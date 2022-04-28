@@ -48,8 +48,7 @@ class CustomRenderer extends Blockly.zelos.Renderer {
 
   makeRenderInfo_(block) {
     const result = super.makeRenderInfo_(block);
-    console.log(block)
-    result.width = 300;
+    result.width = block.workspace.getWidth();
     return result;
   }
 }
