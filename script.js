@@ -47,9 +47,13 @@ class CustomRenderer extends Blockly.zelos.Renderer {
   makeRenderInfo_(block) {
     const result = super.makeRenderInfo_(block);
     
+    console.log(result.statementEdge, result.width)
+    
     // Resize statement blocks to fill screen horizontally
-    if (block.outputConnection === null)
-      result.width = block.workspace.getWidth();
+    if (block.outputConnection === null) {
+      result.width = 2; //block.workspace.getWidth();
+      result.statementEdge = block.workspace.getWidth();
+    }
     
     return result;
   }
