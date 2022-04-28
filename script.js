@@ -39,25 +39,23 @@ var toolbox = {
   ]
 }
 
-class CustomConstantsProvider extends Blockly.blockRendering.ConstantProvider {
+class CustomConstantsProvider extends Blockly.zelos.ConstantProvider {
   constructor() {
     // Set up all of the constants from the base provider.
     super();
+    this.TAB_HEIGHT = 30;
 
   }
 }
 
 class CustomRenderer extends Blockly.zelos.Renderer {
-  constructor(name) {
-    super(name);
-  }
-
-  makeConstants_() {
+  makeConstants() {
     return new CustomConstantsProvider();
-  }
-};
+  };
+}
 
-Blockly.blockRendering.register('custom_renderer', Blockly.zelos.Renderer);
+console.log(Blockly.zelos.Renderer)
+Blockly.blockRendering.register('custom_renderer', /*Blockly.zelos.Renderer*/CustomRenderer);
 
 let workspace = Blockly.inject('root', {toolbox, renderer:"custom_renderer"});
 
