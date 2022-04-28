@@ -40,3 +40,5 @@ var toolbox = {
 }
 
 let workspace = Blockly.inject('root', {toolbox});
+
+console.log(workspace.getFlyout().hide());
