@@ -39,4 +39,4 @@ var toolbox = {
   ]
 }
 
-let workspace = Blockly.inject('n', {toolbox});
+let workspace = Blockly.inject('root', {toolbox});
