@@ -41,4 +41,8 @@ var toolbox = {
 
 let workspace = Blockly.inject('root', {toolbox});
 
-console.log(workspace.getFlyout().hide());
+workspace.getFlyout().hide();
+
+let b = workspace.newBlock("text")
+console.log(workspace.getTopBlocks())
+workspace.centerOnBlock(b.id)
