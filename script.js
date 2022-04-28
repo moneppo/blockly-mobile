@@ -39,11 +39,26 @@ var toolbox = {
   ]
 }
 
-let workspace = Blockly.inject('root', {toolbox, renderer:"zelos"});
+class CustomConstantsProvider extends Blockly.blockRendering.ConstantProvider {
+  constructor() {
+    // Set up all of the constants from the base provider.
+    super();
+
+  }
+}
+
+class CustomRenderer extends Blockly.zelos.Renderer {
+  constructor(name) {
+    super(name);
+  }
+
+  makeConstants_() {
+    return new CustomConstantsProvider();
+  }
+};
+
+Blockly.blockRendering.register('custom_renderer', Blockly.zelos.Renderer);
+
+let workspace = Blockly.inject('root', {toolbox, renderer:"custom_renderer"});
 
 //workspace.getFlyout().hide();
-
-let b = workspace.newBlock("text")
-workspace.addTopBlock(b);
-console.log(workspace.getTopBlocks())
-workspace.centerOnBlock(b.id)
