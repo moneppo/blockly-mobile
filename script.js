@@ -50,7 +50,7 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
       return this.width - this.startX - rightCornerWidth;
     }
     
-    return super.getDesiredRowWidth_(row);
+    return this.width - this.startX; //super.getDesiredRowWidth_(row);
   }
 }
 
