@@ -64,7 +64,7 @@ class CustomRenderer extends Blockly.zelos.Renderer {
     const result = new CustomRenderInfo(this, block);
     if (!block.isInFlyout)
       console.log(result);
-    result.width 
+    result.width = block.workspace.getWidth() - result.statementEdge;
     return result;
   }
 }
