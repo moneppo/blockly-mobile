@@ -44,6 +44,9 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
     super(renderer, block);
   }
   
+  getDesiredRowWidth_(_row) {
+    return this.width - this.startX;
+  }
 }
 
 class CustomRenderer extends Blockly.zelos.Renderer {
