@@ -45,6 +45,7 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
   
   getDesiredRowWidth_(row) {
+   // this.width = this.block_.workspace.getWidth();
     if (row.hasStatement) {
       const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
       return this.width - this.startX - rightCornerWidth;
@@ -60,7 +61,11 @@ class CustomRenderer extends Blockly.zelos.Renderer {
   }
 
   makeRenderInfo_(block) {
-    return new CustomRenderInfo(this, block);
+    const result = new CustomRenderInfo(this, block);
+    if (!block.isInFlyout)
+      console.log(result);
+    result.width 
+    return result;
   }
 }
 
