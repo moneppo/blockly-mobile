@@ -43,14 +43,14 @@ var toolbox = {
 //   constructor(renderer, block) {
 //     super(renderer, block);
 //   }
-  
+
 //   getDesiredRowWidth_(row) {
 //    // this.width = this.block_.workspace.getWidth();
 //     if (row.hasStatement) {
 //       const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
 //       return this.width - this.startX - rightCornerWidth;
 //     }
-    
+
 //     return this.width - this.startX; //super.getDesiredRowWidth_(row);
 //   }
 // }
@@ -70,13 +70,26 @@ var toolbox = {
 
 // Blockly.blockRendering.register("custom_renderer", CustomRenderer);
 
-const addBlock = (workspace, type) => { 
+Blockly.Blocks["top"] = {
+  init: function () {
+    this.jsonInit({
+      type: "top",
+      message0: "when started",
+      nextStatement: null,
+      colour: 230,
+      tooltip: "",
+      helpUrl: "",
+    });
+  },
+};
+
+const addBlock = (workspace, type) => {
   const block = workspace.newBlock(type);
   block.initSvg();
   block.width = workspace.getWidth();
   block.render(false);
   return block;
-}
+};
 
 let workspace = Blockly.inject("root", {
   toolbox,
@@ -86,7 +99,6 @@ let workspace = Blockly.inject("root", {
 console.log(Blockly);
 
 workspace.getFlyout().hide();
-const b = addBlock(workspace, "text");
+const b = addBlock(workspace, "top");
 b.setEditable(false);
 b.setMovable(false);
-
