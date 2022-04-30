@@ -83,8 +83,10 @@ let workspace = Blockly.inject("root", {
   renderer: "zelos", //"custom_renderer",
 });
 
+console.log(Blockly);
+
 workspace.getFlyout().hide();
-const b = addBlock(workspace, "text_print");
+const b = addBlock(workspace, "text");
 b.setEditable(false);
 b.setMovable(false);
 
