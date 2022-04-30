@@ -70,9 +70,21 @@ var toolbox = {
 
 // Blockly.blockRendering.register("custom_renderer", CustomRenderer);
 
+const addBlock = (workspace, type) => { 
+  const block = workspace.newBlock(type);
+  block.initSvg();
+  block.
+  block.render(false);
+  return block;
+}
+
 let workspace = Blockly.inject("root", {
   toolbox,
   renderer: "zelos", //"custom_renderer",
 });
 
 workspace.getFlyout().hide();
+const b = addBlock(workspace, "text_print");
+b.setEditable(false);
+b.setMovable(false);
+
