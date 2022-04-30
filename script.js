@@ -73,7 +73,7 @@ var toolbox = {
 const addBlock = (workspace, type) => { 
   const block = workspace.newBlock(type);
   block.initSvg();
-  block.
+  block.width = workspace.getWidth();
   block.render(false);
   return block;
 }
