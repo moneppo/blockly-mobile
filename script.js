@@ -91,6 +91,15 @@ const addBlock = (workspace, type) => {
   return block;
 };
 
+const addBlockToEnd = (start, type) => {
+  const newBlock = addBlock(start.workspace_, type);
+  let c = start;
+  while(c.getNextBlock() !== null) {
+    c = c.getNextBlock();
+  }
+  c.
+}
+
 let workspace = Blockly.inject("root", {
   toolbox,
   renderer: "zelos", //"custom_renderer",
@@ -102,3 +111,17 @@ workspace.getFlyout().hide();
 const b = addBlock(workspace, "top");
 b.setEditable(false);
 b.setMovable(false);
+
+const add = document.getElementById("add");
+const trash = document.getElementById("trash");
+
+add.addEventListener("click", () => {
+  const expanded = add.getAttribute("open");
+  console.log(expanded);
+  if (expanded) {
+    add.removeAttribute("open");
+  } else {
+    add.setAttribute("open", true);
+    addBlock(workspace, "math_number");
+  }
+});
