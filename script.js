@@ -93,8 +93,8 @@ const addBlock = (workspace, type) => {
 
 const addBlockToEnd = (start, type) => {
   const newBlock = addBlock(start.workspace, type);
-  start.lastConnectionInStack().connect(newBlock.previousConnection)
-}
+  start.lastConnectionInStack().connect(newBlock.previousConnection);
+};
 
 let workspace = Blockly.inject("root", {
   toolbox,
@@ -113,11 +113,16 @@ const trash = document.getElementById("trash");
 
 add.addEventListener("click", () => {
   const expanded = add.getAttribute("open");
-  console.log(expanded);
   if (expanded) {
     add.removeAttribute("open");
   } else {
     add.setAttribute("open", true);
     addBlockToEnd(b, "text_print");
+  }
+});
+
+trash.addEventListener("click", () => {
+  if (Blockly.selected !== b) {
+    Blockly.selected.dispose(true);
   }
 });
