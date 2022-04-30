@@ -92,12 +92,8 @@ const addBlock = (workspace, type) => {
 };
 
 const addBlockToEnd = (start, type) => {
-  const newBlock = addBlock(start.workspace_, type);
-  let c = start;
-  while(c.getNextBlock() !== null) {
-    c = c.getNextBlock();
-  }
-  c.
+  const newBlock = addBlock(start.workspace, type);
+  start.lastConnectionInStack().connect(newBlock.previousConnection)
 }
 
 let workspace = Blockly.inject("root", {
@@ -122,6 +118,6 @@ add.addEventListener("click", () => {
     add.removeAttribute("open");
   } else {
     add.setAttribute("open", true);
-    addBlock(workspace, "math_number");
+    addBlockToEnd(b, "text_print");
   }
 });
