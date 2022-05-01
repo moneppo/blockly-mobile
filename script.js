@@ -41,10 +41,10 @@ var toolbox = {
 
 // TODO: 
 
-// class CustomRenderInfo extends Blockly.zelos.RenderInfo {
-//   constructor(renderer, block) {
-//     super(renderer, block);
-//   }
+class CustomRenderInfo extends Blockly.zelos.RenderInfo {
+  constructor(renderer, block) {
+    super(renderer, block);
+  }
 
 //   getDesiredRowWidth_(row) {
 //    // this.width = this.block_.workspace.getWidth();
@@ -55,12 +55,12 @@ var toolbox = {
 
 //     return this.width - this.startX; //super.getDesiredRowWidth_(row);
 //   }
-// }
+ }
 
-// class CustomRenderer extends Blockly.zelos.Renderer {
-//   constructor(name) {
-//     super(name);
-//   }
+class CustomRenderer extends Blockly.zelos.Renderer {
+  constructor(name) {
+    super(name);
+  }
 
 //   makeRenderInfo_(block) {
 //     const result = new CustomRenderInfo(this, block);
@@ -68,9 +68,9 @@ var toolbox = {
 //     result.width = block.workspace.getWidth() - result.statementEdge;
 //     return result;
 //   }
-// }
+ }
 
-// Blockly.blockRendering.register("custom_renderer", CustomRenderer);
+Blockly.blockRendering.register("custom_renderer", CustomRenderer);
 
 Blockly.Blocks["top"] = {
   init: function () {
@@ -100,7 +100,7 @@ const addBlockToEnd = (start, type) => {
 
 let workspace = Blockly.inject("root", {
   toolbox,
-  renderer: "zelos", //"custom_renderer",
+  renderer: "custom_renderer",
 });
 
 console.log(Blockly);
