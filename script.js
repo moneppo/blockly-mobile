@@ -1,6 +1,6 @@
 /* global Blockly */
 
-import { h, render, createRef, useEffect } from 'https://unpkg.com/preact?module';
+import { h, render } from 'https://unpkg.com/preact@latest?module';
 import htm from 'https://unpkg.com/htm?module';
 const html = htm.bind(h);
 

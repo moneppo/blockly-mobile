@@ -1,7 +1,7 @@
 /* global Blockly */
 
-import { h, createRef} from 'https://unpkg.com/preact?module';
-import { useState } from 'https://unpkg.com/preact/hooks/dist/hooks.module.js';
+import { h, createRef} from 'https://unpkg.com/preact@latest?module';
+import { useEffect } from 'https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module';
 import htm from 'https://unpkg.com/htm?module';
 
 const html = htm.bind(h);
@@ -34,12 +34,12 @@ export default (props) => {
   const ref = createRef();
   const workspaceRef = createRef();
   
-  useEffect(() => {
-   workspaceRef.current = Blockly.inject(ref.current, {
-      toolbox,
-      renderer: "custom_renderer",
-    });
-  }, [ref]);
+   useEffect(() => {
+    workspaceRef.current = Blockly.inject(ref.current, {
+       toolbox,
+       renderer: "custom_renderer",
+     });
+   });//, [ref]);
   
   return html`
     <div ref=${ref} id="workspace" />`;
