@@ -29,9 +29,21 @@ Blockly.Blocks["top"] = {
   },
 };
 
-export default ({workspace}) => {
+const addBlock = (workspace, type) => {
+  const block = workspace.newBlock(type);
+  block.initSvg();
+  block.width = workspace.getWidth();
+  block.render(false);
+  return block;
+};
+
+const addBlockToEnd = (start, type) => {
+  const newBlock = addBlock(start.workspace, type);
+  start.lastConnectionInStack().connect(newBlock.previousConnection);
+};
+
+export default ({ workspace }) => {
   const ref = createRef();
-  
 
   useEffect(() => {
     const ws = Blockly.inject(ref.current, {
@@ -39,6 +51,8 @@ export default ({workspace}) => {
       renderer: "custom_renderer",
     });
     
+    addBlock(ws, "top");
+
     if (workspace) {
       workspace.current = ws;
     }
@@ -46,13 +60,3 @@ export default ({workspace}) => {
 
   return html`<div ref=${ref} id="workspace" />`;
 };
-//   h("div", {
-//     id: "workspace",
-//     oncreate: (e) => {
-//       console.log("on create");
-
-//       //     workspace.getFlyout().hide();
-//       //      const b = addBlock(workspace, "top");
-//       //     
-//     },
-//   });
