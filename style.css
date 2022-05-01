@@ -20,6 +20,13 @@ footer {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  position: relative;
+}
+
+#blockmenu {
+  position: absolute;
+  width: 50%;
+  bottom: 80px;
 }
 
 body {

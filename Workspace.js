@@ -3,39 +3,14 @@
 import { h, createRef } from "https://unpkg.com/preact@latest?module";
 import { useEffect } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
+import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-var toolbox = {
-  kind: "flyoutToolbox",
-  contents: [
-    {
-      kind: "block",
-      type: "text_print",
-    },
-  ],
-};
-
-Blockly.Blocks["top"] = {
-  init: function () {
-    this.jsonInit({
-      type: "top",
-      message0: "when started",
-      nextStatement: null,
-      colour: 230,
-      tooltip: "",
-      helpUrl: "",
-    });
-    this.setEditable(false);
-    this.setMovable(false);
-    this.setDeletable(false);
-  },
-};
 
 const addBlock = (workspace, type) => {
   const block = workspace.newBlock(type);
   block.initSvg();
-//  block.width = workspace.getWidth();
   block.render(false);
   return block;
 };
