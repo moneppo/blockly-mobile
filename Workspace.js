@@ -51,8 +51,18 @@ export default ({ workspace }) => {
       renderer: "custom_renderer",
     });
     
-    addBlock(ws, "top");
-
+    ws.getFlyout().hide();
+    
+    const top = addBlock(ws, "top");
+    
+    ws.addChangeListener((e) => {
+      if (e.type === Blockly.Events.SELECTED &&
+          e.newElementId == top.id) {
+        //select e.oldElementId
+      }
+    });
+    
+    
     if (workspace) {
       workspace.current = ws;
     }
