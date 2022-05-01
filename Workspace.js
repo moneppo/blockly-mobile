@@ -25,18 +25,18 @@ Blockly.Blocks["top"] = {
   },
 };
 
-export default props => 
-
-    h("div", {
-      oncreate: (e) => {
-        const workspace = Blockly.inject(e, {
-          toolbox,
-          renderer: "custom_renderer",
-        });
-   //     workspace.getFlyout().hide();
-  //      const b = addBlock(workspace, "top");
-  //      b.setEditable(false);
-   //     b.setMovable(false);
-      }
-    });
-  
+export default (props) =>
+  h("div", {
+    id: "workspace",
+    oncreate: (e) => {
+      console.log("on create");
+      const workspace = Blockly.inject(e, {
+        toolbox,
+        renderer: "custom_renderer",
+      });
+      //     workspace.getFlyout().hide();
+      //      const b = addBlock(workspace, "top");
+      //      b.setEditable(false);
+      //     b.setMovable(false);
+    },
+  });

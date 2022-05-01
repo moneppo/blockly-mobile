@@ -43,7 +43,7 @@ const trash = document.getElementById("trash");
 app({
   view: () => h("div", {}, [
     h("header", {}),
-    h("main", {}, [Workspace({})]),
+    h("main", {}, [Workspace()]),
     h("footer", {}, [
       h("button", { id: "add" }, text("+")),
       h("button", { id: "trash" }, text("T")),
