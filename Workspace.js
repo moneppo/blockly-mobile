@@ -26,13 +26,16 @@ Blockly.Blocks["top"] = {
       tooltip: "",
       helpUrl: "",
     });
+    this.setEditable(false);
+    this.setMovable(false);
+    this.setDeletable(false);
   },
 };
 
 const addBlock = (workspace, type) => {
   const block = workspace.newBlock(type);
   block.initSvg();
-  block.width = workspace.getWidth();
+//  block.width = workspace.getWidth();
   block.render(false);
   return block;
 };
@@ -54,13 +57,6 @@ export default ({ workspace }) => {
     ws.getFlyout().hide();
     
     const top = addBlock(ws, "top");
-    
-    ws.addChangeListener((e) => {
-      if (e.type === Blockly.Events.SELECTED &&
-          e.newElementId == top.id) {
-        //select e.oldElementId
-      }
-    });
     
     
     if (workspace) {
