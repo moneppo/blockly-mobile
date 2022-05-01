@@ -52,4 +52,4 @@ render(html`
   <footer>
     <button>+</button>
     <button>T</button>
-  </footer>`, document.getElementById("root"))
+  </footer>`, document.body)
