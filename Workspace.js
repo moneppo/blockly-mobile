@@ -58,7 +58,6 @@ export default ({ workspace }) => {
     
     const top = addBlock(ws, "top");
     
-    
     if (workspace) {
       workspace.current = ws;
     }

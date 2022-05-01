@@ -5,6 +5,7 @@ import htm from "https://unpkg.com/htm?module";
 const html = htm.bind(h);
 
 import Workspace from "./Workspace.js";
+import Footer from "./Footer.js";
 
 // TODO:
 //  - full-width blocks
@@ -12,15 +13,22 @@ import Workspace from "./Workspace.js";
 //  - navigation
 //  - image background
 
+const trashClick = () => {
+  if (Blockly.selected) {
+    Blockly.mainWorkspace.removeBlockById(Blockly.selected.id);
+  }
+}
+
+const addClick = () => {
+  
+}
+
 render(
   html` <header />
     <main>
       <${Workspace} />
     </main>
-    <footer>
-      <button>+</button>
-      <button onclick=${()=>Blockly.selected.dispose(true)}>T</button>
-    </footer>`,
+    <${Footer}/>`,
   document.body
 );
 
