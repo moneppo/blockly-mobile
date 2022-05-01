@@ -1,32 +1,48 @@
+/* global Blockly */
+
 import { h, text } from "https://esm.run/hyperapp";
 
-export default props =>
-  h("div", {
-    oncreate: (e) => {
-      let workspace = Blockly.inject(e, {
-        toolbox,
-        renderer: "custom_renderer",
-      });
-    }
-  }, [
-    h("header", {})
-    h("input", {
-      type: "checkbox",
-      checked: props.highlight,
-      onclick: props.ontoggle,
-    }),
-  ])
- 
-<header></header>
-    <main>
-      <div id="root"></div>
-    </main>
+var toolbox = {
+  kind: "flyoutToolbox",
+  contents: [
+    {
+      kind: "block",
+      type: "text_print",
+    },
+  ],
+};
 
-    <footer>
-      <button id="add">
-        +
-      </button>
-      <button id="trash">
-        T
-      </button>
-    </footer>
+Blockly.Blocks["top"] = {
+  init: function () {
+    this.jsonInit({
+      type: "top",
+      message0: "when started",
+      nextStatement: null,
+      colour: 230,
+      tooltip: "",
+      helpUrl: "",
+    });
+  },
+};
+
+export default props => [
+  h("header", {}),
+  h("main",  {}, [
+    h("div", {
+      oncreate: (e) => {
+        const workspace = Blockly.inject(e, {
+          toolbox,
+          renderer: "custom_renderer",
+        });
+        workspace.getFlyout().hide();
+        const b = addBlock(workspace, "top");
+        b.setEditable(false);
+        b.setMovable(false);
+      }
+    })]),
+  h("footer", {}, [
+    h("button", {id: "add"}, text("+")),
+    h("button", {id: "trash"}, text("T")),
+  ])
+  ];
+  
