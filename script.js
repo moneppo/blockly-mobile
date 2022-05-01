@@ -6,30 +6,6 @@ var toolbox = {
   contents: [
     {
       kind: "block",
-      type: "controls_if",
-    },
-    {
-      kind: "block",
-      type: "controls_repeat_ext",
-    },
-    {
-      kind: "block",
-      type: "logic_compare",
-    },
-    {
-      kind: "block",
-      type: "math_number",
-    },
-    {
-      kind: "block",
-      type: "math_arithmetic",
-    },
-    {
-      kind: "block",
-      type: "text",
-    },
-    {
-      kind: "block",
       type: "text_print",
     },
   ],
@@ -40,37 +16,6 @@ var toolbox = {
 //  - unselectable top block
 //  - navigation
 //  - image background
-
-class CustomRenderInfo extends Blockly.zelos.RenderInfo {
-  constructor(renderer, block) {
-    super(renderer, block);
-  }
-
-//   getDesiredRowWidth_(row) {
-//    // this.width = this.block_.workspace.getWidth();
-//     if (row.hasStatement) {
-//       const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
-//       return this.width - this.startX - rightCornerWidth;
-//     }
-
-//     return this.width - this.startX; //super.getDesiredRowWidth_(row);
-//   }
- }
-
-class CustomRenderer extends Blockly.zelos.Renderer {
-  constructor(name) {
-    super(name);
-  }
-
-//   makeRenderInfo_(block) {
-//     const result = new CustomRenderInfo(this, block);
-//     if (!block.isInFlyout)
-//     result.width = block.workspace.getWidth() - result.statementEdge;
-//     return result;
-//   }
- }
-
-Blockly.blockRendering.register("custom_renderer", CustomRenderer);
 
 Blockly.Blocks["top"] = {
   init: function () {
@@ -103,7 +48,6 @@ let workspace = Blockly.inject("root", {
   renderer: "custom_renderer",
 });
 
-console.log(Blockly);
 
 workspace.getFlyout().hide();
 const b = addBlock(workspace, "top");
@@ -128,3 +72,9 @@ trash.addEventListener("click", () => {
     Blockly.selected.dispose(true);
   }
 });
+
+app({
+    init: {},
+    view: ({}) => {},
+    node: document.getElementById("root"),
+  })
