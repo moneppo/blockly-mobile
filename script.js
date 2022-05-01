@@ -1,9 +1,5 @@
-/* If you're feeling fancy you can add interactivity 
-    to your site with Javascript */
-
 /* global Blockly */
-
-console.log("Hello, world!");
+import { h, text, app } from "https://esm.run/hyperapp";
 
 var toolbox = {
   kind: "flyoutToolbox",
@@ -40,6 +36,10 @@ var toolbox = {
 };
 
 // TODO: 
+//  - full-width blocks
+//  - unselectable top block
+//  - navigation
+//  - image background
 
 class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   constructor(renderer, block) {
