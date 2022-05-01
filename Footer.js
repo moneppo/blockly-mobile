@@ -10,13 +10,24 @@ const addBlock = (type) => {
   const block = Blockly.mainWorkspace.newBlock(type);
   block.initSvg();
   block.render(false);
-  return block;
+  Blockly.mainWorkspace
+    .getTopBlocks()[0]
+    .lastConnectionInStack()
+    .connect(block.previousConnection);
 };
 
-const BlockMenu = () => {
+const BlockMenu = ({ onSelected }) => {
   return html`<div id="blockmenu">
     ${toolbox.contents.map(
-      (i) => html` <button onclick=${() => addBlock(i.type)}>${i.type}</button>`
+      (i) =>
+        html`<button
+          onclick=${() => {
+            addBlock(i.type);
+            onSelected && onSelected();
+          }}
+        >
+          ${i.type}
+        </button>`
     )}
   </div>`;
 };
@@ -25,8 +36,8 @@ export default () => {
   const [open, setOpen] = useState(false);
 
   const trashClick = () => {
-    if (Blockly.selected) {
-      Blockly.mainWorkspace.removeBlockById(Blockly.selected.id);
+    if (Blockly.selected && Blockly.selected.isDeletable) {
+      Blockly.selected.dispose();
     }
   };
 
@@ -36,6 +47,6 @@ export default () => {
     <button onclick=${addClick}>+</button>
     <button>P</button>
     <button onclick=${trashClick}>T</button>
-    ${open && html`<${BlockMenu} />`}
+    ${open && html`<${BlockMenu} onSelected=${() => setOpen(false)}/>`}
   </footer>`;
 };
