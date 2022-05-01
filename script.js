@@ -1,6 +1,10 @@
 /* global Blockly */
-import { h, text, app } from "https://esm.run/hyperapp";
-import Workspace from "../Workspace.js";
+
+import { h, render, createRef, useEffect } from 'https://unpkg.com/preact?module';
+import htm from 'https://unpkg.com/htm?module';
+const html = htm.bind(h);
+
+import Workspace from "./Workspace.js";
 
 // TODO:
 //  - full-width blocks
@@ -40,14 +44,12 @@ const trash = document.getElementById("trash");
 //   }
 // });
 
-app({
-  view: () => h("div", {}, [
-    h("header", {}),
-    h("main", {}, [Workspace()]),
-    h("footer", {}, [
-      h("button", { id: "add" }, text("+")),
-      h("button", { id: "trash" }, text("T")),
-    ]),
-  ]),
-  node: document.getElementById("root"),
-});
+render(html`
+  <header />
+  <main>
+    <${Workspace} />
+  </main>
+  <footer>
+    <button>+</button>
+    <button>T</button>
+  </footer>`, document.getElementById("root"))

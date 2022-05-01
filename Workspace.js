@@ -1,6 +1,11 @@
 /* global Blockly */
 
-import { h, text } from "https://esm.run/hyperapp";
+import { h, createRef} from 'https://unpkg.com/preact?module';
+import { useState } from 'https://unpkg.com/preact/hooks/dist/hooks.module.js';
+import htm from 'https://unpkg.com/htm?module';
+
+const html = htm.bind(h);
+
 
 var toolbox = {
   kind: "flyoutToolbox",
@@ -25,18 +30,29 @@ Blockly.Blocks["top"] = {
   },
 };
 
-export default (props) =>
-  h("div", {
-    id: "workspace",
-    oncreate: (e) => {
-      console.log("on create");
-      const workspace = Blockly.inject(e, {
-        toolbox,
-        renderer: "custom_renderer",
-      });
-      //     workspace.getFlyout().hide();
-      //      const b = addBlock(workspace, "top");
-      //      b.setEditable(false);
-      //     b.setMovable(false);
-    },
-  });
+export default (props) => {
+  const ref = createRef();
+  const workspaceRef = createRef();
+  
+  useEffect(() => {
+   workspaceRef.current = Blockly.inject(ref.current, {
+      toolbox,
+      renderer: "custom_renderer",
+    });
+  }, [ref]);
+  
+  return html`
+    <div ref=${ref} id="workspace" />`;
+  
+}
+//   h("div", {
+//     id: "workspace",
+//     oncreate: (e) => {
+//       console.log("on create");
+     
+//       //     workspace.getFlyout().hide();
+//       //      const b = addBlock(workspace, "top");
+//       //      b.setEditable(false);
+//       //     b.setMovable(false);
+//     },
+//   });
