@@ -4,7 +4,7 @@ Blockly.Blocks["top"] = {
   init: function () {
     this.jsonInit({
       type: "top",
-      message0: "when started",
+      message0: "WHEN STARTED",
       nextStatement: null,
       colour: 230,
       tooltip: "",

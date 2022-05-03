@@ -43,9 +43,9 @@ export default ({ workspace }) => {
 
     const top = addBlock(ws, "top");
 
-    ws.addChangeListener((e) => {
-      console.log(e);
-    });
+    // ws.addChangeListener((e) => {
+    //   console.log(e);
+    // });
 
     if (workspace) {
       workspace.current = ws;
