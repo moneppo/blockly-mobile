@@ -38,8 +38,8 @@ export default () => {
   const [open, setOpen] = useState(false);
 
   const trashClick = () => {
-    if (Blockly.selected && Blockly.selected.isDeletable) {
-      Blockly.selected.dispose();
+    if (Blockly.selected && Blockly.selected.isDeletable()) {
+      Blockly.selected.checkAndDelete();
     }
   };
 

@@ -13,15 +13,7 @@ import Footer from "./Footer.js";
 //  - navigation
 //  - image background
 
-const trashClick = () => {
-  if (Blockly.selected) {
-    Blockly.mainWorkspace.removeBlockById(Blockly.selected.id);
-  }
-}
-
-const addClick = () => {
-  
-}
+console.log(Blockly.blocks)
 
 render(
   html` <header />
