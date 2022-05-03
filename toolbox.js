@@ -22,7 +22,8 @@ export default {
     {
       kind: "block",
       type: "text_print",
-      icon: "bi bi-music-note"
+      icon: "bi bi-music-note",
+      display_name: "Play Sound"
     },
   ],
 };

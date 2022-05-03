@@ -27,7 +27,8 @@ const BlockMenu = ({ onSelected }) => {
             onSelected && onSelected();
           }}
         >
-          ${i.type}
+          <i class=${i.icon} />
+          ${i.display_name}
         </button>`
     )}
   </div>`;
