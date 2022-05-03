@@ -1,5 +1,8 @@
 /* global Blockly */
 
+
+// This metrics manager completely disregards the toolbox flyout
+// and only enables vertical scrolling
 export default class extends Blockly.MetricsManager {
   constructor(workspace) {
     super(workspace);
@@ -12,23 +15,17 @@ export default class extends Blockly.MetricsManager {
   getAbsoluteMetrics() {
     return { left: 0, top: 0 };
   }
-
-  getScrollMetrics(
-    getWorkspaceCoordinates = undefined,
-    cachedViewMetrics = undefined,
-    cachedContentMetrics = undefined
-  ) {
-    const scrollMetrics = super.getScrollMetrics(
-      getWorkspaceCoordinates,
-      cachedViewMetrics,
-      cachedContentMetrics
-    );
-    const contentMetrics =
-      cachedContentMetrics || this.getContentMetrics(getWorkspaceCoordinates);
-    const viewMetrics =
-      cachedViewMetrics || this.getViewMetrics(getWorkspaceCoordinates);
-
-    return scrollMetrics;
+  
+  getViewMetrics(opt_getWorkspaceCoordinates) {
+    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+    const svgMetrics = this.getSvgMetrics();
+   
+    return {
+      height: svgMetrics.height / scale,
+      width: svgMetrics.width / scale,
+      top: -this.workspace_.scrollY / scale,
+      left: -this.workspace_.scrollX / scale,
+    };
   }
   
 
