@@ -32,6 +32,15 @@ export default ({ workspace }) => {
     ws.getFlyout().hide();
     
     const top = addBlock(ws, "top");
+   
+    ws.addChangeListener(e=>{
+      console.log(e);
+      console.log(ws.getBlockById(e.blockId))
+    })
+    
+    setTimeout(() => {
+    top.moveTo(new Blockly.utils.Coordinate(0,0));
+    }, 1000);
     
     if (workspace) {
       workspace.current = ws;

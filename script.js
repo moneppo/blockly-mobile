@@ -13,7 +13,7 @@ import Footer from "./Footer.js";
 //  - navigation
 //  - image background
 
-console.log(Blockly.blocks)
+console.log(Blockly.Blocks)
 
 render(
   html` <header />

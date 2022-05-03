@@ -58,5 +58,11 @@ export default {
       icon: "bi bi-music-note",
       display_name: "play sample",
     },
+    {
+      kind: "block",
+      type: "controls_repeat",
+      icon: "bi bi-arrow-counterclockwise",
+      display_name: "repeat",
+    },
   ],
 };
