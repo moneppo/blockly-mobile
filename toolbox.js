@@ -22,6 +22,7 @@ export default {
     {
       kind: "block",
       type: "text_print",
+      icon: "bi bi-music-note"
     },
   ],
 };

@@ -17,6 +17,7 @@ const addBlock = (type) => {
 };
 
 const BlockMenu = ({ onSelected }) => {
+  console.log();
   return html`<div id="blockmenu">
     ${toolbox.contents.map(
       (i) =>
@@ -44,9 +45,15 @@ export default () => {
   const addClick = () => setOpen(!open);
 
   return html` <footer>
-    <button onclick=${addClick}><i class="bi bi-plus-square-fill"></i></button>
-    <button>P</button>
-    <button onclick=${trashClick}>T</button>
-    ${open && html`<${BlockMenu} onSelected=${() => setOpen(false)}/>`}
+    <button onclick=${addClick}>
+      <i class="bi bi-plus-square" />
+    </button>
+    <button>
+      <i class="bi bi-play" />
+    </button>
+    <button onclick=${trashClick}>
+      <i class="bi bi-trash3" />
+    </button>
+    ${open && html`<${BlockMenu} onSelected=${() => setOpen(false)} />`}
   </footer>`;
 };
