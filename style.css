@@ -29,6 +29,17 @@ footer {
   bottom: 80px;
 }
 
+button {
+  border: 0;
+  padding: 0;
+  margin: 10px;
+  background: none;
+}
+
+button i {
+  font-size: 40px;
+}
+
 body {
   margin: 0;
   padding: 0;

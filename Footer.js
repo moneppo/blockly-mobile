@@ -44,7 +44,7 @@ export default () => {
   const addClick = () => setOpen(!open);
 
   return html` <footer>
-    <button onclick=${addClick}>+</button>
+    <button onclick=${addClick}><i class="bi bi-plus-square-fill"></i></button>
     <button>P</button>
     <button onclick=${trashClick}>T</button>
     ${open && html`<${BlockMenu} onSelected=${() => setOpen(false)}/>`}
