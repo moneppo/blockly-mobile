@@ -27,6 +27,11 @@ export default ({ workspace }) => {
     const ws = Blockly.inject(ref.current, {
       toolbox,
       renderer: "custom_renderer",
+      move: {
+        scrollbars: {
+          vertical: true
+        }
+      },
       plugins: {
         metricsManager: VerticalMetrics,
       },
