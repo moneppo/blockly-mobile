@@ -7,7 +7,6 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-
 const addBlock = (workspace, type) => {
   const block = workspace.newBlock(type);
   block.initSvg();
@@ -27,21 +26,19 @@ export default ({ workspace }) => {
     const ws = Blockly.inject(ref.current, {
       toolbox,
       renderer: "custom_renderer",
+      move: {drag: true,
+      grid: { spacing: 20, length: 3, colour: "#ccc" },
     });
-    
+
     ws.getFlyout().hide();
-    
+    ws.scroll(300,0);
+
     const top = addBlock(ws, "top");
-   
-    ws.addChangeListener(e=>{
+
+    ws.addChangeListener((e) => {
       console.log(e);
-      console.log(ws.getBlockById(e.blockId))
-    })
-    
-    setTimeout(() => {
-    top.moveTo(new Blockly.utils.Coordinate(0,0));
-    }, 1000);
-    
+    });
+
     if (workspace) {
       workspace.current = ws;
     }
