@@ -4,6 +4,7 @@ import { h, createRef } from "https://unpkg.com/preact@latest?module";
 import { useEffect } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 import toolbox from "./toolbox.js";
+import VerticalMetrics from "./VerticalMetrics.js";
 
 const html = htm.bind(h);
 
@@ -26,12 +27,14 @@ export default ({ workspace }) => {
     const ws = Blockly.inject(ref.current, {
       toolbox,
       renderer: "custom_renderer",
-      move: {drag: true,
+      plugins: {
+        metricsManager: VerticalMetrics,
+      },
       grid: { spacing: 20, length: 3, colour: "#ccc" },
     });
 
     ws.getFlyout().hide();
-    ws.scroll(300,0);
+    ws.scroll(300, 0);
 
     const top = addBlock(ws, "top");
 
