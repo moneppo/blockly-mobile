@@ -16,7 +16,6 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
       const firstElem = row.elements[1];
       const lastElem = row.elements[row.elements.length - 2];
       console.log(firstElem, lastElem);
-      firstElem.width = 1000;
 
     }
   }
