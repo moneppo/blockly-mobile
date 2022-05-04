@@ -16,26 +16,27 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
     super.addElemSpacing_();
 
     if (!screenWidth) return;
-
     for (let i = 0, row; (row = this.rows[i]); i++) {
+        console.log(row);
       row.measure();
       let remainingSpace = screenWidth - row.width;
+      console.log(row.align)
       switch (row.align) {
-        case -1:
-          if (row.endsWithElemSpacer()) {
-            row.elements[row.elements.length - 1].width += remainingSpace;
-          }
-          break;
-        case 1:
+        case Blockly.ALIGN_RIGHT:
           if (row.startsWithElemSpacer()) {
             row.elements[0].width += remainingSpace;
           }
           break;
-        default:
-          if (row.endsWithElemSpacer() && row.startsWithElemSpace()) {
+        case Blockly.ALIGN_CENTRE:
+          if (row.endsWithElemSpacer() && row.startsWithElemSpacer()) {
             row.elements[0].width += remainingSpace / 2;
             row.elements[row.elements.length - 1].width += remainingSpace / 2;
           }
+        default: // ALIGN_LEFT or undefined
+          if (row.endsWithElemSpacer()) {
+            row.elements[row.elements.length - 1].width += remainingSpace;
+          }
+          break;
       }
     }
   }
