@@ -3,6 +3,7 @@
 Blockly.Blocks["top"] = {
   init: function () {
     this.jsonInit({
+      align: "CENTRE",
       type: "top",
       message0: "WHEN STARTED",
       nextStatement: null,
