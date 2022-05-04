@@ -8,12 +8,9 @@ import Workspace from "./Workspace.js";
 import Footer from "./Footer.js";
 
 // TODO:
-//  - block width updates on resize
 //  - child blocks render smaller than parent
 //  - designer mode
 //  - image background
-
-screen.orientation.lock("portrait")
 
 render(
   html` <header />

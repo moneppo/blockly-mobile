@@ -30,9 +30,9 @@ export default ({ workspace }) => {
   useEffect(() => {
     const resize = () => {
       CustomRenderer.setScreenWidth(ref.current.clientWidth);
+      Blockly.mainWorkspace.resize();
+      Blockly.mainWorkspace.render();
     };
-    
-    resize()
 
     const ws = Blockly.inject(ref.current, {
       toolbox,
@@ -57,6 +57,7 @@ export default ({ workspace }) => {
       workspace.current = ws;
     }
   
+    resize()
 
     window.addEventListener("resize", resize);
     return () => {
