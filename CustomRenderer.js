@@ -6,7 +6,12 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
   
   addElemSpacing_() {
-    
+    super.addElemSpacing_();
+     for (let i = 0, row; (row = this.rows[i]); i++) {
+      // No spacing needed before the corner on the top row or the bottom row.
+      if (row.startsWithElemSpacer()) {
+        
+      }
   }
 
   finalize_() {
