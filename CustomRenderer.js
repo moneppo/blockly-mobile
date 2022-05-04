@@ -10,18 +10,29 @@ const isStatementInputRow = (row) => {
   return false;
 };
 
+let screenWidth = undefined;
+
 class CustomRenderInfo extends Blockly.zelos.RenderInfo {
-  constructor(renderer, block, width) {
+  constructor(renderer, block) {
     super(renderer, block);
-    this.width = width;
+  }
+  
+  static setScreenWidth(width) {
+    screenWidth = width;
   }
   
   addElemSpacing_() {
     super.addElemSpacing_();
+    
+    if (!screenWidth) return;
+    
+    console.log("ha")
+    
     for (let i = 0, row; (row = this.rows[i]); i++) {
       if (isStatementInputRow(row)) continue;
       
-      let remainingSpace = this.width - row.width;  
+      let remainingSpace = this.width - row.width;
+      console.log(screenWidth, remainingSpace)
        
       if (row.startsWithElemSpacer()) {
         if (row.endsWithElemSpacer()) {
@@ -37,20 +48,18 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
 }
 
-class CustomRenderer extends Blockly.zelos.Renderer {
+
+export class CustomRenderer extends Blockly.zelos.Renderer {
   constructor(name) {
     super(name);
   }
   
-  setScreenWidth(width) {
-    this.width = width;
+  static setScreenWidth(width) {
+    CustomRenderInfo.setScreenWidth(width);
   }
 
   makeRenderInfo_(block) {
-    if (this.width) {
-      return new Blockly.zelos.RenderInfo(this, block);
-    }
-    return new CustomRenderInfo(this, block, this.width);
+    return new CustomRenderInfo(this, block);
   }
 }
 

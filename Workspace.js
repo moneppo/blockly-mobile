@@ -1,10 +1,11 @@
 /* global Blockly */
 
 import { h, createRef } from "https://unpkg.com/preact@latest?module";
-import { useEffect } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+import { useEffect, useLayoutEffect } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 import toolbox from "./toolbox.js";
 import VerticalMetrics from "./VerticalMetrics.js";
+import {CustomRenderer} from "./CustomRenderer.js";
 
 const html = htm.bind(h);
 
@@ -20,13 +21,21 @@ const addBlockToEnd = (start, type) => {
   start.lastConnectionInStack().connect(newBlock.previousConnection);
 };
 
+const setWidth = (width) => {
+  CustomRenderer.setScreenWidth(width);
+}
+
 export default ({ workspace }) => {
   const ref = createRef();
+  
+  useLayoutEffect(() => {
+    setWidth(ref.current.clientWidth)
+  })
 
   useEffect(() => {
     const ws = Blockly.inject(ref.current, {
       toolbox,
-      renderer: "custom_renderer",
+      renderer: "custom_renderer", // CustomRenderer.js
       move: {
         scrollbars: {
           vertical: true
@@ -42,10 +51,6 @@ export default ({ workspace }) => {
     ws.scroll(300, 0);
 
     const top = addBlock(ws, "top");
-
-    // ws.addChangeListener((e) => {
-    //   console.log(e);
-    // });
 
     if (workspace) {
       workspace.current = ws;
