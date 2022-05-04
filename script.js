@@ -17,7 +17,6 @@ render(
     <main>
       <${Workspace} />
     </main>
-    <${Footer}/>`,
+    <${Footer} />`,
   document.body
 );
-
