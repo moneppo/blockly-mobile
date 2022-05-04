@@ -1,6 +1,22 @@
-/* a minimalist set of CSS resets */
+/* Rotation lock media hack */
+@media only screen and (orientation:landscape) {
+  body {
+    height: 100vw;
+    transform: rotate(90deg);
+  }
+}
 
-/* default to border-box */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100vh;
+}
+
 html {
   box-sizing: border-box;
   font-size: 16px;
@@ -11,6 +27,7 @@ html {
 *:after {
   box-sizing: inherit;
 }
+
 
 header {
   height: 40px;
@@ -52,17 +69,6 @@ button i {
 
 #blockmenu button i {
   padding-right: 5px;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  height: 100vh;
 }
 
 main {

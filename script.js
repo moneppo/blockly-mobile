@@ -13,6 +13,8 @@ import Footer from "./Footer.js";
 //  - designer mode
 //  - image background
 
+screen.orientation.lock("portrait")
+
 render(
   html` <header />
     <main>
