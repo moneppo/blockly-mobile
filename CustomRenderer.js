@@ -1,4 +1,5 @@
 /* global Blockly */
+console.log(Blockly.blockRendering.Types)
 
 class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   constructor(renderer, block) {
@@ -8,9 +9,11 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   addElemSpacing_() {
     super.addElemSpacing_();
     for (let i = 0, row; (row = this.rows[i]); i++) {
-      // No spacing needed before the corner on the top row or the bottom row.
-      if (row.startsWithElemSpacer() && row.type ) {
+    
+      if (row.startsWithElemSpacer() && !Blockly.blockRendering.Types.isStatementInput(row)) {
         row.elements[0].width += 20;
+      } else {
+        console.log(Blockly.blockRendering.Types.getType(row))
       }
 
       if (row.endsWithElemSpacer()) {
