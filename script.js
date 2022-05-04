@@ -8,12 +8,10 @@ import Workspace from "./Workspace.js";
 import Footer from "./Footer.js";
 
 // TODO:
-//  - full-width blocks
-//  - unselectable top block
-//  - navigation
+//  - block width updates on resize
+//  - child blocks render smaller than parent
+//  - designer mode
 //  - image background
-
-console.log(Blockly.Blocks)
 
 render(
   html` <header />

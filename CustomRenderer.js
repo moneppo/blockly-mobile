@@ -8,7 +8,6 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
 
   static setScreenWidth(width) {
-    console.log(screenWidth);
     screenWidth = width;
   }
 
@@ -17,10 +16,8 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
 
     if (!screenWidth) return;
     for (let i = 0, row; (row = this.rows[i]); i++) {
-        console.log(row);
       row.measure();
       let remainingSpace = screenWidth - row.width;
-      console.log(row.align)
       switch (row.align) {
         case Blockly.ALIGN_RIGHT:
           if (row.startsWithElemSpacer()) {
@@ -32,6 +29,7 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
             row.elements[0].width += remainingSpace / 2;
             row.elements[row.elements.length - 1].width += remainingSpace / 2;
           }
+          break;
         default: // ALIGN_LEFT or undefined
           if (row.endsWithElemSpacer()) {
             row.elements[row.elements.length - 1].width += remainingSpace;
