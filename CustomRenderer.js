@@ -6,20 +6,20 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
 
   finalize_() {
-        super.finalize_();
-    console.log("FOR:", this.block_, this)
-     for (let i = 0; i < this.rows.length; i++) {
-       const row = this.rows[i];
-       if (!Blockly.blockRendering.Types.isInputRow(row)) {
-         continue;
-       }
-//       const firstElem = row.elements[1];
-//       const lastElem = row.elements[row.elements.length - 2];
-//       console.log(firstElem, lastElem);
-       row.elements[0].width=100;
+    super.finalize_();
+    console.log("FOR:", this.block_, this);
+    for (let i = 0; i < this.rows.length; i++) {
+      const row = this.rows[i];
+      row.width += 300;
+      row.xPos -= 3;
+      // if (!Blockly.blockRendering.Types.isInputRow(row)) {
+      //   continue;
+      // }
+      //       const firstElem = row.elements[1];
+      //       const lastElem = row.elements[row.elements.length - 2];
+      //       console.log(firstElem, lastElem);
       console.log(row.elements[0]);
-     }
-      
+    }
   }
 }
 
