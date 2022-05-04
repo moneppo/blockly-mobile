@@ -1,5 +1,4 @@
 /* global Blockly */
-console.log(Blockly.blockRendering.Types);
 
 const isStatementInputRow = (row) => {
   for (let j = 0, elem; (elem = row.elements[j]); j++) {
@@ -18,10 +17,12 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
 
   static setScreenWidth(width) {
+    console.log(screenWidth)
     screenWidth = width;
   }
 
   addElemSpacing_() {
+    console.log("update")
     super.addElemSpacing_();
 
     if (!screenWidth) return;

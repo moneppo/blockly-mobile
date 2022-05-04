@@ -1,11 +1,14 @@
 /* global Blockly */
 
 import { h, createRef } from "https://unpkg.com/preact@latest?module";
-import { useEffect, useLayoutEffect } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+import {
+  useEffect,
+  useLayoutEffect,
+} from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 import toolbox from "./toolbox.js";
 import VerticalMetrics from "./VerticalMetrics.js";
-import {CustomRenderer} from "./CustomRenderer.js";
+import { CustomRenderer } from "./CustomRenderer.js";
 
 const html = htm.bind(h);
 
@@ -21,25 +24,22 @@ const addBlockToEnd = (start, type) => {
   start.lastConnectionInStack().connect(newBlock.previousConnection);
 };
 
-const setWidth = (width) => {
-  CustomRenderer.setScreenWidth(width);
-}
-
 export default ({ workspace }) => {
   const ref = createRef();
-  
-  useLayoutEffect(() => {
-    setWidth(ref.current.clientWidth)
-  })
 
   useEffect(() => {
+    const resize = () => {
+      CustomRenderer.setScreenWidth(ref.current.clientWidth);
+      Blockly.currentWorkspace.render();
+    };
+
     const ws = Blockly.inject(ref.current, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
       move: {
         scrollbars: {
-          vertical: true
-        }
+          vertical: true,
+        },
       },
       plugins: {
         metricsManager: VerticalMetrics,
@@ -55,6 +55,13 @@ export default ({ workspace }) => {
     if (workspace) {
       workspace.current = ws;
     }
+    
+    resize()
+
+    window.addEventListener("resize", resize);
+    return () => {
+      window.removeEventListener("resize", resize);
+    };
   }, [ref]);
 
   return html`<div ref=${ref} id="workspace" />`;
