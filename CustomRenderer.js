@@ -1,5 +1,14 @@
 /* global Blockly */
-console.log(Blockly.blockRendering.Types)
+console.log(Blockly.blockRendering.Types);
+
+const isStatementInputRow = (row) => {
+  for (let j = 0, elem; (elem = row.elements[j]); j++) {
+    if (Blockly.blockRendering.Types.isStatementInput(elem)) {
+      return true;
+    }
+  }
+  return false;
+};
 
 class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   constructor(renderer, block) {
@@ -9,11 +18,11 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   addElemSpacing_() {
     super.addElemSpacing_();
     for (let i = 0, row; (row = this.rows[i]); i++) {
-    
-      if (row.startsWithElemSpacer() && !Blockly.blockRendering.Types.isStatementInput(row)) {
+      if (
+        row.startsWithElemSpacer() &&
+        !isStatementInputRow(row)
+      ) {
         row.elements[0].width += 20;
-      } else {
-        console.log(Blockly.blockRendering.Types.getType(row))
       }
 
       if (row.endsWithElemSpacer()) {
