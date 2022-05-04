@@ -4,6 +4,10 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   constructor(renderer, block) {
     super(renderer, block);
   }
+  
+  addElemSpacing_() {
+    
+  }
 
   finalize_() {
     super.finalize_();
