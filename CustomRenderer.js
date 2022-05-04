@@ -10,15 +10,14 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
     console.log("FOR:", this.block_, this);
     for (let i = 0; i < this.rows.length; i++) {
       const row = this.rows[i];
-      row.width += 300;
-      row.xPos -= 3;
-      // if (!Blockly.blockRendering.Types.isInputRow(row)) {
-      //   continue;
-      // }
-      //       const firstElem = row.elements[1];
-      //       const lastElem = row.elements[row.elements.length - 2];
-      //       console.log(firstElem, lastElem);
-      console.log(row.elements[0]);
+      const spacing = 300 / row.elements.filter(e => Blockly.blockRendering.Types.isSpacer(e)).length;
+      for (let s = 0; s < row.elements.length; s++) {
+        const element = row.elements[s];
+        if (Blockly.blockRendering.Types.isSpacer(element)) {
+          element.width += spacing;
+        }
+      }
+      console.log(row);
     }
   }
 }
