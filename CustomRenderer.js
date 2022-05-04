@@ -1,14 +1,5 @@
 /* global Blockly */
 
-const isStatementInputRow = (row) => {
-  for (let j = 0, elem; (elem = row.elements[j]); j++) {
-    if (Blockly.blockRendering.Types.isStatementInput(elem)) {
-      return true;
-    }
-  }
-  return false;
-};
-
 let screenWidth = undefined;
 
 class CustomRenderInfo extends Blockly.zelos.RenderInfo {
@@ -17,22 +8,22 @@ class CustomRenderInfo extends Blockly.zelos.RenderInfo {
   }
 
   static setScreenWidth(width) {
-    console.log(screenWidth)
+    console.log(screenWidth);
     screenWidth = width;
   }
 
   addElemSpacing_() {
-    console.log("update")
     super.addElemSpacing_();
 
     if (!screenWidth) return;
 
     for (let i = 0, row; (row = this.rows[i]); i++) {
-      if (isStatementInputRow(row)) continue;
-
+      row.measure();
       let remainingSpace = screenWidth - row.width;
-      console.log(screenWidth, remainingSpace);
+      switch(row.align) {
+        case -1: 
 
+      // TODO: Fix to adhere to alignment
       if (row.startsWithElemSpacer()) {
         if (row.endsWithElemSpacer()) {
           row.elements[0].width += remainingSpace / 2;
