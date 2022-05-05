@@ -25,7 +25,7 @@ Blockly.Blocks["play_sample"] = {
       args0: [
         {
           type: "field_image",
-          src: "https://icons.getbootstrap.com/assets/icons/music-note.svg",
+          src: "https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/music-note.svg?v=1651768616125",
           width: 36,
           height: 36,
           alt: "*",
