@@ -4,11 +4,12 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-const Button = ({selected, x, y, update}) => {
+const Button = ({ selected, x, y, update }) => {
   const ref = createRef();
-  const [dragOffset, setDragOffset] = useState({x:0,y:0});
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const startDrag = (event) => {
+    console.log("hai");
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
     let point = new DOMPoint(event.clientX, event.clientY);
@@ -16,6 +17,7 @@ const Button = ({selected, x, y, update}) => {
     setDragOffset({ x: point.x - x, y: point.y - y });
 
     const mousemove = (event) => {
+      console.log("huh?")
       event.preventDefault();
       point.x = event.clientX;
       point.y = event.clientY;
@@ -32,26 +34,20 @@ const Button = ({selected, x, y, update}) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  return html`
-    <rect
-      x=${x}
-      y=${y}
-      width="20"
-      height="20"
-      ref=${ref}
-      onMouseDown=${startDrag}
-    />`;
+  return html` <g ref=${ref} transform="translate(${x} ${y})">
+    <rect width="20" height="20" onMouseDown=${startDrag} />
+     <polyline points="0,100 50,25 50,75 100,0" fill="gray"/>
+  </g>`;
 };
 
 export default () => {
-  const [pos, setPos] = useState([0,0]);
-  
-  const update = (x,y) => {
-    setPos([x,y]);
-  }
-  
+  const [pos, setPos] = useState([0, 0]);
+
+  const update = (x, y) => {
+    setPos([x, y]);
+  };
+
   return html`<svg viewBox="0 0 100 100">
     <${Button} x=${pos[0]} y=${pos[1]} update=${update} />
-    </svg>
-  `
-}
+  </svg> `;
+};
