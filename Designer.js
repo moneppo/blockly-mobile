@@ -23,10 +23,17 @@ const Rotator = ({ width, height, rotation, update }) => {
       document.removeEventListener("mouseup", mouseup);
     };
   };
-  return html`<ellipse ref=${ref} cx="20" cy="20" rx="3" ry="3" />`;
+  return html` <image
+    href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
+    ref=${ref}
+    x=${width}
+    y=${height / 2 - 4}
+    height="8"
+    width="8"
+  />`;
 };
 
-const Button = ({ selected, x, y, update, select }) => {
+const Button = ({ selected, x, y, r, update, select }) => {
   const ref = createRef();
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
@@ -42,7 +49,7 @@ const Button = ({ selected, x, y, update, select }) => {
       point.x = event.clientX;
       point.y = event.clientY;
       let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      update(cursor.x - dragOffset.x, cursor.y - dragOffset.y);
+      update(cursor.x - dragOffset.x, cursor.y - dragOffset.y, r);
     };
 
     const mouseup = () => {
@@ -54,23 +61,32 @@ const Button = ({ selected, x, y, update, select }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  //    ${selected && html`<${Rotator} />`}
-  return html` <g ref=${ref} transform="translate(${x} ${y})">
+  const rotate = (newRotation) => {
+    update(x, y, newRotation);
+  };
+
+  console.log(r);
+
+  return html` <g
+    ref=${ref}
+    transform="rotate(${r} 10 10) translate(${x} ${y})"
+  >
     <rect
       width="20"
       height="20"
       onMouseDown=${selected ? startDrag : select}
       fill="teal"
     />
+    ${selected && html`<${Rotator} width="20" height="20" update=${rotate} />`}
   </g>`;
 };
 
 export default () => {
-  const [pos, setPos] = useState([0, 0]);
+  const [pos, setPos] = useState([0, 0, 0]);
   const [selected, setSelected] = useState(false);
 
-  const update = (x, y) => {
-    setPos([x, y]);
+  const update = (x, y, r) => {
+    setPos([x, y, r]);
   };
 
   return html`<svg viewBox="0 0 100 100">
@@ -78,6 +94,7 @@ export default () => {
       selected=${selected}
       x=${pos[0]}
       y=${pos[1]}
+      r=${pos[2]}
       update=${update}
       select=${setSelected}
     />
