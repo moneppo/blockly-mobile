@@ -1,51 +1,54 @@
-/* global fabric */
-
 import { h, createRef } from "https://unpkg.com/preact@latest?module";
-import {
-  useState,
-  useMemo,
-  useEffect,
-} from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-function resizeCanvas(canvas) {
-  console.log("resize");
-  const { width, height } = canvas.getBoundingClientRect();
-
-  if (canvas.width !== width || canvas.height !== height) {
-    const { devicePixelRatio: ratio = 1 } = window;
-    const context = canvas.getContext("2d");
-    canvas.width = width * ratio;
-    canvas.height = height * ratio;
-    context.scale(ratio, ratio);
+const Rect = () => {
+    const ref = createRef();
+ 
+    startDrag(event, draggedElem) {
+    event.preventDefault();
+    let point = this.svg.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    point = point.matrixTransform(this.svg.getScreenCTM().inverse());
+    this.setState({dragOffset: {
+      x: point.x - this.state.rect.x,
+      y: point.y - this.state.rect.y
+    }});
+    
+    const mousemove = (event) => {
+      event.preventDefault();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      let cursor = point.matrixTransform(this.svg.getScreenCTM().inverse());
+      this.setState({rect: {
+        x: cursor.x - this.state.dragOffset.x,
+        y: cursor.y - this.state.dragOffset.y
+      }});
+    };
+    
+    const mouseup = (event) => {
+      document.removeEventListener("mousemove", mousemove);
+      document.removeEventListener("mouseup", mouseup);
+    };
+    
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
   }
 }
 
-export default () => {
-  const ref = createRef();
-  if (ref.current) resizeCanvas(ref.current);
-
-  const c = useMemo(() => {
-    let canvas = new fabric.Canvas(ref.current);
-    console.log(canvas)
-    canvas.setBackgroundColor("rgba(255, 73, 64, 0.6)");
-    var rect = new fabric.Rect({
-      left: 100,
-      top: 50,
-      fill: "yellow",
-      width: 200,
-      height: 100,
-      objectCaching: false,
-      stroke: "lightgreen",
-      strokeWidth: 4,
-    });
-
-    canvas.add(rect);
-    canvas.setActiveObject(rect);
-    return canvas;
-  }, [ref]);
-
-  return html`<canvas ref=${ref} width="400" height="300" />`;
-};
+  
+    return html`
+      <svg viewBox="0 0 100 100" ref={(svg) => this.svg = svg}>
+        <rect
+          x={this.state.rect.x}
+          y={this.state.rect.y}
+          width="20"
+          height="20"
+          ref=${ref}
+          onMouseDown={(e) => this.startDrag(e, this.svgRectElem)}
+        />
+      </svg>`;
+  
