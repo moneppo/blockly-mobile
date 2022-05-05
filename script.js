@@ -5,6 +5,7 @@ import htm from "https://unpkg.com/htm?module";
 const html = htm.bind(h);
 
 import Workspace from "./Workspace.js";
+import Designer from "./Designer.js";
 import Footer from "./Footer.js";
 
 // TODO:
@@ -15,7 +16,7 @@ import Footer from "./Footer.js";
 render(
   html` <header />
     <main>
-      <${Workspace} />
+      <${/*Workspace*/ Designer} />
     </main>
     <${Footer} />`,
   document.body
