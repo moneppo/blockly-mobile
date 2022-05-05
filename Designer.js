@@ -4,34 +4,27 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-const Rotator = ({width, height, rotation, update}) => {
-   const ref = createRef();
+const Rotator = ({ width, height, rotation, update }) => {
+  const ref = createRef();
   const [offset, setOffset] = useState(0);
 
   const startRotate = (event) => {
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
-    let point = new DOMPoint(, event.clientY);
-    point = point.matrixTransform(svg.getScreenCTM().inverse());
-    setDragOffset(event.clientX);
+    setOffset(event.clientX - rotation);
 
     const mousemove = (event) => {
       event.preventDefault();
-      point.x = event.clientX;
-      point.y = event.clientY;
-      let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      update(cursor.x - dragOffset.x, cursor.y - dragOffset.y);
+      update(event.clientX - offset);
     };
 
     const mouseup = () => {
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     };
-
-  }
-  return html`<ellipse ref=${ref} cx="20" cy="20" rx="3" ry="3"/>`;
-  
-}
+  };
+  return html`<ellipse ref=${ref} cx="20" cy="20" rx="3" ry="3" />`;
+};
 
 const Button = ({ selected, x, y, update, select }) => {
   const ref = createRef();
@@ -61,9 +54,14 @@ const Button = ({ selected, x, y, update, select }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
+  //    ${selected && html`<${Rotator} />`}
   return html` <g ref=${ref} transform="translate(${x} ${y})">
-    <rect width="20" height="20" onMouseDown=${selected ? startDrag : select} />
-    ${selected && html`<${Rotator}/>`}
+    <rect
+      width="20"
+      height="20"
+      onMouseDown=${selected ? startDrag : select}
+      fill="teal"
+    />
   </g>`;
 };
 
@@ -76,6 +74,12 @@ export default () => {
   };
 
   return html`<svg viewBox="0 0 100 100">
-    <${Button} selected=${selected} x=${pos[0]} y=${pos[1]} update=${update} select=${setSelected}/>
+    <${Button}
+      selected=${selected}
+      x=${pos[0]}
+      y=${pos[1]}
+      update=${update}
+      select=${setSelected}
+    />
   </svg> `;
 };
