@@ -29,6 +29,7 @@ export default () => {
 
   const c = useMemo(() => {
     let canvas = new fabric.Canvas(ref.current);
+    console.log(canvas)
     canvas.setBackgroundColor("rgba(255, 73, 64, 0.6)");
     var rect = new fabric.Rect({
       left: 100,
