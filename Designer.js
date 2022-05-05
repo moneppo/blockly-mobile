@@ -7,12 +7,13 @@ const html = htm.bind(h);
 const Rect = () => {
     const ref = createRef();
  
-    startDrag(event, draggedElem) {
-    event.preventDefault();
-    let point = this.svg.createSVGPoint();
-    point.x = event.clientX;
-    point.y = event.clientY;
-    point = point.matrixTransform(this.svg.getScreenCTM().inverse());
+    const startDrag = (event) => {
+      const svg = ref.current.ownerSVGElement;
+      event.preventDefault();
+      let point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      point = point.matrixTransform(svg.getScreenCTM().inverse());
     this.setState({dragOffset: {
       x: point.x - this.state.rect.x,
       y: point.y - this.state.rect.y
@@ -41,14 +42,14 @@ const Rect = () => {
 
   
     return html`
-      <svg viewBox="0 0 100 100" ref={(svg) => this.svg = svg}>
+      <svg viewBox="0 0 100 100">
         <rect
           x={this.state.rect.x}
           y={this.state.rect.y}
           width="20"
           height="20"
           ref=${ref}
-          onMouseDown={(e) => this.startDrag(e, this.svgRectElem)}
+          onMouseDown=${startDrag}
         />
       </svg>`;
   
