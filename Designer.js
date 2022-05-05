@@ -22,7 +22,11 @@ const Rotator = ({ width, height, rotation, update }) => {
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     };
+    
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
   };
+  
   return html` <image
     href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
     ref=${ref}
@@ -30,6 +34,7 @@ const Rotator = ({ width, height, rotation, update }) => {
     y=${height / 2 - 4}
     height="8"
     width="8"
+    onMouseDown=${startRotate}
   />`;
 };
 
@@ -65,11 +70,10 @@ const Button = ({ selected, x, y, r, update, select }) => {
     update(x, y, newRotation);
   };
 
-  console.log(r);
 
   return html` <g
     ref=${ref}
-    transform="rotate(${r} 10 10) translate(${x} ${y})"
+    transform="translate(${x} ${y}) rotate(${r} 10 10)"
   >
     <rect
       width="20"
