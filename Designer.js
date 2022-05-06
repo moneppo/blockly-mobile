@@ -24,17 +24,19 @@ const useLens = (val) => {
 
 const Rotator = ({ box }) => {
   const ref = createRef();
-  const [offset, setOffset] = useState(0);
   const { w, h, r } = box();
 
   const startRotate = (event) => {
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
-    setOffset(event.clientX - r);
+    let offset = new DOMPoint(event.clientX, event.clientY);
+    offset = offset.matrixTransform(svg.getScreenCTM().inverse());
 
     const mousemove = (event) => {
       event.preventDefault();
-      box({ r: event.clientX - offset });
+      let point = new DOMPoint(event.clientX, event.clientY);
+      point = point.matrixTransform(svg.getScreenCTM().inverse());
+      box({ r: point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -59,15 +61,13 @@ const Rotator = ({ box }) => {
 
 const Resizer = ({ box }) => {
   const ref = createRef();
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const { x,y,w, h } = box();
+  const { x, y, w, h } = box();
 
   const startResize = (event) => {
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
-    let point = new DOMPoint(event.clientX, event.clientY);
-    point = point.matrixTransform(svg.getScreenCTM().inverse());
-    setOffset({ x: point.x - x, y: point.y-y });
+    let offset = new DOMPoint(event.clientX, event.clientY);
+    offset = offset.matrixTransform(svg.getScreenCTM().inverse());
 
     const mousemove = (event) => {
       event.preventDefault();
@@ -98,27 +98,21 @@ const Resizer = ({ box }) => {
 
 const Button = ({ select, box }) => {
   const ref = createRef();
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const { x, y, w, h, r } = box();
   const selected = select();
 
   const startDrag = (event) => {
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
-    let point = new DOMPoint(event.clientX, event.clientY);
-    point = point.matrixTransform(svg.getScreenCTM().inverse());
-    setDragOffset({ x: point.x, y: point.y });
+    let offset = new DOMPoint(event.clientX, event.clientY);
+    offset = offset.matrixTransform(svg.getScreenCTM().inverse());
 
     const mousemove = (event) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
       let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      console.log("move: clicked=", point,
-                  "offset=", dragOffset,
-                  "result=", { x: point.x - dragOffset.x, y: point.y - dragOffset.y })
-      box({ x: point.x - dragOffset.x, y: point.y - dragOffset.y });
-      
+      box({ x: point.x - offset.x, y: point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -128,6 +122,8 @@ const Button = ({ select, box }) => {
 
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
+    
+   event.stopPropagation();
   };
 
   const rotate = (r) => box({ r });
@@ -153,6 +149,7 @@ export default () => {
   const select = useLens(false);
 
   return html`<svg viewBox="0 0 100 100">
+    <rect width="100%" height="100%" fill="transparent" onMouseDown=${()=>select(false)}/>
     <${Button} select=${select} box=${box} />
   </svg> `;
 };
