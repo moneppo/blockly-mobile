@@ -6,14 +6,14 @@ const html = htm.bind(h);
 
 // Not technically a lens, but it's a short name.
 // Essentially a getter/setter for higher-level state,
-// reducing the number of attributes that need to be passed 
+// reducing the number of attributes that need to be passed
 // to child components.
 const useLens = (val) => {
   const [state, setState] = useState(val);
   return (s) => {
     if (s === undefined) return state;
 
-    if (typeof val === 'object') {
+    if (typeof val === "object") {
       setState({ ...state, ...s });
     } else {
       setState(s);
@@ -59,18 +59,22 @@ const Rotator = ({ width, height, rotation, update }) => {
 
 const Resizer = ({ box }) => {
   const ref = createRef();
-  const [offset, setOffset] = useState({x:0, y:0});
-   const { w, h} = box();
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const { w, h } = box();
 
-  const startRotate = (event) => {
+  const startResize = (event) => {
+    console.log("hi");
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
-    setOffset({x: event.clientX, y: event.clientY});
+    let point = new DOMPoint(event.clientX, event.clientY);
+    point = point.matrixTransform(svg.getScreenCTM().inverse());
+    setOffset({ x: point.x, y: point.y });
 
     const mousemove = (event) => {
       event.preventDefault();
-      box({w: w + event.clientX - offset.x, 
-           h: h + event.clientY - offset.y});
+      let point = new DOMPoint(event.clientX, event.clientY);
+      point = point.matrixTransform(svg.getScreenCTM().inverse());
+      box({ w: w + point.x - offset.x, h: h + point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -82,14 +86,13 @@ const Resizer = ({ box }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  return html` <image
-    href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
+  return html`<polyline
+    points="${w + 2},${h - 3} ${w + 2},${h + 2} ${w - 3},${h + 2}"
+    fill="transparent"
+    stroke="black"
+    style="pointer-events:all;"
     ref=${ref}
-    x=${w}
-    y=${h}
-    height="8"
-    width="8"
-    onMouseDown=${startRotate}
+    onMouseDown=${startResize}
   />`;
 };
 
@@ -104,14 +107,14 @@ const Button = ({ select, box }) => {
     event.preventDefault();
     let point = new DOMPoint(event.clientX, event.clientY);
     point = point.matrixTransform(svg.getScreenCTM().inverse());
-    setDragOffset({ x: point.x - x, y: point.y - y });
+    setDragOffset({ x: point.x, y: point.y });
 
     const mousemove = (event) => {
       event.preventDefault();
-      point.x = event.clientX;
-      point.y = event.clientY;
+      let point = new DOMPoint(event.clientX, event.clientY);
+      point = point.matrixTransform(svg.getScreenCTM().inverse());
       let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      box({ x: cursor.x - dragOffset.x, y: cursor.y - dragOffset.y });
+      box({ x: point.x - dragOffset.x, y: point.y - dragOffset.y });
     };
 
     const mouseup = () => {
@@ -129,15 +132,13 @@ const Button = ({ select, box }) => {
     ref=${ref}
     transform="translate(${x} ${y}) rotate(${r} 10 10)"
   >
-    <rect
-      width="20"
-      height="20"
-      onMouseDown=${selected ? startDrag : select}
+    <rect width=${w} height=${h}
+      onMouseDown=${selected ? startDrag : () => select(true)}
       fill="teal"
     />
-    ${selected && html`
-      <${Rotator} width="20" height="20" update=${rotate} />
-      <${Resizer} box=${box}`}
+    ${selected &&
+    html` <${Rotator} width="20" height="20" update=${rotate} />
+      <${Resizer} box=${box} />`}
   </g>`;
 };
 
