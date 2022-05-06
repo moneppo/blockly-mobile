@@ -4,6 +4,20 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
+const useLens = (val) => {
+  const [state, setState] = useState(val);
+  return (s) => {
+    if (s === undefined) return state;
+    
+    if (Object.is(state, Object)) {
+      setState({...state, ...s})
+    } else {
+      setState(s);
+    }
+   
+  }
+}
+
 const Rotator = ({ width, height, rotation, update }) => {
   const ref = createRef();
   const [offset, setOffset] = useState(0);
@@ -38,9 +52,11 @@ const Rotator = ({ width, height, rotation, update }) => {
   />`;
 };
 
-const Button = ({ selected, x, y, r, update, select }) => {
+const Button = ({ select, box }) => {
   const ref = createRef();
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const {x, y, w, h, r} = box();
+  const selected = select();
 
   const startDrag = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -54,7 +70,7 @@ const Button = ({ selected, x, y, r, update, select }) => {
       point.x = event.clientX;
       point.y = event.clientY;
       let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      update(cursor.x - dragOffset.x, cursor.y - dragOffset.y, r);
+      box({x: cursor.x - dragOffset.x, y: cursor.y - dragOffset.y});
     };
 
     const mouseup = () => {
@@ -66,10 +82,7 @@ const Button = ({ selected, x, y, r, update, select }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  const rotate = (newRotation) => {
-    update(x, y, newRotation);
-  };
-
+  const rotate = r => box({r})
 
   return html` <g
     ref=${ref}
@@ -86,21 +99,13 @@ const Button = ({ selected, x, y, r, update, select }) => {
 };
 
 export default () => {
-  const [pos, setPos] = useState([0, 0, 0]);
-  const [selected, setSelected] = useState(false);
-
-  const update = (x, y, r) => {
-    setPos([x, y, r]);
-  };
+  const box = useLens({x: 0, y: 0, w: 20, h: 20, r: 0});
+  const select = useLens(false);
 
   return html`<svg viewBox="0 0 100 100">
     <${Button}
-      selected=${selected}
-      x=${pos[0]}
-      y=${pos[1]}
-      r=${pos[2]}
-      update=${update}
-      select=${setSelected}
+      select=${select}
+      box=${box}
     />
   </svg> `;
 };
