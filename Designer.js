@@ -115,6 +115,9 @@ const Button = ({ select, box }) => {
       point = point.matrixTransform(svg.getScreenCTM().inverse());
       let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
       box({ x: point.x - dragOffset.x, y: point.y - dragOffset.y });
+      console.log("move", {x, y},
+                  
+                  { x: point.x - dragOffset.x, y: point.y - dragOffset.y })
     };
 
     const mouseup = () => {
