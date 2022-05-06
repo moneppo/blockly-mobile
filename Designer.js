@@ -4,19 +4,24 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
+// Not technically a lens, but it's a short name.
+// Essentially a getter/setter for higher-level state,
+// reducing the number of attributes that need to be passed 
+// to child components.
 const useLens = (val) => {
   const [state, setState] = useState(val);
   return (s) => {
     if (s === undefined) return state;
-    
-    if (Object.is(state, Object)) {
-      setState({...state, ...s})
+
+    if (typeof val === 'object') {
+      setState({ ...state, ...s });
     } else {
       setState(s);
     }
-   
-  }
-}
+  };
+};
+
+// TODO: Correct offsets
 
 const Rotator = ({ width, height, rotation, update }) => {
   const ref = createRef();
@@ -36,11 +41,11 @@ const Rotator = ({ width, height, rotation, update }) => {
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     };
-    
+
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
   };
-  
+
   return html` <image
     href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
     ref=${ref}
@@ -52,10 +57,46 @@ const Rotator = ({ width, height, rotation, update }) => {
   />`;
 };
 
+const Resizer = ({ box }) => {
+  const ref = createRef();
+  const [offset, setOffset] = useState({x:0, y:0});
+   const { w, h} = box();
+
+  const startRotate = (event) => {
+    const svg = ref.current.ownerSVGElement;
+    event.preventDefault();
+    setOffset({x: event.clientX, y: event.clientY});
+
+    const mousemove = (event) => {
+      event.preventDefault();
+      box({w: w + event.clientX - offset.x, 
+           h: h + event.clientY - offset.y});
+    };
+
+    const mouseup = () => {
+      document.removeEventListener("mousemove", mousemove);
+      document.removeEventListener("mouseup", mouseup);
+    };
+
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
+  };
+
+  return html` <image
+    href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
+    ref=${ref}
+    x=${w}
+    y=${h}
+    height="8"
+    width="8"
+    onMouseDown=${startRotate}
+  />`;
+};
+
 const Button = ({ select, box }) => {
   const ref = createRef();
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const {x, y, w, h, r} = box();
+  const { x, y, w, h, r } = box();
   const selected = select();
 
   const startDrag = (event) => {
@@ -70,7 +111,7 @@ const Button = ({ select, box }) => {
       point.x = event.clientX;
       point.y = event.clientY;
       let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      box({x: cursor.x - dragOffset.x, y: cursor.y - dragOffset.y});
+      box({ x: cursor.x - dragOffset.x, y: cursor.y - dragOffset.y });
     };
 
     const mouseup = () => {
@@ -82,7 +123,7 @@ const Button = ({ select, box }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  const rotate = r => box({r})
+  const rotate = (r) => box({ r });
 
   return html` <g
     ref=${ref}
@@ -94,18 +135,17 @@ const Button = ({ select, box }) => {
       onMouseDown=${selected ? startDrag : select}
       fill="teal"
     />
-    ${selected && html`<${Rotator} width="20" height="20" update=${rotate} />`}
+    ${selected && html`
+      <${Rotator} width="20" height="20" update=${rotate} />
+      <${Resizer} box=${box}`}
   </g>`;
 };
 
 export default () => {
-  const box = useLens({x: 0, y: 0, w: 20, h: 20, r: 0});
+  const box = useLens({ x: 0, y: 0, w: 20, h: 20, r: 0 });
   const select = useLens(false);
 
   return html`<svg viewBox="0 0 100 100">
-    <${Button}
-      select=${select}
-      box=${box}
-    />
+    <${Button} select=${select} box=${box} />
   </svg> `;
 };
