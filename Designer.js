@@ -20,18 +20,19 @@ const useLens = (val) => {
   };
 };
 
-const useSubLens = (state, setState, key) => {
-  return (s) => {
-    if (s === undefined) return state[key];
-
-    if (typeof s === "object") {
-      setState((oldState => {
-        oldState[key] = {}
-      }));
-    } else {
-      setState(s);
+const usePathLens = (val) => {
+  const [state, setState] = useState(val);
+  return new Proxy({}, {
+    get: (_target, prop) => {
+       return state[prop];
+    },
+    set: (_target, prop, value) => {
+      setState(s => {
+        s[prop] = value;
+        return s;
+      })
     }
-  };
+  });
 };
 
 // TODO: Correct offsets
@@ -163,6 +164,7 @@ const Button = ({ select, box }) => {
 };
 
 export default () => {
+  const buttons = usePathLens([{x:25,y:25, w: 100, h: 100, r: 0}])
   const box = useLens({ x: 25, y: 25, w: 100, h: 100, r: 0 });
   const select = useLens(false);
 
@@ -174,6 +176,7 @@ export default () => {
       stroke="green"
       onMouseUp=${() => select(false)}
     />
+    ${buttons.map}
     <${Button} select=${select} box=${box} />
   </svg> `;
 };
