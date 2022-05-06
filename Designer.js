@@ -4,7 +4,6 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-// Not technically a lens, but it's a short name.
 // Essentially a getter/setter for higher-level state,
 // reducing the number of attributes that need to be passed
 // to child components.
@@ -23,18 +22,19 @@ const useLens = (val) => {
 
 // TODO: Correct offsets
 
-const Rotator = ({ width, height, rotation, update }) => {
+const Rotator = ({ box }) => {
   const ref = createRef();
   const [offset, setOffset] = useState(0);
+  const { w, h, r } = box();
 
   const startRotate = (event) => {
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
-    setOffset(event.clientX - rotation);
+    setOffset(event.clientX - r);
 
     const mousemove = (event) => {
       event.preventDefault();
-      update(event.clientX - offset);
+      box({ r: event.clientX - offset });
     };
 
     const mouseup = () => {
@@ -49,8 +49,8 @@ const Rotator = ({ width, height, rotation, update }) => {
   return html` <image
     href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
     ref=${ref}
-    x=${width}
-    y=${height / 2 - 4}
+    x=${w}
+    y=${h / 2 - 4}
     height="8"
     width="8"
     onMouseDown=${startRotate}
@@ -60,15 +60,14 @@ const Rotator = ({ width, height, rotation, update }) => {
 const Resizer = ({ box }) => {
   const ref = createRef();
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const { w, h } = box();
+  const { x,y,w, h } = box();
 
   const startResize = (event) => {
-    console.log("hi");
     const svg = ref.current.ownerSVGElement;
     event.preventDefault();
     let point = new DOMPoint(event.clientX, event.clientY);
     point = point.matrixTransform(svg.getScreenCTM().inverse());
-    setOffset({ x: point.x, y: point.y });
+    setOffset({ x: point.x - x, y: point.y-y });
 
     const mousemove = (event) => {
       event.preventDefault();
@@ -90,8 +89,9 @@ const Resizer = ({ box }) => {
     points="${w + 2},${h - 3} ${w + 2},${h + 2} ${w - 3},${h + 2}"
     fill="transparent"
     stroke="black"
-    style="pointer-events:all;"
+    pointer-events="all"
     ref=${ref}
+    stroke-width=".75px"
     onMouseDown=${startResize}
   />`;
 };
@@ -130,14 +130,16 @@ const Button = ({ select, box }) => {
 
   return html` <g
     ref=${ref}
-    transform="translate(${x} ${y}) rotate(${r} 10 10)"
+    transform="translate(${x} ${y}) rotate(${r} ${w / 2} ${h / 2})"
   >
-    <rect width=${w} height=${h}
-      onMouseDown=${selected ? startDrag : () => select(true)}
+    <rect
+      width=${w}
+      height=${h}
       fill="teal"
+      onMouseDown=${selected ? startDrag : () => select(true)}
     />
     ${selected &&
-    html` <${Rotator} width="20" height="20" update=${rotate} />
+    html` <${Rotator} box=${box} />
       <${Resizer} box=${box} />`}
   </g>`;
 };
