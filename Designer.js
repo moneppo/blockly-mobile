@@ -20,6 +20,20 @@ const useLens = (val) => {
   };
 };
 
+const useSubLens = (state, setState, key) => {
+  return (s) => {
+    if (s === undefined) return state[key];
+
+    if (typeof s === "object") {
+      setState((oldState => {
+        oldState[key] = {}
+      }));
+    } else {
+      setState(s);
+    }
+  };
+};
+
 // TODO: Correct offsets
 
 const Rotator = ({ box }) => {
@@ -52,9 +66,9 @@ const Rotator = ({ box }) => {
     href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
     ref=${ref}
     x=${w}
-    y=${h / 2 - 4}
-    height="8"
-    width="8"
+    y=${h / 2 - 16}
+    height="32"
+    width="32"
     onMouseDown=${startRotate}
   />`;
 };
@@ -73,7 +87,10 @@ const Resizer = ({ box }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      box({ w: w + point.x - offset.x, h: h + point.y - offset.y });
+      box({
+        w: Math.max(w + point.x - offset.x, 75),
+        h: Math.max(h + point.y - offset.y, 75),
+      });
     };
 
     const mouseup = () => {
@@ -86,12 +103,13 @@ const Resizer = ({ box }) => {
   };
 
   return html`<polyline
-    points="${w + 2},${h - 3} ${w + 2},${h + 2} ${w - 3},${h + 2}"
+    points="${w + 8},${h - 12} ${w + 8},${h + 8} ${w - 12},${h + 8}"
     fill="transparent"
     stroke="black"
     pointer-events="all"
     ref=${ref}
-    stroke-width=".75px"
+    stroke-width="2.3px"
+    stroke-linecap="round"
     onMouseDown=${startResize}
   />`;
 };
@@ -122,8 +140,8 @@ const Button = ({ select, box }) => {
 
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
-    
-   event.stopPropagation();
+
+    event.stopPropagation();
   };
 
   const rotate = (r) => box({ r });
@@ -145,11 +163,17 @@ const Button = ({ select, box }) => {
 };
 
 export default () => {
-  const box = useLens({ x: 0, y: 0, w: 20, h: 20, r: 0 });
+  const box = useLens({ x: 25, y: 25, w: 100, h: 100, r: 0 });
   const select = useLens(false);
 
-  return html`<svg viewBox="0 0 100 100">
-    <rect width="100%" height="100%" fill="transparent" onMouseDown=${()=>select(false)}/>
+  return html`<svg viewBox="0 0 auto 100">
+    <rect
+      width="100%"
+      height="100%"
+      fill="transparent"
+      stroke="green"
+      onMouseUp=${() => select(false)}
+    />
     <${Button} select=${select} box=${box} />
   </svg> `;
 };
