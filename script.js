@@ -16,20 +16,38 @@ import DesignFooter from "./DesignFooter.js";
 //  - image background
 
 const App = () => {
- const [buttons, setButtons] = useState([
+  const [buttons, setButtons] = useState([
     { x: 25, y: 25, w: 100, h: 100, r: 0 },
   ]);
+  const [selected, setSelected] = useState(-1);
 
   const updateButton = (i, b) => {
-    buttons[i] = b;
+    buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
-  
-  return html` <header />
+
+  const add = () =>
+    setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
+
+  const remove = () => {
+    if (selected >= 0) {
+      setButtons(b => {
+        b.splice(selected, 1)
+        return [...b]);
+      setSelected(-1);
+    }
+  };
+
+  return html`<header />
     <main>
-      <${/*Workspace*/ Designer} buttons=${buttons} updateButton=${updateButton}/>
+      <${/*Workspace*/ Designer}
+        buttons=${buttons}
+        updateButton=${updateButton}
+        selected=${selected}
+        setSelected=${setSelected}
+      />
     </main>
-    <${DesignFooter} />`
-}
+    <${DesignFooter} add=${add} remove=${remove} />`;
+};
 
 render(html`<${App} />`, document.body);

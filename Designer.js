@@ -96,8 +96,7 @@ const Button = ({ select, selected, update, button }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      console.log(offset, point, { x: point.x - offset.x, y: point.y - offset.y })
-      update({ x: x + point.x - offset.x, y: y+ point.y - offset.y });
+      update({ x: x + point.x - offset.x, y: y + point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -127,10 +126,7 @@ const Button = ({ select, selected, update, button }) => {
   </g>`;
 };
 
-export default ({buttons, updateButton}) => {
- 
-  const [selected, setSelected] = useState(-1);
-
+export default ({ buttons, updateButton, selected, setSelected }) => {
   return html`<svg>
     <rect
       width="100%"
@@ -146,7 +142,7 @@ export default ({buttons, updateButton}) => {
         button=${b}
         key=${i}
         selected=${i === selected}
-        update=${(b) => updateButton(i,b)}
+        update=${(b) => updateButton(i, b)}
         select=${select}
       />`;
     })}
