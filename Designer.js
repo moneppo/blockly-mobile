@@ -18,7 +18,7 @@ const Rotator = ({ button, update }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      update({ r: point.y - offset.y });
+      update({ r: r + point.y - offset.y });
     };
 
     const mouseup = () => {
