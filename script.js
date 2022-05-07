@@ -26,14 +26,15 @@ const App = () => {
     setButtons([...buttons]);
   };
 
-  const add = () =>
-    setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
+  const add = () => {
+    setSelected(buttons.length);
+    setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }])
+  }
 
   const remove = () => {
     if (selected >= 0) {
-      setButtons(b => {
-        b.splice(selected, 1)
-        return [...b]);
+      buttons.splice(selected, 1);
+      setButtons([...buttons]);
       setSelected(-1);
     }
   };
