@@ -6,9 +6,9 @@ const html = htm.bind(h);
 
 // TODO: Correct offsets
 
-const Rotator = ({ box }) => {
+const Rotator = ({ button, update }) => {
   const ref = createRef();
-  const { w, h, r } = box();
+  const { w, h, r } = button;
 
   const startRotate = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -20,7 +20,7 @@ const Rotator = ({ box }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      box({ r: point.y - offset.y });
+      update({ r: point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -43,9 +43,9 @@ const Rotator = ({ box }) => {
   />`;
 };
 
-const Resizer = ({ box }) => {
+const Resizer = ({ button, update }) => {
   const ref = createRef();
-  const { x, y, w, h } = box();
+  const { x, y, w, h } = button;
 
   const startResize = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -57,7 +57,7 @@ const Resizer = ({ box }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      box({
+      update({
         w: Math.max(w + point.x - offset.x, 75),
         h: Math.max(h + point.y - offset.y, 75),
       });
@@ -84,10 +84,9 @@ const Resizer = ({ box }) => {
   />`;
 };
 
-const Button = ({ select, box }) => {
+const Button = ({ select, selected, update, button }) => {
   const ref = createRef();
-  const { x, y, w, h, r } = box();
-  const selected = select();
+  let { x, y, w, h, r } = button;
 
   const startDrag = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -99,8 +98,8 @@ const Button = ({ select, box }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      let cursor = point.matrixTransform(svg.getScreenCTM().inverse());
-      box({ x: point.x - offset.x, y: point.y - offset.y });
+      console.log(offset, point, { x: point.x - offset.x, y: point.y - offset.y })
+      update({ x: point.x - offset.x, y: point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -114,8 +113,6 @@ const Button = ({ select, box }) => {
     event.stopPropagation();
   };
 
-  const rotate = (r) => box({ r });
-
   return html` <g
     ref=${ref}
     transform="translate(${x} ${y}) rotate(${r} ${w / 2} ${h / 2})"
@@ -124,23 +121,24 @@ const Button = ({ select, box }) => {
       width=${w}
       height=${h}
       fill="teal"
-      onMouseDown=${selected ? startDrag : () => select(true)}
+      onMouseDown=${selected ? startDrag : select}
     />
     ${selected &&
-    html` <${Rotator} box=${box} />
-      <${Resizer} box=${box} />`}
+    html` <${Rotator} button=${button} update=${update} />
+      <${Resizer} button=${button} update=${update} />`}
   </g>`;
 };
 
 export default () => {
-  console.log("drawing");
-  const [buttons, setButtons] = useState([{x:25, y:25, w: 100, h: 100, r: 0}])
+  const [buttons, setButtons] = useState([
+    { x: 25, y: 25, w: 100, h: 100, r: 0 },
+  ]);
   const [selected, setSelected] = useState(-1);
-  
+
   const updateButton = (i, b) => {
     buttons[i] = b;
-    setButtons(buttons);
-  }
+    setButtons([...buttons]);
+  };
 
   return html`<svg>
     <rect
@@ -150,14 +148,20 @@ export default () => {
       stroke="green"
       onClick=${() => setSelected(-1)}
     />
-    ${buttons.map((b,i) => {
+    ${buttons.map((b, i) => {
       const select = () => setSelected(i);
       const update = (b) => {
-        buttons[i] = b;
-        setButtons(buttons);
-      }
-      
-      return html`<${Button} button=${b} update=${(b) => updateButton(i, b)} select=${select} />`
+        buttons[i] = { ...buttons[i], ...b };
+        setButtons([...buttons]);
+      };
+
+      return html`<${Button}
+        button=${b}
+        key=${i}
+        selected=${i === selected}
+        update=${update}
+        select=${select}
+      />`;
     })}
   </svg> `;
 };
