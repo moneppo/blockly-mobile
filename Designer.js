@@ -168,7 +168,7 @@ export default () => {
   const box = useLens({ x: 25, y: 25, w: 100, h: 100, r: 0 });
   const select = useLens(false);
 
-  return html`<svg viewBox="0 0 auto 100">
+  return html`<svg>
     <rect
       width="100%"
       height="100%"
@@ -176,7 +176,6 @@ export default () => {
       stroke="green"
       onMouseUp=${() => select(false)}
     />
-    ${buttons.map}
     <${Button} select=${select} box=${box} />
   </svg> `;
 };
