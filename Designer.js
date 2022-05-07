@@ -133,15 +133,13 @@ const Button = ({ select, box }) => {
 };
 
 export default () => {
+  console.log("drawing");
   const [buttons, setButtons] = useState([{x:25, y:25, w: 100, h: 100, r: 0}])
-  const [select, setSelect] = useState(-1);
+  const [selected, setSelected] = useState(-1);
   
-  const button = i => s => {
-    if (s === undefined) return buttons[i];
-    setButtons(prev => {
-      prev[i] = {...prev[i], ...s};
-      return prev;
-    })
+  const updateButton = (i, b) => {
+    buttons[i] = b;
+    setButtons(buttons);
   }
 
   return html`<svg>
@@ -150,8 +148,16 @@ export default () => {
       height="100%"
       fill="transparent"
       stroke="green"
-      onMouseUp=${() => select(false)}
+      onClick=${() => setSelected(-1)}
     />
-    ${buttons.map((_b,i) => html`<${Button} box=${button(i)} />`)}
+    ${buttons.map((b,i) => {
+      const select = () => setSelected(i);
+      const update = (b) => {
+        buttons[i] = b;
+        setButtons(buttons);
+      }
+      
+      return html`<${Button} button=${b} update=${(b) => updateButton(i, b)} select=${select} />`
+    })}
   </svg> `;
 };
