@@ -20,19 +20,31 @@ const useLens = (val) => {
   };
 };
 
-const usePathLens = (val) => {
+const useLensArray = (val) => {
   const [state, setState] = useState(val);
-  return new Proxy({}, {
-    get: (_target, prop) => {
-       return state[prop];
-    },
-    set: (_target, prop, value) => {
-      setState(s => {
-        s[prop] = value;
-        return s;
-      })
+  const result = (i, s) => {
+    if (s === undefined) return state[i];
+
+    if (typeof s === "object") {
+      setState(oldState => {
+        oldState[i] = {...oldState[i], ...s};
+        return oldState
+      });
+    } else {
+       setState(oldState => {
+        oldState[i] = s
+        return oldState
+      });
     }
-  });
+  }
+  
+  result.length = () => {
+    return state.length;
+  }
+  
+  result.map = (fn) => state.map(fn);
+  
+  return result;
 };
 
 // TODO: Correct offsets
@@ -164,7 +176,7 @@ const Button = ({ select, box }) => {
 };
 
 export default () => {
-  const buttons = usePathLens([{x:25,y:25, w: 100, h: 100, r: 0}])
+  const buttons = useArrayLens([{x:25,y:25, w: 100, h: 100, r: 0}])
   const box = useLens({ x: 25, y: 25, w: 100, h: 100, r: 0 });
   const select = useLens(false);
 
@@ -176,6 +188,7 @@ export default () => {
       stroke="green"
       onMouseUp=${() => select(false)}
     />
+    ${buttons.map(b => )}
     <${Button} select=${select} box=${box} />
   </svg> `;
 };
