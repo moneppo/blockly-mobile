@@ -4,49 +4,6 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-// Essentially a getter/setter for higher-level state,
-// reducing the number of attributes that need to be passed
-// to child components.
-const useLens = (val) => {
-  const [state, setState] = useState(val);
-  return (s) => {
-    if (s === undefined) return state;
-
-    if (typeof val === "object") {
-      setState({ ...state, ...s });
-    } else {
-      setState(s);
-    }
-  };
-};
-
-const useLensArray = (val) => {
-  const [state, setState] = useState(val);
-  const result = (i, s) => {
-    if (s === undefined) return state[i];
-
-    if (typeof s === "object") {
-      setState(oldState => {
-        oldState[i] = {...oldState[i], ...s};
-        return oldState
-      });
-    } else {
-       setState(oldState => {
-        oldState[i] = s
-        return oldState
-      });
-    }
-  }
-  
-  result.length = () => {
-    return state.length;
-  }
-  
-  result.map = (fn) => state.map(fn);
-  
-  return result;
-};
-
 // TODO: Correct offsets
 
 const Rotator = ({ box }) => {
@@ -176,9 +133,16 @@ const Button = ({ select, box }) => {
 };
 
 export default () => {
-  const buttons = useArrayLens([{x:25,y:25, w: 100, h: 100, r: 0}])
-  const box = useLens({ x: 25, y: 25, w: 100, h: 100, r: 0 });
-  const select = useLens(false);
+  const [buttons, setButtons] = useState([{x:25, y:25, w: 100, h: 100, r: 0}])
+  const [select, setSelect] = useState(-1);
+  
+  const button = i => s => {
+    if (s === undefined) return buttons[i];
+    setButtons(prev => {
+      prev[i] = {...prev[i], ...s};
+      return prev;
+    })
+  }
 
   return html`<svg>
     <rect
@@ -188,7 +152,6 @@ export default () => {
       stroke="green"
       onMouseUp=${() => select(false)}
     />
-    ${buttons.map(b => )}
-    <${Button} select=${select} box=${box} />
+    ${buttons.map((_b,i) => html`<${Button} box=${button(i)} />`)}
   </svg> `;
 };
