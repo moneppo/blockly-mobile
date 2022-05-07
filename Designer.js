@@ -4,8 +4,6 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-// TODO: Correct offsets
-
 const Rotator = ({ button, update }) => {
   const ref = createRef();
   const { w, h, r } = button;
@@ -99,7 +97,7 @@ const Button = ({ select, selected, update, button }) => {
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
       console.log(offset, point, { x: point.x - offset.x, y: point.y - offset.y })
-      update({ x: point.x - offset.x, y: point.y - offset.y });
+      update({ x: x + point.x - offset.x, y: y+ point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -129,16 +127,9 @@ const Button = ({ select, selected, update, button }) => {
   </g>`;
 };
 
-export default () => {
-  const [buttons, setButtons] = useState([
-    { x: 25, y: 25, w: 100, h: 100, r: 0 },
-  ]);
+export default ({buttons, updateButton}) => {
+ 
   const [selected, setSelected] = useState(-1);
-
-  const updateButton = (i, b) => {
-    buttons[i] = b;
-    setButtons([...buttons]);
-  };
 
   return html`<svg>
     <rect
@@ -150,16 +141,12 @@ export default () => {
     />
     ${buttons.map((b, i) => {
       const select = () => setSelected(i);
-      const update = (b) => {
-        buttons[i] = { ...buttons[i], ...b };
-        setButtons([...buttons]);
-      };
 
       return html`<${Button}
         button=${b}
         key=${i}
         selected=${i === selected}
-        update=${update}
+        update=${(b) => updateButton(i,b)}
         select=${select}
       />`;
     })}
