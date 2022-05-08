@@ -13,7 +13,10 @@ The primary goals are to:
    on web technologies
 2. Evaluate customization of Blockly using the new extension capabilities
    added over the past year
-3. Try out the music lab experience and new UX 
+3. Try out the music lab experience and new UX designs, such as full-screen
+   block-editing.
+
+The primary content begins in [script.js](script.js).
 
 -->
 <!DOCTYPE html>
@@ -22,12 +25,19 @@ The primary goals are to:
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="https://glitch.com/favicon.ico" />
-
-    <title>Hello world!</title>
+    
+    <title>Music Lab</title>
+    
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    
+<!-- 
+
+I'm using ES6 modules as much as possible as that's where the web is moving. Granted this 
+doesn't work for Blockly, but for the rest of the prototype it makes things very straight forward.
+
+-->
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
-    <script src="https://www.unpkg.com/fabricjs"></script>
     <script src="/script.js" defer type="module"></script>
   </head>
   <body>

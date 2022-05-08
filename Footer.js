@@ -34,7 +34,7 @@ const BlockMenu = ({ onSelected }) => {
   </div>`;
 };
 
-export default () => {
+export default ({onTrashClick, onAddClick, onRunClick}) => {
   const [open, setOpen] = useState(false);
 
   const trashClick = () => {
@@ -46,13 +46,13 @@ export default () => {
   const addClick = () => setOpen(!open);
 
   return html` <footer>
-    <button onclick=${addClick}>
+    <button onclick=${onAddClick}>
       <i class="bi bi-plus-square" />
     </button>
-    <button>
+    <button onclick=${onRunClick}>>
       <i class="bi bi-play" />
     </button>
-    <button onclick=${trashClick}>
+    <button onclick=${onTrashClick}>
       <i class="bi bi-trash3" />
     </button>
     ${open && html`<${BlockMenu} onSelected=${() => setOpen(false)} />`}
