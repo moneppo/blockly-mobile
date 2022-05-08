@@ -34,7 +34,6 @@ the following:
 import Workspace from "./Workspace.js";
 import Designer from "./Designer.js";
 
-import Header from "./Header.js";
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
 
@@ -106,7 +105,13 @@ I'm encoding the active view as follows:
       break;
   }
 
-  return html`<Header changeView=${changeView} />
+  return html`<header>
+   ${view > -2 && 
+      html`<button>
+        <i class="bi bi-chevron-left"/>
+      </button>`}
+    <button onClick=${() => changeView(1)}><i class="bi bi-chevron-right" /></button>
+  </header>
     <main>${activeView}</main>
     <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
       ${menuOpen &&
