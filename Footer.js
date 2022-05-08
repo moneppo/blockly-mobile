@@ -6,35 +6,7 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-const addBlock = (type) => {
-  const block = Blockly.mainWorkspace.newBlock(type);
-  block.initSvg();
-  block.render(false);
-  Blockly.mainWorkspace
-    .getTopBlocks()[0]
-    .lastConnectionInStack()
-    .connect(block.previousConnection);
-};
-
-const BlockMenu = ({ onSelected }) => {
-  console.log();
-  return html`<div id="blockmenu">
-    ${toolbox.contents.map(
-      (i) =>
-        html`<button
-          onclick=${() => {
-            addBlock(i.type);
-            onSelected && onSelected();
-          }}
-        >
-          <i class=${i.icon} />
-          ${i.display_name}
-        </button>`
-    )}
-  </div>`;
-};
-
-export default ({onTrashClick, onAddClick, onRunClick}) => {
+export default ({onTrashClick, onAddClick, onRunClick, children}) => {
   const [open, setOpen] = useState(false);
 
   const trashClick = () => {
@@ -55,6 +27,6 @@ export default ({onTrashClick, onAddClick, onRunClick}) => {
     <button onclick=${onTrashClick}>
       <i class="bi bi-trash3" />
     </button>
-    ${open && html`<${BlockMenu} onSelected=${() => setOpen(false)} />`}
+    ${children}
   </footer>`;
 };

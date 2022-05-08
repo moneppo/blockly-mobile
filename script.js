@@ -33,7 +33,9 @@ the following:
 */
 import Workspace from "./Workspace.js";
 import Designer from "./Designer.js";
-import DesignFooter from "./DesignFooter.js";
+import Footer from "./Footer.js";
+
+import BlockMenu from "./BlockMenu.js";
 
 // TODO:
 //  - child blocks render smaller than parent
@@ -49,11 +51,12 @@ All state is stored at the top level component (`App`). This allows for
 easier porting to a redux store.
 
 */
-  
+  const [view, setView] = useState(-1)
   const [buttons, setButtons] = useState([
     { x: 25, y: 25, w: 100, h: 100, r: 0 },
   ]);
   const [selected, setSelected] = useState(-1);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
@@ -82,7 +85,9 @@ easier porting to a redux store.
         setSelected=${setSelected}
       />
     </main>
-    <${DesignFooter} add=${add} remove=${remove} />`;
+    <${Footer} add=${add} remove=${remove}>
+      ${menuOpen && html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
+    </>`;
 };
 
 render(html`<${App} />`, document.body);
