@@ -33,8 +33,9 @@ the following:
 */
 import Workspace from "./Workspace.js";
 import Designer from "./Designer.js";
-import Footer from "./Footer.js";
 
+import Header from "./Header.js";
+import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
 
 // TODO:
@@ -55,17 +56,20 @@ I'm encoding the active view as follows:
 
 */
   const [view, setView] = useState(-2);
-
+  const [selected, setSelected] = useState(-1);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([
     { x: 25, y: 25, w: 100, h: 100, r: 0 },
   ]);
-  const [selected, setSelected] = useState(-1);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
+  
+  const changeView = (offset) => {
+   setView(Math.min(Math.max(view + offset, -2), buttons.length-1));
+  }
 
   let activeView, onAddClick, onTrashClick, onRunClick;
   switch (view) {
@@ -102,7 +106,7 @@ I'm encoding the active view as follows:
       break;
   }
 
-  return html`<header />
+  return html`<Header changeView=${changeView} />
     <main>${activeView}</main>
     <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
       ${menuOpen &&

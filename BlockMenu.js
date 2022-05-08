@@ -10,7 +10,7 @@ const html = htm.bind(h);
 
 /**
 
-The BlockMenu component is essentially a mobile-friendly reimplementation
+The BlockMenu component is essentially a mobile-friendly re-implementation
 of the toolbox. It's debatable where this is a good solution. In theory,
 one can specify where the toolbox gets rendered, so it could be reutilitized
 in a menu component. However, there is a ton of complexity to the toolbox that
