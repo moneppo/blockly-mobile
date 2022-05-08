@@ -42,10 +42,8 @@ import BlockMenu from "./BlockMenu.js";
 //  - designer mode
 //  - image background
 
-
 const App = () => {
-  
-/** 
+  /** 
 
 All state is stored at the top level component (`App`). This allows for
 easier porting to a redux store.
@@ -57,7 +55,7 @@ I'm encoding the active view as follows:
 
 */
   const [view, setView] = useState(-2);
-  
+
   const [buttons, setButtons] = useState([
     { x: 25, y: 25, w: 100, h: 100, r: 0 },
   ]);
@@ -68,34 +66,36 @@ I'm encoding the active view as follows:
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
-  
+
   let activeView, onAddClick, onTrashClick, onRunClick;
-  switch(view) {
+  switch (view) {
     case -2:
-      activeView = html`
-        <${Designer}
-          buttons=${buttons}
-          updateButton=${updateButton}
-          selected=${selected}
-          setSelected=${setSelected}
-        />`;
-      onAddClick =  () => {
+      activeView = html` <${Designer}
+        buttons=${buttons}
+        updateButton=${updateButton}
+        selected=${selected}
+        setSelected=${setSelected}
+      />`;
+      onAddClick = () => {
         setSelected(buttons.length);
-        setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }])
-      }
+        setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
+      };
       onTrashClick = () => {
-         if (selected >= 0) {
+        if (selected >= 0) {
           buttons.splice(selected, 1);
           setButtons([...buttons]);
           setSelected(-1);
         }
-      }
+      };
       break;
     case -1:
       activeView = html`<${Workspace} />`;
-      onAddClick = () => {
-        set
-      }
+      onAddClick = () => setMenuOpen(!menuOpen);
+      onTrashClick = () => {
+        if (Blockly.selected && Blockly.selected.isDeletable()) {
+          Blockly.selected.checkAndDelete();
+        }
+      };
       break;
     default:
       activeView = html`<${Workspace} />`;
@@ -103,12 +103,11 @@ I'm encoding the active view as follows:
   }
 
   return html`<header />
-    <main>
-      ${activeView}
-    </main>
-    <${Footer} add=${add} remove=${remove}>
-      ${menuOpen && html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
-    </>`;
+    <main>${activeView}</main>
+    <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
+      ${menuOpen &&
+      html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
+    </${Footer}>`;
 };
 
 render(html`<${App} />`, document.body);

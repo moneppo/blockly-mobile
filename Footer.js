@@ -7,16 +7,6 @@ import toolbox from "./toolbox.js";
 const html = htm.bind(h);
 
 export default ({onTrashClick, onAddClick, onRunClick, children}) => {
-  const [open, setOpen] = useState(false);
-
-  const trashClick = () => {
-    if (Blockly.selected && Blockly.selected.isDeletable()) {
-      Blockly.selected.checkAndDelete();
-    }
-  };
-
-  const addClick = () => setOpen(!open);
-
   return html` <footer>
     <button onclick=${onAddClick}>
       <i class="bi bi-plus-square" />
