@@ -50,8 +50,14 @@ const App = () => {
 All state is stored at the top level component (`App`). This allows for
 easier porting to a redux store.
 
+I'm encoding the active view as follows:
+-2: Designer
+-1: "when started" event workspace
+0 to buttons.length-1: "when pressed" event for the button with that index
+
 */
-  const [view, setView] = useState(-1)
+  const [view, setView] = useState(-2);
+  
   const [buttons, setButtons] = useState([
     { x: 25, y: 25, w: 100, h: 100, r: 0 },
   ]);
@@ -62,28 +68,43 @@ easier porting to a redux store.
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
-
-  const add = () => {
-    setSelected(buttons.length);
-    setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }])
+  
+  let activeView, onAddClick, onTrashClick, onRunClick;
+  switch(view) {
+    case -2:
+      activeView = html`
+        <${Designer}
+          buttons=${buttons}
+          updateButton=${updateButton}
+          selected=${selected}
+          setSelected=${setSelected}
+        />`;
+      onAddClick =  () => {
+        setSelected(buttons.length);
+        setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }])
+      }
+      onTrashClick = () => {
+         if (selected >= 0) {
+          buttons.splice(selected, 1);
+          setButtons([...buttons]);
+          setSelected(-1);
+        }
+      }
+      break;
+    case -1:
+      activeView = html`<${Workspace} />`;
+      onAddClick = () => {
+        set
+      }
+      break;
+    default:
+      activeView = html`<${Workspace} />`;
+      break;
   }
-
-  const remove = () => {
-    if (selected >= 0) {
-      buttons.splice(selected, 1);
-      setButtons([...buttons]);
-      setSelected(-1);
-    }
-  };
 
   return html`<header />
     <main>
-      <${/*Workspace*/ Designer}
-        buttons=${buttons}
-        updateButton=${updateButton}
-        selected=${selected}
-        setSelected=${setSelected}
-      />
+      ${activeView}
     </main>
     <${Footer} add=${add} remove=${remove}>
       ${menuOpen && html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
