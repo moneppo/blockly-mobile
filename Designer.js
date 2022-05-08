@@ -4,6 +4,8 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
+// TODO: Scale after rotation is wonky
+
 const Rotator = ({ button, update }) => {
   const ref = createRef();
   const { w, h, r } = button;
