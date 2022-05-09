@@ -65,10 +65,10 @@ I'm encoding the active view as follows:
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
-  
+
   const changeView = (offset) => {
-   setView(Math.min(Math.max(view + offset, -2), buttons.length-1));
-  }
+    setView(Math.min(Math.max(view + offset, -2), buttons.length - 1));
+  };
 
   let activeView, onAddClick, onTrashClick, onRunClick;
   switch (view) {
@@ -105,18 +105,19 @@ I'm encoding the active view as follows:
       break;
   }
 
-  return html`<header>
-   ${view > -2 && 
-      html`<button>
-        <i class="bi bi-chevron-left"/>
-      </button>`}
-    <button onClick=${() => changeView(1)}><i class="bi bi-chevron-right" /></button>
+  return html`
+  <header>
+    <button onClick=${() => changeView(-1)}>
+      ${view > -2 && html`<i class="bi bi-chevron-left" />`}
+    </button>
+    <button onClick=${() => changeView(1)}>
+     ${view < buttons.length && html`<i class="bi bi-chevron-right" />`}
+    </button>
   </header>
-    <main>${activeView}</main>
-    <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-      ${menuOpen &&
-      html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
-    </${Footer}>`;
+  <main>${activeView}</main>
+  <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
+    ${menuOpen && html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
+  </${Footer}>`;
 };
 
 render(html`<${App} />`, document.body);
