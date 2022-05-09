@@ -49,8 +49,10 @@ export default ({ blocks, updateBlocks }) => {
 
 
     if (blocks) {
+      ws.clear();
       Blockly.serialization.workspaces.load(blocks, ws);
     } else {
+      console.log("initializing");
       const top = addBlock(ws, "top");
       updateBlocks(Blockly.serialization.workspaces.save(ws));
     };

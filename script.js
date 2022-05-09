@@ -58,6 +58,7 @@ I'm encoding the active view as follows:
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
+  const [startingBlocks, setStartingBlocks] = useState();
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
@@ -91,7 +92,10 @@ I'm encoding the active view as follows:
       };
       break;
     case -1:
-      activeView = html`<${Workspace} button=${/>`;
+      activeView = html`<${Workspace}
+        blocks=${startingBlocks}
+        updateBlocks=${setStartingBlocks}
+      />`;
       onAddClick = () => setMenuOpen(!menuOpen);
       onTrashClick = () => {
         if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -100,7 +104,13 @@ I'm encoding the active view as follows:
       };
       break;
     default:
-      activeView = html`<${Workspace} />`;
+      activeView = html`<${Workspace}
+        blocks=${buttons[view].blocks}
+        updateBlocks=${(blocks) => {
+          buttons[view].blocks = blocks;
+          setButtons([...buttons]);
+        }}
+      />`;
       break;
   }
 
@@ -110,7 +120,7 @@ I'm encoding the active view as follows:
       ${view > -2 && html`<i class="bi bi-chevron-left" />`}
     </button>
     <button onClick=${() => changeView(1)}>
-     ${view < buttons.length -1  && html`<i class="bi bi-chevron-right" />`}
+     ${view < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
     </button>
   </header>
   <main>${activeView}</main>
