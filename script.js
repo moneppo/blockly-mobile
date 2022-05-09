@@ -57,9 +57,7 @@ I'm encoding the active view as follows:
   const [view, setView] = useState(-2);
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [buttons, setButtons] = useState([
-    { x: 25, y: 25, w: 100, h: 100, r: 0 },
-  ]);
+  const [buttons, setButtons] = useState([]);
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
@@ -111,7 +109,7 @@ I'm encoding the active view as follows:
       ${view > -2 && html`<i class="bi bi-chevron-left" />`}
     </button>
     <button onClick=${() => changeView(1)}>
-     ${view < buttons.length && html`<i class="bi bi-chevron-right" />`}
+     ${view < buttons.length -1  && html`<i class="bi bi-chevron-right" />`}
     </button>
   </header>
   <main>${activeView}</main>

@@ -84,7 +84,15 @@ const Resizer = ({ button, update }) => {
   />`;
 };
 
-const Button = ({ select, selected, update, button }) => {
+const Edit = ({onEdit, button}) => {
+  return html`
+    <image href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/code-slash.svg?v=1652059910958"
+     height="32"
+    width="32"
+    x="${button.w + 8}" y="-16"/>`;
+}
+
+const Button = ({ select, selected, update, button, onEdit }) => {
   const ref = createRef();
   let { x, y, w, h, r } = button;
 
@@ -124,8 +132,9 @@ const Button = ({ select, selected, update, button }) => {
     />
     ${selected &&
     html` <${Rotator} button=${button} update=${update} />
-      <${Resizer} button=${button} update=${update} />`}
-  </g>`;
+      <${Resizer} button=${button} update=${update} />
+      <${Edit} onEdit=${onEdit} button=${button} />`}
+  </g>`
 };
 
 export default ({ buttons, updateButton, selected, setSelected }) => {

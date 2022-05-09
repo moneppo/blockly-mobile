@@ -45,7 +45,6 @@ export default ({ workspace }) => {
       plugins: {
         metricsManager: VerticalMetrics,
       },
-      grid: { spacing: 20, length: 3, colour: "#ccc" },
     });
 
     ws.getFlyout().hide();
