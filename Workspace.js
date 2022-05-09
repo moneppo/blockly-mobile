@@ -24,7 +24,7 @@ const addBlockToEnd = (start, type) => {
   start.lastConnectionInStack().connect(newBlock.previousConnection);
 };
 
-export default ({ workspace }) => {
+export default ({ blocks, updateBlocks }) => {
   const ref = createRef();
 
   useEffect(() => {
@@ -47,22 +47,25 @@ export default ({ workspace }) => {
       },
     });
 
+
+    if (blocks) {
+      Blockly.serialization.workspaces.load(blocks, ws);
+    } else {
+      const top = addBlock(ws, "top");
+      updateBlocks(Blockly.serialization.workspaces.save(ws));
+    };
+  
     ws.getFlyout().hide();
     ws.scroll(300, 0);
-
-    const top = addBlock(ws, "top");
-
-    if (workspace) {
-      workspace.current = ws;
-    }
-  
-    resize()
+    resize();
 
     window.addEventListener("resize", resize);
+    
     return () => {
       window.removeEventListener("resize", resize);
     };
   }, [ref]);
+  
 
   return html`<div ref=${ref} id="workspace" />`;
 };

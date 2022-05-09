@@ -84,13 +84,16 @@ const Resizer = ({ button, update }) => {
   />`;
 };
 
-const Edit = ({onEdit, button}) => {
-  return html`
-    <image href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/code-slash.svg?v=1652059910958"
-     height="32"
+const Edit = ({ onEdit, button }) => {
+  return html` <image
+    href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/code-slash.svg?v=1652059910958"
+    height="32"
     width="32"
-    x="${button.w + 8}" y="-16"/>`;
-}
+    x="${button.w + 8}"
+    y="-16"
+    onClick=${onEdit}
+  />`;
+};
 
 const Button = ({ select, selected, update, button, onEdit }) => {
   const ref = createRef();
@@ -134,10 +137,10 @@ const Button = ({ select, selected, update, button, onEdit }) => {
     html` <${Rotator} button=${button} update=${update} />
       <${Resizer} button=${button} update=${update} />
       <${Edit} onEdit=${onEdit} button=${button} />`}
-  </g>`
+  </g>`;
 };
 
-export default ({ buttons, updateButton, selected, setSelected }) => {
+export default ({ buttons, updateButton, selected, setSelected, onEdit }) => {
   return html`<svg>
     <rect
       width="100%"
@@ -155,6 +158,7 @@ export default ({ buttons, updateButton, selected, setSelected }) => {
         selected=${i === selected}
         update=${(b) => updateButton(i, b)}
         select=${select}
+        onEdit=${() => onEdit(i)}
       />`;
     })}
   </svg> `;

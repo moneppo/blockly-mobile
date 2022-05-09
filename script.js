@@ -76,6 +76,7 @@ I'm encoding the active view as follows:
         updateButton=${updateButton}
         selected=${selected}
         setSelected=${setSelected}
+        onEdit=${() => setView(1)}
       />`;
       onAddClick = () => {
         setSelected(buttons.length);
@@ -90,7 +91,7 @@ I'm encoding the active view as follows:
       };
       break;
     case -1:
-      activeView = html`<${Workspace} />`;
+      activeView = html`<${Workspace} button=${/>`;
       onAddClick = () => setMenuOpen(!menuOpen);
       onTrashClick = () => {
         if (Blockly.selected && Blockly.selected.isDeletable()) {
