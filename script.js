@@ -77,7 +77,7 @@ I'm encoding the active view as follows:
         updateButton=${updateButton}
         selected=${selected}
         setSelected=${setSelected}
-        onEdit=${() => setView(1)}
+        onEdit=${(i) => setView(i)}
       />`;
       onAddClick = () => {
         setSelected(buttons.length);
