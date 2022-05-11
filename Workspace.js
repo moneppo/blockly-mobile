@@ -30,6 +30,7 @@ export default ({ workspaceRef }) => {
   const ref = createRef();
 
   useEffect(() => {
+    console.log("setup")
     workspaceRef.current = Blockly.inject(ref.current, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
@@ -45,8 +46,10 @@ export default ({ workspaceRef }) => {
     });
     
     if (blocks) {
+      console.log("load")
       Blockly.serialization.workspaces.load(blocks, workspaceRef.current);
     } else {
+      console.log("init")
       addBlock(workspaceRef.current, "top");
     }
 
@@ -63,6 +66,7 @@ export default ({ workspaceRef }) => {
     window.addEventListener("resize", resize);
 
     return () => {
+      console.log("teardown")
       setBlocks(Blockly.serialization.workspaces.save(workspaceRef.current));
       window.removeEventListener("resize", resize);
     };
