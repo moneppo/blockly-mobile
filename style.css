@@ -80,6 +80,7 @@ main {
   margin: 0px;
   padding: 0px;
   flex-grow: 1;
+  overflow-x: hidden;
 }
 
 #workspace {

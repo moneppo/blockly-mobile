@@ -81,6 +81,7 @@ I'm encoding the active view as follows:
       />`;
       onAddClick = () => {
         setSelected(buttons.length);
+        const ref = createRef();
         setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
       };
       onTrashClick = () => {

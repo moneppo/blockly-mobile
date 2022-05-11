@@ -24,63 +24,40 @@ const addBlockToEnd = (start, type) => {
   start.lastConnectionInStack().connect(newBlock.previousConnection);
 };
 
-export default ({ blocks, updateBlocks }) => {
+export default ({ workspaceRef }) => {
   const ref = createRef();
-  
-  useEffect(() => {
-    // For this prototype, Workspace treats the Blockly workspace
-    // as a singleton.
-    if (Blockly?.mainWorkspace === undefined) {
-      console.log("ws setup");
-      Blockly.inject(ref.current, {
-        toolbox,
-        renderer: "custom_renderer", // CustomRenderer.js
-        move: {
-          scrollbars: {
-            vertical: true,
-          },
-        },
-        plugins: {
-          metricsManager: VerticalMetrics,
-        },
-        grid:
-         {spacing: 20,
-          length: 3,
-          colour: '#ccc',
-          snap: true},
-      });
-    }
-  });
 
   useEffect(() => {
+    workspaceRef.current = Blockly.inject(ref.current, {
+      toolbox,
+      renderer: "custom_renderer", // CustomRenderer.js
+      move: {
+        scrollbars: {
+          vertical: true,
+        },
+      },
+      plugins: {
+        metricsManager: VerticalMetrics,
+      },
+      grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
+    });
+
     const resize = () => {
       CustomRenderer.setScreenWidth(ref.current.clientWidth);
-      Blockly.mainWorkspace.resize();
-      Blockly.mainWorkspace.render();
+      workspaceRef.current.resize();
+      workspaceRef.current.render();
     };
 
-
-    if (blocks) {
-      console.log("hydrate", blocks)
-      Blockly.serialization.workspaces.load(blocks, Blockly.mainWorkspace);
-    } else {
-      addBlock(Blockly.mainWorkspace, "top");
-      updateBlocks(Blockly.serialization.workspaces.save(Blockly.mainWorkspace));
-    };
-  
-    Blockly.mainWorkspace.getFlyout().hide();
-    Blockly.mainWorkspace.scroll(300, 0);
+    workspaceRef.current.getFlyout().hide();
+    workspaceRef.current.scroll(300, 0);
     resize();
 
     window.addEventListener("resize", resize);
-    
+
     return () => {
-      console.log("teardown");
-      Blockly.mainWorkspace.clear();
       window.removeEventListener("resize", resize);
     };
-  }, [ref, blocks, updateBlocks]);
-  
+  }, [ref, workspaceRef]);
 
   return html`<div ref=${ref} id="workspace" />`;
 };
