@@ -11,17 +11,29 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-export default ({ initialXML, children, ...rest }) => {
+export default ({ initialXML, children}) => {
   const blocklyDiv = createRef();
-  const toolbox = createRef();
   const workspace = createRef();
 
   useEffect(() => {
-    if (!workspace.current) return;
+    if (!blocklyDiv.current) return;
+    
+    console.log("buildup")
     workspace.current = Blockly.inject(blocklyDiv.current, {
-      toolbox: toolbox.current,
-      ...rest,
+      toolbox,
+      renderer: "custom_renderer", // CustomRenderer.js
+      move: {
+        scrollbars: {
+          vertical: true,
+        },
+      },
+      plugins: {
+    //    metricsManager: VerticalMetrics,
+      },
+      grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
     });
+    
+    workspace.current.getFlyout().hide();
 
     if (initialXML) {
       Blockly.Xml.domToWorkspace(
@@ -30,12 +42,7 @@ export default ({ initialXML, children, ...rest }) => {
       );
     }
     
-  },[initialXML,blocklyDiv,toolbox]);
+  },[initialXML, blocklyDiv, toolbox]);
 
-  return html`
-            <div ref=${blocklyDiv} id="blocklyDiv" />
-            <xml xmlns="https://developers.google.com/blockly/xml" is="blockly" style="display: 'none'; ref=${toolbox}>
-                ${children}
-            </xml>
-        `;
+  return html`<div ref=${blocklyDiv} id="workspace" />`;
 };
