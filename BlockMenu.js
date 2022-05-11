@@ -24,28 +24,13 @@ production application. Instead, I would make blocks additions & deletions
 dispatched actions, even if the end result was the same calls into the Blockly
 workspace.
 
-*/ 
+*/
 
-const addBlock = (type, workspace) => {
-  const block = workspace.newBlock(type);
-  block.initSvg();
-  block.render(false);
-  workspace
-    .getTopBlocks()[0]
-    .lastConnectionInStack()
-    .connect(block.previousConnection);
-};
-
-export default ({ onSelected, workspace }) => {
+export default ({ addBlock }) => {
   return html`<div id="blockmenu">
     ${toolbox.contents.map(
       (i) =>
-        html`<button
-          onclick=${() => {
-            addBlock(i.type, workspace);
-            onSelected && onSelected();
-          }}
-        >
+        html`<button onclick=${() => addBlock(i.type)}>
           <i class=${i.icon} />
           ${i.display_name}
         </button>`

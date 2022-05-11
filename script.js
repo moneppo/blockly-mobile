@@ -59,7 +59,7 @@ I'm encoding the active view as follows:
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
   const startRef = createRef();
-  const [startingBlocks, setStartingBlocks] = useState({ref: startRef});
+  const [startingBlocks, setStartingBlocks] = useState({ ref: startRef });
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
@@ -70,16 +70,14 @@ I'm encoding the active view as follows:
     setView(Math.min(Math.max(view + offset, -2), buttons.length - 1));
   };
 
-  let activeView, onAddClick, onTrashClick, onRunClick;
-  switch (view) {
-    case -2:
-      activeView = html` <${Designer}
+  /* html` <${Designer}
         buttons=${buttons}
         updateButton=${updateButton}
         selected=${selected}
         setSelected=${setSelected}
         onEdit=${(i) => setView(i)}
       />`;
+    
       onAddClick = () => {
         setSelected(buttons.length);
         const ref = createRef();
@@ -92,30 +90,29 @@ I'm encoding the active view as follows:
           setSelected(-1);
         }
       };
-      break;
-    case -1:
-      activeView = html`<${Workspace}
-        workspaceRef=${startRef}
-      />`;
-      onAddClick = () => setMenuOpen(!menuOpen);
-      onTrashClick = () => {
-        if (Blockly.selected && Blockly.selected.isDeletable()) {
-          Blockly.selected.checkAndDelete();
-        }
-      };
-      break;
-    default:
-      activeView = html`<${Workspace}
-        workspaceRef=${buttons[view].ref}
-      />`;
-      onAddClick = () => setMenuOpen(!menuOpen);
-      onTrashClick = () => {
-        if (Blockly.selected && Blockly.selected.isDeletable()) {
-          Blockly.selected.checkAndDelete();
-        }
-      };
-      break;
-  }
+      */
+
+  const activeView = html`<${Workspace} workspaceRef=${startRef} />`;
+  const onAddClick = () => setMenuOpen(!menuOpen);
+  const onTrashClick = () => {
+    if (Blockly.selected && Blockly.selected.isDeletable()) {
+      Blockly.selected.checkAndDelete();
+    }
+  };
+
+  const addBlock = (type) => {
+    setMenuOpen(false);
+    if (type === undefined) return;
+
+    console.log("add", type, buttons[view]);
+    const block = buttons[view].ref.current.newBlock(type);
+    block.initSvg();
+    block.render(false);
+    buttons[view].ref.current
+      .getTopBlocks()[0]
+      .lastConnectionInStack()
+      .connect(block.previousConnection);
+  };
 
   return html`
   <header>
@@ -128,7 +125,7 @@ I'm encoding the active view as follows:
   </header>
   <main>${activeView}</main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-    ${menuOpen && html`<${BlockMenu} workspace=${buttons[view].ref} onSelected=${() => setMenuOpen(false)} />`}
+    ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
   </${Footer}>`;
 };
 
