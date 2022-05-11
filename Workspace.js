@@ -34,36 +34,42 @@ export default ({ blocks, updateBlocks }) => {
       Blockly.mainWorkspace.render();
     };
 
-    const ws = Blockly.inject(ref.current, {
-      toolbox,
-      renderer: "custom_renderer", // CustomRenderer.js
-      move: {
-        scrollbars: {
-          vertical: true,
+    // For this prototype, Workspace treats the Blockly workspace
+    // as a singleton.
+    
+    if (Blockly?.mainWorkspace === undefined) {
+      console.log("ws setup");
+      Blockly.inject(ref.current, {
+        toolbox,
+        renderer: "custom_renderer", // CustomRenderer.js
+        move: {
+          scrollbars: {
+            vertical: true,
+          },
         },
-      },
-      plugins: {
-        metricsManager: VerticalMetrics,
-      },
-    });
+        plugins: {
+          metricsManager: VerticalMetrics,
+        },
+      });
+    }
 
 
     if (blocks) {
-      ws.clear();
-      Blockly.serialization.workspaces.load(blocks, ws);
+      Blockly.serialization.workspaces.load(blocks, Blockly.mainWorkspace);
     } else {
-      console.log("initializing");
-      const top = addBlock(ws, "top");
-      updateBlocks(Blockly.serialization.workspaces.save(ws));
+      addBlock(Blockly.mainWorkspace, "top");
+      updateBlocks(Blockly.serialization.workspaces.save(Blockly.mainWorkspace));
     };
   
-    ws.getFlyout().hide();
-    ws.scroll(300, 0);
+    Blockly.mainWorkspace.getFlyout().hide();
+    Blockly.mainWorkspace.scroll(300, 0);
     resize();
 
     window.addEventListener("resize", resize);
     
     return () => {
+
+      Blockly.mainWorkspace.clear();
       window.removeEventListener("resize", resize);
     };
   }, [ref]);
