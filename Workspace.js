@@ -26,17 +26,10 @@ const addBlockToEnd = (start, type) => {
 
 export default ({ blocks, updateBlocks }) => {
   const ref = createRef();
-
+  
   useEffect(() => {
-    const resize = () => {
-      CustomRenderer.setScreenWidth(ref.current.clientWidth);
-      Blockly.mainWorkspace.resize();
-      Blockly.mainWorkspace.render();
-    };
-
     // For this prototype, Workspace treats the Blockly workspace
     // as a singleton.
-    
     if (Blockly?.mainWorkspace === undefined) {
       console.log("ws setup");
       Blockly.inject(ref.current, {
@@ -50,11 +43,25 @@ export default ({ blocks, updateBlocks }) => {
         plugins: {
           metricsManager: VerticalMetrics,
         },
+        grid:
+         {spacing: 20,
+          length: 3,
+          colour: '#ccc',
+          snap: true},
       });
     }
+  });
+
+  useEffect(() => {
+    const resize = () => {
+      CustomRenderer.setScreenWidth(ref.current.clientWidth);
+      Blockly.mainWorkspace.resize();
+      Blockly.mainWorkspace.render();
+    };
 
 
     if (blocks) {
+      console.log("hydrate", blocks)
       Blockly.serialization.workspaces.load(blocks, Blockly.mainWorkspace);
     } else {
       addBlock(Blockly.mainWorkspace, "top");
@@ -68,11 +75,11 @@ export default ({ blocks, updateBlocks }) => {
     window.addEventListener("resize", resize);
     
     return () => {
-
+      console.log("teardown");
       Blockly.mainWorkspace.clear();
       window.removeEventListener("resize", resize);
     };
-  }, [ref]);
+  }, [ref, blocks, updateBlocks]);
   
 
   return html`<div ref=${ref} id="workspace" />`;
