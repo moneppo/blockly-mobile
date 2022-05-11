@@ -92,7 +92,7 @@ I'm encoding the active view as follows:
       };
       */
 
-  const activeView = html`<${Workspace} workspaceRef=${startRef} />`;
+  const activeView = view > -2 ? html`<${Workspace} workspaceRef=${startRef} />`:"huh?";
   const onAddClick = () => setMenuOpen(!menuOpen);
   const onTrashClick = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {

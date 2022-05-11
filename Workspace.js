@@ -70,7 +70,7 @@ export default ({ workspaceRef }) => {
       setBlocks(Blockly.serialization.workspaces.save(workspaceRef.current));
       window.removeEventListener("resize", resize);
     };
-  }, [ref]);
+  }, []);
 
   return html`<div ref=${ref} id="workspace" />`;
 };
