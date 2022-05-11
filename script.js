@@ -102,7 +102,7 @@ I'm encoding the active view as follows:
 
   const addBlock = (type) => {
     setMenuOpen(false);
-    if (type === undefined) return;
+    if (type === undefined || buttons[view] === undefined) return;
 
     console.log("add", type, buttons[view]);
     const block = buttons[view].ref.current.newBlock(type);
