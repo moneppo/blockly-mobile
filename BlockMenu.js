@@ -26,23 +26,23 @@ workspace.
 
 */ 
 
-const addBlock = (type) => {
-  const block = Blockly.mainWorkspace.newBlock(type);
+const addBlock = (type, workspace) => {
+  const block = workspace.newBlock(type);
   block.initSvg();
   block.render(false);
-  Blockly.mainWorkspace
+  workspace
     .getTopBlocks()[0]
     .lastConnectionInStack()
     .connect(block.previousConnection);
 };
 
-export default ({ onSelected }) => {
+export default ({ onSelected, workspace }) => {
   return html`<div id="blockmenu">
     ${toolbox.contents.map(
       (i) =>
         html`<button
           onclick=${() => {
-            addBlock(i.type);
+            addBlock(i.type, workspace);
             onSelected && onSelected();
           }}
         >

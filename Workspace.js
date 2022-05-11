@@ -41,6 +41,8 @@ export default ({ workspaceRef }) => {
       },
       grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
     });
+    
+    addBlock(workspaceRef.current, "top")
 
     const resize = () => {
       CustomRenderer.setScreenWidth(ref.current.clientWidth);

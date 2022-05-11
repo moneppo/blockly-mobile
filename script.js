@@ -7,7 +7,7 @@ support for direct-to-browser usage. I can even keep JSX format by using the `ht
 package, so this should be pretty fast to port to React.
 
 */
-import { h, render } from "https://unpkg.com/preact@latest?module";
+import { h, render, createRef } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
@@ -58,7 +58,8 @@ I'm encoding the active view as follows:
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const [startingBlocks, setStartingBlocks] = useState();
+  const startRef = createRef();
+  const [startingBlocks, setStartingBlocks] = useState({ref: startRef});
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
@@ -82,7 +83,7 @@ I'm encoding the active view as follows:
       onAddClick = () => {
         setSelected(buttons.length);
         const ref = createRef();
-        setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
+        setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0, ref }]);
       };
       onTrashClick = () => {
         if (selected >= 0) {
@@ -94,8 +95,7 @@ I'm encoding the active view as follows:
       break;
     case -1:
       activeView = html`<${Workspace}
-        blocks=${startingBlocks}
-        updateBlocks=${setStartingBlocks}
+        workspaceRef=${startRef}
       />`;
       onAddClick = () => setMenuOpen(!menuOpen);
       onTrashClick = () => {
@@ -106,12 +106,14 @@ I'm encoding the active view as follows:
       break;
     default:
       activeView = html`<${Workspace}
-        blocks=${buttons[view].blocks}
-        updateBlocks=${(blocks) => {
-          buttons[view].blocks = blocks;
-          setButtons([...buttons]);
-        }}
+        workspaceRef=${buttons[view].ref}
       />`;
+      onAddClick = () => setMenuOpen(!menuOpen);
+      onTrashClick = () => {
+        if (Blockly.selected && Blockly.selected.isDeletable()) {
+          Blockly.selected.checkAndDelete();
+        }
+      };
       break;
   }
 
@@ -126,7 +128,7 @@ I'm encoding the active view as follows:
   </header>
   <main>${activeView}</main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-    ${menuOpen && html`<${BlockMenu} onSelected=${() => setMenuOpen(false)} />`}
+    ${menuOpen && html`<${BlockMenu} workspace=${buttons[view].ref.current} onSelected=${() => setMenuOpen(false)} />`}
   </${Footer}>`;
 };
 
