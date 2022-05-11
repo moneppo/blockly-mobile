@@ -36,6 +36,7 @@ import Designer from "./Designer.js";
 
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
+import Blockly from "./Blockly.js";
 
 // TODO:
 //  - child blocks render smaller than parent
@@ -114,19 +115,21 @@ I'm encoding the active view as follows:
       .connect(block.previousConnection);
   };
 
-  return html`
-  <header>
-    <button onClick=${() => changeView(-1)}>
-      ${view > -2 && html`<i class="bi bi-chevron-left" />`}
-    </button>
-    <button onClick=${() => changeView(1)}>
-     ${view < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
-    </button>
-  </header>
-  <main>${activeView}</main>
-  <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-    ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
-  </${Footer}>`;
+  //return html`
+  // <header>
+  //   <button onClick=${() => changeView(-1)}>
+  //     ${view > -2 && html`<i class="bi bi-chevron-left" />`}
+  //   </button>
+  //   <button onClick=${() => changeView(1)}>
+  //    ${view < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
+  //   </button>
+  // </header>
+  // <main>${activeView}</main>
+  // <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
+  //   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
+  // </${Footer}>`;
+  
+  return html`<${Blockly} />`;
 };
 
 render(html`<${App} />`, document.body);
