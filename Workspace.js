@@ -1,6 +1,7 @@
 /* global Blockly */
 
 import { h, createRef } from "https://unpkg.com/preact@latest?module";
+import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import {
   useEffect,
   useLayoutEffect,
@@ -25,6 +26,7 @@ const addBlockToEnd = (start, type) => {
 };
 
 export default ({ workspaceRef }) => {
+  const [blocks, setBlocks] = useState();
   const ref = createRef();
 
   useEffect(() => {
@@ -42,7 +44,11 @@ export default ({ workspaceRef }) => {
       grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
     });
     
-    addBlock(workspaceRef.current, "top")
+    if (blocks) {
+      Blockly.serialization.workspaces.load(blocks, workspaceRef.current);
+    } else {
+      addBlock(workspaceRef.current, "top");
+    }
 
     const resize = () => {
       CustomRenderer.setScreenWidth(ref.current.clientWidth);
@@ -57,9 +63,10 @@ export default ({ workspaceRef }) => {
     window.addEventListener("resize", resize);
 
     return () => {
+      setBlocks(Blockly.serialization.workspaces.save(blocks));
       window.removeEventListener("resize", resize);
     };
-  }, [ref, workspaceRef]);
+  }, [ref]);
 
   return html`<div ref=${ref} id="workspace" />`;
 };
