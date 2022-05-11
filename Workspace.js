@@ -63,7 +63,7 @@ export default ({ workspaceRef }) => {
     window.addEventListener("resize", resize);
 
     return () => {
-      setBlocks(Blockly.serialization.workspaces.save(blocks));
+      setBlocks(Blockly.serialization.workspaces.save(workspaceRef.current));
       window.removeEventListener("resize", resize);
     };
   }, [ref]);

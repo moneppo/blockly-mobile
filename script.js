@@ -128,7 +128,7 @@ I'm encoding the active view as follows:
   </header>
   <main>${activeView}</main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-    ${menuOpen && html`<${BlockMenu} workspace=${buttons[view].ref.current} onSelected=${() => setMenuOpen(false)} />`}
+    ${menuOpen && html`<${BlockMenu} workspace=${buttons[view].ref} onSelected=${() => setMenuOpen(false)} />`}
   </${Footer}>`;
 };
 
