@@ -17,9 +17,6 @@ export default ({ json, children, save }) => {
   const workspace = createRef();
 
   useEffect(() => {
-    // if (!blocklyDiv.current) return;
-
-    console.log("buildup");
     workspace.current = Blockly.inject(blocklyDiv.current, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js

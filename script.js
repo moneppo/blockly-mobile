@@ -49,27 +49,19 @@ const App = () => {
 All state is stored at the top level component (`App`). This allows for
 easier porting to a redux store.
 
-I'm encoding the active view as follows:
--2: Designer
--1: "when started" event workspace
-0 to buttons.length-1: "when pressed" event for the button with that index
-
 */
-  const [view, setView] = useState(-2);
+  
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const startRef = createRef();
-  const [startingBlocks, setStartingBlocks] = useState({ ref: startRef });
+  const [startingBlocks, setStartingBlocks] = useState();
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
 
-  const changeView = (offset) => {
-    setView(Math.min(Math.max(view + offset, -2), buttons.length - 1));
-  };
+ 
 
   /* html` <${Designer}
         buttons=${buttons}
@@ -92,8 +84,10 @@ I'm encoding the active view as follows:
         }
       };
       */
+  
+  
 
-  const activeView = view > -2 ? html`<${Workspace} workspaceRef=${startRef} />`:"huh?";
+  const activeView = view > -2 ? html`<${Blockly} json=${startingBlocks} save=${setStartingBlocks} />`:"huh?";
   const onAddClick = () => setMenuOpen(!menuOpen);
   const onTrashClick = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -102,10 +96,10 @@ I'm encoding the active view as follows:
   };
 
   const addBlock = (type) => {
+    console.log("add", type, buttons[view]);
     setMenuOpen(false);
     if (type === undefined || buttons[view] === undefined) return;
 
-    console.log("add", type, buttons[view]);
     const block = buttons[view].ref.current.newBlock(type);
     block.initSvg();
     block.render(false);
@@ -115,25 +109,21 @@ I'm encoding the active view as follows:
       .connect(block.previousConnection);
   };
 
-  //return html`
-  // <header>
-  //   <button onClick=${() => changeView(-1)}>
-  //     ${view > -2 && html`<i class="bi bi-chevron-left" />`}
-  //   </button>
-  //   <button onClick=${() => changeView(1)}>
-  //    ${view < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
-  //   </button>
-  // </header>
-  // <main>${activeView}</main>
-  // <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-  //   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
-  // </${Footer}>`;
-  
   return html`
-   ${menuOpen && html`<${Blockly} save=${(s) => console.log(s)} />`}
-   <${Footer} onAddClick=${onAddClick} onTrashClick=${()=>{}}>
-    
-   </${Footer}>`;
+  <header>
+    <button onClick=${() => changeView(-1)}>
+      ${view > -2 && html`<i class="bi bi-chevron-left" />`}
+    </button>
+    <button onClick=${() => changeView(1)}>
+     ${view < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
+    </button>
+  </header>
+  <main>${activeView}</main>
+  <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
+  ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
+  </${Footer}>`;
+  
+  
 };
 
 render(html`<${App} />`, document.body);
