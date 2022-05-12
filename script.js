@@ -130,7 +130,7 @@ I'm encoding the active view as follows:
   // </${Footer}>`;
   
   return html`
-   ${menuOpen && html`<${Blockly} />`}
+   ${menuOpen && html`<${Blockly} save=${(s) => console.log(s)} />`}
    <${Footer} onAddClick=${onAddClick} onTrashClick=${()=>{}}>
     
    </${Footer}>`;

@@ -12,12 +12,12 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-export default ({ initialJSON, children }) => {
+export default ({ json, children, save }) => {
   const blocklyDiv = createRef();
   const workspace = createRef();
 
   useEffect(() => {
-    if (!blocklyDiv.current) return;
+    // if (!blocklyDiv.current) return;
 
     console.log("buildup");
     workspace.current = Blockly.inject(blocklyDiv.current, {
@@ -29,19 +29,22 @@ export default ({ initialJSON, children }) => {
         },
       },
       plugins: {
-            metricsManager: VerticalMetrics,
+        metricsManager: VerticalMetrics,
       },
       grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
     });
 
     workspace.current.getFlyout().hide();
 
-    if (initialJSON) {
-      Blockly.serialization.workspaces.load(initialJSON, workspace.current);
+    if (json) {
+      Blockly.serialization.workspaces.load(json, workspace.current);
     }
-    
-    return () => console.log("teardown")
-  }, [initialJSON, blocklyDiv, toolbox]);
+
+    return () => {
+      save && save(Blockly.serialization.workspaces.save(workspace.current));
+      console.log("teardown");
+    };
+  }, [json, blocklyDiv, toolbox]);
 
   return html`<div ref=${blocklyDiv} id="workspace" />`;
 };
