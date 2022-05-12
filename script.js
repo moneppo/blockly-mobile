@@ -55,34 +55,12 @@ easier porting to a redux store.
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
   const [startingBlocks, setStartingBlocks] = useState();
-  const [mode, setMode] = useState({ type: "design", i: -1 });
+  const [mode, setMode] = useState({ type: "design" });
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
-
-  /* html` <${Designer}
-        buttons=${buttons}
-        updateButton=${updateButton}
-        selected=${selected}
-        setSelected=${setSelected}
-        onEdit=${(i) => setView(i)}
-      />`;
-    
-      onAddClick = () => {
-        setSelected(buttons.length);
-        const ref = createRef();
-        setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0, ref }]);
-      };
-      onTrashClick = () => {
-        if (selected >= 0) {
-          buttons.splice(selected, 1);
-          setButtons([...buttons]);
-          setSelected(-1);
-        }
-      };
-      */
 
   const onAddClick = () => {
     if (mode.type === "design") {
@@ -111,23 +89,46 @@ easier porting to a redux store.
     //   .connect(block.previousConnection);
   };
 
+  const navLeft = () => {
+    switch (mode.type) {
+      case "started":
+        setMode({ type: "design" });
+        break;
+      case "button":
+        setMode(
+          mode.i === 0 ? { type: "started" } : { type: "button", i: mode.i - 1 }
+        );
+        break;
+      default:
+        console.log("should never get here");
+    }
+  };
+
+  const navRight = () => {
+    switch (mode.type) {
+      case "design":
+        setMode({ type: "started" });
+        break;
+      case "started":
+        setMode({ type: "button", i: 0 });
+        break;
+      case "button":
+        setMode({ type: "button", i: mode.i + 1 });
+        break;
+      default:
+        console.log("should never get here");
+    }
+  };
+
   return html`
   <header>
-    <button onClick=${() => {
-      if (mode.type === "event") {
-        if (mode.i > 0) {
-          setMode({ type: "event", i: mode.i - 1 });
-        } else {
-          setMode({ type: "design" });
-        }
-      }
-    }}>
-      ${mode.type === "event" && html`<i class="bi bi-chevron-left" />`}
+    <button onClick=${navLeft}>
+      ${mode.type !== "design" && html`<i class="bi bi-chevron-left" />`}
     </button>
-    <button onClick=${() => {}}>
+    <button onClick=${navRight}>
      ${
-       mode.type === "designer" ||
-       (mode.i < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`)
+       (mode.type !== "button" || mode.i < buttons.length - 1) &&
+       html`<i class="bi bi-chevron-right" />`
      }
     </button>
   </header>
@@ -139,12 +140,16 @@ easier porting to a redux store.
         updateButton=${updateButton}
         selected=${selected}
         setSelected=${setSelected}
-        onEdit=${(i) => setMode({ type: "event", i })}
+        onEdit=${(i) => setMode({ type: "button", i })}
       />`
     }
-    ${
-      mode.type === "event" &&
+     ${
+      mode.type === "started" &&
       html` <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
+    }
+    ${
+      mode.type === "button" &&
+      html` ${mode.i} ${`//`<${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
