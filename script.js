@@ -119,6 +119,11 @@ easier porting to a redux store.
         console.log("should never get here");
     }
   };
+  
+  let showRight = false;
+  switch(mode.type) {
+    case "design": 
+  }
 
   return html`
   <header>
@@ -126,10 +131,7 @@ easier porting to a redux store.
       ${mode.type !== "design" && html`<i class="bi bi-chevron-left" />`}
     </button>
     <button onClick=${navRight}>
-     ${
-       (mode.type !== "button" || mode.i < buttons.length - 1) &&
-       html`<i class="bi bi-chevron-right" />`
-     }
+     ${showRight && html`${mode.type} <i class="bi bi-chevron-right" />`}
     </button>
   </header>
   <main>
@@ -144,12 +146,12 @@ easier porting to a redux store.
       />`
     }
      ${
-      mode.type === "started" &&
-      html` <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
-    }
+       mode.type === "started" &&
+       html` <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
+     }
     ${
       mode.type === "button" &&
-      html` ${mode.i} ${`//`<${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
+      html`<${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
