@@ -129,7 +129,11 @@ I'm encoding the active view as follows:
   //   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
   // </${Footer}>`;
   
-  return html`<${Blockly} />`;
+  return html`
+   ${menuOpen && html`<${Blockly} />`}
+   <${Footer} onAddClick=${onAddClick} onTrashClick=${()=>{}}>
+    
+   </${Footer}>`;
 };
 
 render(html`<${App} />`, document.body);
