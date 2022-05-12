@@ -50,17 +50,17 @@ All state is stored at the top level component (`App`). This allows for
 easier porting to a redux store.
 
 */
-  
+
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
   const [startingBlocks, setStartingBlocks] = useState();
+  const [mode, setMode] = useState({ type: "design", i: -1 });
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
   };
-
 
   /* html` <${Designer}
         buttons=${buttons}
@@ -83,10 +83,15 @@ easier porting to a redux store.
         }
       };
       */
-  
-  
 
-  const onAddClick = () => setMenuOpen(!menuOpen);
+  const onAddClick = () => {
+    if (mode.type === "design") {
+      setSelected(buttons.length);
+      setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
+    } else {
+      setMenuOpen(!menuOpen);
+    }
+  };
   const onTrashClick = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       Blockly.selected.checkAndDelete();
@@ -96,7 +101,7 @@ easier porting to a redux store.
   const addBlock = (type) => {
     console.log("add", type);
     setMenuOpen(false);
-    
+
     // const block = buttons[view].ref.current.newBlock(type);
     // block.initSvg();
     // block.render(false);
@@ -108,21 +113,43 @@ easier porting to a redux store.
 
   return html`
   <header>
-    <button onClick=${() => {}}>
-      ${false && html`<i class="bi bi-chevron-left" />`}
+    <button onClick=${() => {
+      if (mode.type === "event") {
+        if (mode.i > 0) {
+          setMode({ type: "event", i: mode.i - 1 });
+        } else {
+          setMode({ type: "design" });
+        }
+      }
+    }}>
+      ${mode.type === "event" && html`<i class="bi bi-chevron-left" />`}
     </button>
     <button onClick=${() => {}}>
-     ${true < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
+     ${
+       mode.type === "designer" ||
+       (mode.i < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`)
+     }
     </button>
   </header>
   <main>
-    <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />
+    ${
+      mode.type === "design" &&
+      html`<${Designer}
+        buttons=${buttons}
+        updateButton=${updateButton}
+        selected=${selected}
+        setSelected=${setSelected}
+        onEdit=${(i) => setMode({ type: "event", i })}
+      />`
+    }
+    ${
+      mode.type === "event" &&
+      html` <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
+    }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
   </${Footer}>`;
-  
-  
 };
 
 render(html`<${App} />`, document.body);
