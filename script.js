@@ -61,7 +61,6 @@ easier porting to a redux store.
     setButtons([...buttons]);
   };
 
- 
 
   /* html` <${Designer}
         buttons=${buttons}
@@ -87,7 +86,6 @@ easier porting to a redux store.
   
   
 
-  const activeView = view > -2 ? html`<${Blockly} json=${startingBlocks} save=${setStartingBlocks} />`:"huh?";
   const onAddClick = () => setMenuOpen(!menuOpen);
   const onTrashClick = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -96,29 +94,30 @@ easier porting to a redux store.
   };
 
   const addBlock = (type) => {
-    console.log("add", type, buttons[view]);
+    console.log("add", type);
     setMenuOpen(false);
-    if (type === undefined || buttons[view] === undefined) return;
-
-    const block = buttons[view].ref.current.newBlock(type);
-    block.initSvg();
-    block.render(false);
-    buttons[view].ref.current
-      .getTopBlocks()[0]
-      .lastConnectionInStack()
-      .connect(block.previousConnection);
+    
+    // const block = buttons[view].ref.current.newBlock(type);
+    // block.initSvg();
+    // block.render(false);
+    // buttons[view].ref.current
+    //   .getTopBlocks()[0]
+    //   .lastConnectionInStack()
+    //   .connect(block.previousConnection);
   };
 
   return html`
   <header>
-    <button onClick=${() => changeView(-1)}>
-      ${view > -2 && html`<i class="bi bi-chevron-left" />`}
+    <button onClick=${() => {}}>
+      ${false && html`<i class="bi bi-chevron-left" />`}
     </button>
-    <button onClick=${() => changeView(1)}>
-     ${view < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
+    <button onClick=${() => {}}>
+     ${true < buttons.length - 1 && html`<i class="bi bi-chevron-right" />`}
     </button>
   </header>
-  <main>${activeView}</main>
+  <main>
+    <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />
+  </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
   </${Footer}>`;

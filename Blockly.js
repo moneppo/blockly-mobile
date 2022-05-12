@@ -17,6 +17,7 @@ export default ({ json, children, save }) => {
   const workspace = createRef();
 
   useEffect(() => {
+    console.log("buildup")
     workspace.current = Blockly.inject(blocklyDiv.current, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
@@ -41,7 +42,7 @@ export default ({ json, children, save }) => {
       save && save(Blockly.serialization.workspaces.save(workspace.current));
       console.log("teardown");
     };
-  }, [json, blocklyDiv, toolbox]);
+  }, []);
 
   return html`<div ref=${blocklyDiv} id="workspace" />`;
 };
