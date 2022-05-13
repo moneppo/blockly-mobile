@@ -55,7 +55,7 @@ easier porting to a redux store.
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const [startingBlocks, setStartingBlocks] = useState(JSON.stringify({
+  const [startingBlocks, setStartingBlocks] = useState({
     "blocks": {
         "languageVersion": 0,
         "blocks": [
@@ -67,7 +67,7 @@ easier porting to a redux store.
             }
         ]
     }
-  }));
+  });
   const [mode, setMode] = useState({ type: "design" });
 
   const updateButton = (i, b) => {
@@ -167,11 +167,11 @@ easier porting to a redux store.
     }
      ${
        mode.type === "started" &&
-       html` <${Workspace} json=${startingBlocks} update=${setStartingBlocks} />`
+       html` <${Workspace} blocks=${startingBlocks} save=${setStartingBlocks} />`
      }
     ${
       mode.type === "button" &&
-      html`<${Workspace} json=${startingBlocks} update=${setStartingBlocks} />`
+      html`<${Workspace} />`
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>

@@ -20,7 +20,7 @@ const addBlock = (workspace, type) => {
   return block;
 };
 
-export default ({ json, save }) => {
+export default ({ blocks, save }) => {
   const blocklyDiv = createRef();
   const workspace = createRef();
 
@@ -42,9 +42,9 @@ export default ({ json, save }) => {
 
     workspace.current.getFlyout().hide();
 
-    if (json) {
-      console.log(json)
-      Blockly.serialization.workspaces.load(json, workspace.current);
+    if (blocks) {
+      console.log(blocks)
+      Blockly.serialization.workspaces.load(blocks, workspace.current);
     }
 
     return () => {
