@@ -9,6 +9,7 @@ import {
 import htm from "https://unpkg.com/htm?module";
 import VerticalMetrics from "./VerticalMetrics.js";
 import toolbox from "./toolbox.js";
+import { CustomRenderer } from "./CustomRenderer.js";
 
 const html = htm.bind(h);
 
@@ -19,7 +20,7 @@ const addBlock = (workspace, type) => {
   return block;
 };
 
-export default ({ json, children, save }) => {
+export default ({ json, save }) => {
   const blocklyDiv = createRef();
   const workspace = createRef();
 
@@ -36,15 +37,14 @@ export default ({ json, children, save }) => {
       plugins: {
         metricsManager: VerticalMetrics,
       },
-      grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
+     // grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
     });
 
     workspace.current.getFlyout().hide();
 
     if (json) {
+      console.log(json)
       Blockly.serialization.workspaces.load(json, workspace.current);
-    } else {
-      addBlock(workspace.current, "top");
     }
 
     return () => {

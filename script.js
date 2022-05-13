@@ -24,24 +24,25 @@ the following:
   allow for "beat surfing" style playing, but even just a button grid is a 
   sufficient experience for the prototype.
 
-**Workspace**: Place blocks as actions in response to events. In this prototype,
+**Blockly**: Place blocks as actions in response to events. In this prototype,
   there are only two types of events: "when started" and "when tapped".
   
 **Run**: Actually run the app, allowing for playback of sounds and responding to 
   touch events.
 
 */
-import Workspace from "./Workspace.js";
 import Designer from "./Designer.js";
 
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
-import Blockly from "./Blockly.js";
+import Workspace from "./Blockly.js";
 
 // TODO:
 //  - child blocks render smaller than parent
 //  - designer mode
 //  - image background
+
+console.log(Blockly);
 
 const App = () => {
   /** 
@@ -54,7 +55,19 @@ easier porting to a redux store.
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const [startingBlocks, setStartingBlocks] = useState();
+  const [startingBlocks, setStartingBlocks] = useState(JSON.stringify({
+    "blocks": {
+        "languageVersion": 0,
+        "blocks": [
+            {
+                "type": "top",
+                "id": Blockly.utils.idGenerator.genUid(),
+                "x": 0,
+                "y": 0
+            }
+        ]
+    }
+  }));
   const [mode, setMode] = useState({ type: "design" });
 
   const updateButton = (i, b) => {
@@ -154,11 +167,11 @@ easier porting to a redux store.
     }
      ${
        mode.type === "started" &&
-       html` <${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
+       html` <${Workspace} json=${startingBlocks} update=${setStartingBlocks} />`
      }
     ${
       mode.type === "button" &&
-      html`<${Blockly} json=${startingBlocks} update=${setStartingBlocks} />`
+      html`<${Workspace} json=${startingBlocks} update=${setStartingBlocks} />`
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
