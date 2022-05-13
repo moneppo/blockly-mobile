@@ -56,17 +56,17 @@ easier porting to a redux store.
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
   const [startingBlocks, setStartingBlocks] = useState({
-    "blocks": {
-        "languageVersion": 0,
-        "blocks": [
-            {
-                "type": "top",
-                "id": Blockly.utils.idGenerator.genUid(),
-                "x": 0,
-                "y": 0
-            }
-        ]
-    }
+    blocks: {
+      languageVersion: 0,
+      blocks: [
+        {
+          type: "top",
+          id: Blockly.utils.idGenerator.genUid(),
+          x: 0,
+          y: 0,
+        },
+      ],
+    },
   });
   const [mode, setMode] = useState({ type: "design" });
 
@@ -78,7 +78,27 @@ easier porting to a redux store.
   const onAddClick = () => {
     if (mode.type === "design") {
       setSelected(buttons.length);
-      setButtons([...buttons, { x: 35, y: 35, w: 100, h: 100, r: 0 }]);
+      setButtons([
+        ...buttons,
+        {
+          x: 35,
+          y: 35,
+          w: 100,
+          h: 100,
+          r: 0,
+          b: {
+            languageVersion: 0,
+            blocks: [
+              {
+                type: "top",
+                id: Blockly.utils.idGenerator.genUid(),
+                x: 0,
+                y: 0,
+              },
+            ],
+          },
+        },
+      ]);
     } else {
       setMenuOpen(!menuOpen);
     }
@@ -144,6 +164,13 @@ easier porting to a redux store.
     case "button":
       if (mode.i < buttons.length - 1) showRight = true;
   }
+  
+  const saveBlocks = (blocks) => {
+    setButtons(b => {
+      b[mode.i].b = blocks;
+      return [...b];
+    })
+  }
 
   return html`
   <header>
@@ -167,12 +194,13 @@ easier porting to a redux store.
     }
      ${
        mode.type === "started" &&
-       html` <${Workspace} blocks=${startingBlocks} save=${setStartingBlocks} />`
+       html` <${Workspace}
+         blocks=${startingBlocks}
+         save=${setStartingBlocks}
+       />`
      }
-    ${
-      mode.type === "button" &&
-      html`<${Workspace} />`
-    }
+    ${mode.type === "button" && html`<${Workspace} 
+    blocks=${buttons[mode.i].b}/>`}
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
