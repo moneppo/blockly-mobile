@@ -87,15 +87,18 @@ easier porting to a redux store.
           h: 100,
           r: 0,
           b: {
-            languageVersion: 0,
-            blocks: [
-              {
-                type: "top",
-                id: Blockly.utils.idGenerator.genUid(),
-                x: 0,
-                y: 0,
-              },
-            ],
+            blocks: {
+              languageVersion: 0,
+              blocks: [
+                {
+                  type: "event",
+                  id: Blockly.utils.idGenerator.genUid(),
+                  x: 0,
+                  y: 0,
+                  fields: { button_name:"WHEN BUTTON PRESSED"}
+                },
+              ],
+            },
           },
         },
       ]);
@@ -164,13 +167,13 @@ easier porting to a redux store.
     case "button":
       if (mode.i < buttons.length - 1) showRight = true;
   }
-  
+
   const saveBlocks = (blocks) => {
-    setButtons(b => {
+    setButtons((b) => {
       b[mode.i].b = blocks;
       return [...b];
-    })
-  }
+    });
+  };
 
   return html`
   <header>
@@ -199,8 +202,10 @@ easier porting to a redux store.
          save=${setStartingBlocks}
        />`
      }
-    ${mode.type === "button" && html`<${Workspace} 
-    blocks=${buttons[mode.i].b}/>`}
+    ${
+      mode.type === "button" &&
+      html`<${Workspace} blocks=${buttons[mode.i].b} save=${saveBlocks} />`
+    }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
   ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}

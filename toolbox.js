@@ -6,10 +6,31 @@ Blockly.Blocks["top"] = {
       type: "top",
       message0: "WHEN STARTED",
       nextStatement: null,
-     "lastDummyAlign0": "CENTRE",
+      lastDummyAlign0: "CENTRE",
       colour: 230,
       tooltip: "",
       helpUrl: "",
+    });
+    this.setEditable(false);
+    this.setMovable(false);
+    this.setDeletable(false);
+  },
+};
+
+Blockly.Blocks["event"] = {
+  init: function () {
+    this.jsonInit({
+      type: "example_serializable_label",
+      message0: "%1",
+      nextStatement: null,
+      colour: 180,
+      args0: [
+        {
+          type: "field_label_serializable",
+          name: "button_name",
+          text: "name goes here",
+        },
+      ],
     });
     this.setEditable(false);
     this.setMovable(false);
