@@ -119,10 +119,17 @@ easier porting to a redux store.
         console.log("should never get here");
     }
   };
-  
+
   let showRight = false;
-  switch(mode.type) {
-    case "design": 
+  switch (mode.type) {
+    case "design":
+      showRight = true;
+      break;
+    case "started":
+      if (buttons.length > 0) showRight = true;
+      break;
+    case "button":
+      if (mode.i < buttons.length - 1) showRight = true;
   }
 
   return html`
