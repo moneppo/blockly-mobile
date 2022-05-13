@@ -138,7 +138,7 @@ easier porting to a redux store.
       ${mode.type !== "design" && html`<i class="bi bi-chevron-left" />`}
     </button>
     <button onClick=${navRight}>
-     ${showRight && html`${mode.type} <i class="bi bi-chevron-right" />`}
+     ${showRight && html`<i class="bi bi-chevron-right" />`}
     </button>
   </header>
   <main>

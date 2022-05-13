@@ -12,6 +12,13 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
+const addBlock = (workspace, type) => {
+  const block = workspace.newBlock(type);
+  block.initSvg();
+  block.render(false);
+  return block;
+};
+
 export default ({ json, children, save }) => {
   const blocklyDiv = createRef();
   const workspace = createRef();
@@ -36,6 +43,8 @@ export default ({ json, children, save }) => {
 
     if (json) {
       Blockly.serialization.workspaces.load(json, workspace.current);
+    } else {
+      addBlock(workspace.current, "top");
     }
 
     return () => {
