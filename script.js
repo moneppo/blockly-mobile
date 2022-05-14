@@ -43,8 +43,6 @@ import Workspace from "./Workspace.js";
 //  - designer mode
 //  - image background
 
-console.log(Blockly);
-
 const App = () => {
   /** 
 
@@ -57,10 +55,9 @@ easier porting to a redux store.
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
   const [startingBlocks, setStartingBlocks] = useState(
-    addBlock(newWorkspace(), "top")
+    addBlock(addBlock(newWorkspace(), "top"), "play_sample")
   );
   
-  console.log(startingBlocks);
   const [mode, setMode] = useState({ type: "design" });
 
   const updateButton = (i, b) => {
@@ -94,17 +91,23 @@ easier porting to a redux store.
     }
   };
 
-  const add = (type) => {
+  const add = (type, fields) => {
     console.log("add", type);
     setMenuOpen(false);
-
-    // const block = buttons[view].ref.current.newBlock(type);
-    // block.initSvg();
-    // block.render(false);
-    // buttons[view].ref.current
-    //   .getTopBlocks()[0]
-    //   .lastConnectionInStack()
-    //   .connect(block.previousConnection);
+    
+     switch (mode.type) {
+      case "started":
+        setStartingBlocks(addBlock(startingBlocks, type, fields));
+        break;
+      case "button":
+        setButtons(buttons => {
+          buttons[mode.i].b = addBlock(buttons[mode.i].b, type, fields);
+          return [...buttons]
+        });
+        break;
+      default:
+        console.log("should never get here");
+    }
   };
 
   const navLeft = () => {

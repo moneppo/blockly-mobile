@@ -48,6 +48,7 @@ export default ({ blocks, save }) => {
     }
 
     return () => {
+      console.log(Blockly.serialization.workspaces.save(workspace.current));
       save && save(Blockly.serialization.workspaces.save(workspace.current));
       console.log("teardown");
     };

@@ -78,6 +78,7 @@ export default {
       kind: "block",
       type: "play_sample",
       icon: "bi bi-music-note",
+      fie
       display_name: "play sample",
     },
     {

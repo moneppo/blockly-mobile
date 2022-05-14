@@ -8,11 +8,12 @@ export const newWorkspace = () => ({
 });
 
 export const addBlock = (workspace, type, fields) => {
-  return workspace.blocks.blocks.push({
+  workspace.blocks.blocks.push({
     type,
     fields,
     id: Blockly.utils.idGenerator.genUid(),
     x: 0,
     y: 0,
   });
+  return workspace
 };
