@@ -11,6 +11,7 @@ import { h, render, createRef } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
+import { newWorkspace, addBlock } from "./blockHelpers.js";
 const html = htm.bind(h);
 
 /**
@@ -35,7 +36,7 @@ import Designer from "./Designer.js";
 
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
-import Workspace from "./Blockly.js";
+import Workspace from "./Workspace.js";
 
 // TODO:
 //  - child blocks render smaller than parent
@@ -55,19 +56,11 @@ easier porting to a redux store.
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const [startingBlocks, setStartingBlocks] = useState({
-    blocks: {
-      languageVersion: 0,
-      blocks: [
-        {
-          type: "top",
-          id: Blockly.utils.idGenerator.genUid(),
-          x: 0,
-          y: 0,
-        },
-      ],
-    },
-  });
+  const [startingBlocks, setStartingBlocks] = useState(
+    addBlock(newWorkspace(), "top")
+  );
+  
+  console.log(startingBlocks);
   const [mode, setMode] = useState({ type: "design" });
 
   const updateButton = (i, b) => {
@@ -86,20 +79,9 @@ easier porting to a redux store.
           w: 100,
           h: 100,
           r: 0,
-          b: {
-            blocks: {
-              languageVersion: 0,
-              blocks: [
-                {
-                  type: "event",
-                  id: Blockly.utils.idGenerator.genUid(),
-                  x: 0,
-                  y: 0,
-                  fields: { button_name:"WHEN BUTTON PRESSED"}
-                },
-              ],
-            },
-          },
+          b: addBlock(newWorkspace(), "event", {
+            button_name: "WHEN BUTTON PRESSED",
+          }),
         },
       ]);
     } else {
@@ -112,7 +94,7 @@ easier porting to a redux store.
     }
   };
 
-  const addBlock = (type) => {
+  const add = (type) => {
     console.log("add", type);
     setMenuOpen(false);
 
@@ -208,7 +190,7 @@ easier porting to a redux store.
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-  ${menuOpen && html`<${BlockMenu} addBlock=${addBlock} />`}
+  ${menuOpen && html`<${BlockMenu} addBlock=${add} />`}
   </${Footer}>`;
 };
 

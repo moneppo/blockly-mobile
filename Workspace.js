@@ -1,14 +1,14 @@
 /* global Blockly */
 
 import { h, createRef } from "https://unpkg.com/preact@latest?module";
-import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import {
+  useState,
   useEffect,
-  useLayoutEffect,
 } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+
 import htm from "https://unpkg.com/htm?module";
-import toolbox from "./toolbox.js";
 import VerticalMetrics from "./VerticalMetrics.js";
+import toolbox from "./toolbox.js";
 import { CustomRenderer } from "./CustomRenderer.js";
 
 const html = htm.bind(h);
@@ -20,18 +20,13 @@ const addBlock = (workspace, type) => {
   return block;
 };
 
-const addBlockToEnd = (start, type) => {
-  const newBlock = addBlock(start.workspace, type);
-  start.lastConnectionInStack().connect(newBlock.previousConnection);
-};
-
-export default ({ workspaceRef }) => {
-  const [blocks, setBlocks] = useState();
-  const ref = createRef();
+export default ({ blocks, save }) => {
+  const blocklyDiv = createRef();
+  const workspace = createRef();
 
   useEffect(() => {
-    console.log("setup")
-    workspaceRef.current = Blockly.inject(ref.current, {
+    console.log("buildup")
+    workspace.current = Blockly.inject(blocklyDiv.current, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
       move: {
@@ -42,35 +37,21 @@ export default ({ workspaceRef }) => {
       plugins: {
         metricsManager: VerticalMetrics,
       },
-      grid: { spacing: 20, length: 3, colour: "#ccc", snap: true },
+     // grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
     });
-    
+
+    workspace.current.getFlyout().hide();
+
     if (blocks) {
-      console.log("load")
-      Blockly.serialization.workspaces.load(blocks, workspaceRef.current);
-    } else {
-      console.log("init")
-      addBlock(workspaceRef.current, "top");
+      console.log(blocks)
+      Blockly.serialization.workspaces.load(blocks, workspace.current);
     }
 
-    const resize = () => {
-      CustomRenderer.setScreenWidth(ref.current.clientWidth);
-      workspaceRef.current.resize();
-      workspaceRef.current.render();
-    };
-
-    workspaceRef.current.getFlyout().hide();
-    workspaceRef.current.scroll(300, 0);
-    resize();
-
-    window.addEventListener("resize", resize);
-
     return () => {
-      console.log("teardown")
-      setBlocks(Blockly.serialization.workspaces.save(workspaceRef.current));
-      window.removeEventListener("resize", resize);
+      save && save(Blockly.serialization.workspaces.save(workspace.current));
+      console.log("teardown");
     };
   }, []);
 
-  return html`<div ref=${ref} id="workspace" />`;
+  return html`<div ref=${blocklyDiv} id="workspace" />`;
 };
