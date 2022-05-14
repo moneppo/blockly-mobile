@@ -30,7 +30,7 @@ export default ({ addBlock }) => {
   return html`<div id="blockmenu">
     ${toolbox.contents.map(
       (i) =>
-        html`<button onclick=${() => addBlock(i.type)}>
+        html`<button onclick=${() => addBlock(i.type, i.fields)}>
           <i class=${i.icon} />
           ${i.display_name}
         </button>`

@@ -1,6 +1,8 @@
 /* global Blockly */
 
-export const newWorkspace = () => ({
+
+
+export const workspace = () => ({
   blocks: {
     languageVersion: 0,
     blocks: [],
@@ -17,3 +19,13 @@ export const addBlock = (workspace, type, fields) => {
   });
   return workspace
 };
+
+
+const block = (type, fields, next) => ({
+    type,
+    fields,
+    next,
+    id: Blockly.utils.idGenerator.genUid(),
+    x: 0,
+    y: 0
+})

@@ -78,7 +78,7 @@ export default {
       kind: "block",
       type: "play_sample",
       icon: "bi bi-music-note",
-      fie
+      fields: {NAME: 'OPTIONNAME'},
       display_name: "play sample",
     },
     {
