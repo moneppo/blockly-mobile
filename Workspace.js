@@ -25,7 +25,6 @@ export default ({ blocks, save }) => {
   const workspace = createRef();
 
   useEffect(() => {
-    console.log("buildup")
     workspace.current = Blockly.inject(blocklyDiv.current, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
@@ -37,15 +36,10 @@ export default ({ blocks, save }) => {
       plugins: {
         metricsManager: VerticalMetrics,
       },
-     // grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
+      // grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
     });
 
     workspace.current.getFlyout().hide();
-
-    if (blocks) {
-      console.log(blocks)
-      Blockly.serialization.workspaces.load(blocks, workspace.current);
-    }
 
     return () => {
       console.log(Blockly.serialization.workspaces.save(workspace.current));
@@ -53,6 +47,13 @@ export default ({ blocks, save }) => {
       console.log("teardown");
     };
   }, []);
+
+  useEffect(() => {
+    if (blocks) {
+      console.log(blocks);
+      Blockly.serialization.workspaces.load(blocks, workspace.current);
+    }
+  }, [blocks, workspace]);
 
   return html`<div ref=${blocklyDiv} id="workspace" />`;
 };

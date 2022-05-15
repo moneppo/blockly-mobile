@@ -100,11 +100,11 @@ easier porting to a redux store.
 
     switch (mode.type) {
       case "started":
-        setStartingBlocks(addBlock(block(buttons[mode.i].b, type, fields)));
+        setStartingBlocks(addBlock(startingBlocks, block(type, fields)));
         break;
       case "button":
         setButtons((buttons) => {
-          buttons[mode.i].b = addBlock(block(buttons[mode.i].b, type, fields));
+          buttons[mode.i].b = addBlock(buttons[mode.i].b, block( type, fields));
           return [...buttons];
         });
         break;
