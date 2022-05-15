@@ -11,7 +11,6 @@ import { h, render, createRef } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
-import { newWorkspace, addBlock } from "./blockHelpers.js";
 const html = htm.bind(h);
 
 /**
@@ -33,7 +32,7 @@ the following:
 
 */
 import Designer from "./Designer.js";
-
+import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
 import Workspace from "./Workspace.js";
@@ -55,9 +54,11 @@ easier porting to a redux store.
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
   const [startingBlocks, setStartingBlocks] = useState(
-    addBlock(addBlock(newWorkspace(), "top"), "play_sample")
+    workspace([
+      block("top", undefined, block("play_sample", { NAME: "OPTIONNAME" })),
+    ])
   );
-  
+
   const [mode, setMode] = useState({ type: "design" });
 
   const updateButton = (i, b) => {
@@ -76,9 +77,11 @@ easier porting to a redux store.
           w: 100,
           h: 100,
           r: 0,
-          b: addBlock(newWorkspace(), "event", {
-            button_name: "WHEN BUTTON PRESSED",
-          }),
+          b: workspace([
+            block("event", {
+              button_name: "WHEN BUTTON PRESSED",
+            }),
+          ]),
         },
       ]);
     } else {
@@ -94,15 +97,15 @@ easier porting to a redux store.
   const add = (type, fields) => {
     console.log("add", type);
     setMenuOpen(false);
-    
-     switch (mode.type) {
+
+    switch (mode.type) {
       case "started":
-        setStartingBlocks(addBlock(startingBlocks, type, fields));
+        setStartingBlocks(addBlock(block(buttons[mode.i].b, type, fields)));
         break;
       case "button":
-        setButtons(buttons => {
-          buttons[mode.i].b = addBlock(buttons[mode.i].b, type, fields);
-          return [...buttons]
+        setButtons((buttons) => {
+          buttons[mode.i].b = addBlock(block(buttons[mode.i].b, type, fields));
+          return [...buttons];
         });
         break;
       default:

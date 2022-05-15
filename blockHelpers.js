@@ -1,31 +1,22 @@
 /* global Blockly */
 
-
-
-export const workspace = () => ({
+export const workspace = (blocks) => ({
   blocks: {
     languageVersion: 0,
-    blocks: [],
+    blocks: blocks || [],
   },
 });
 
-export const addBlock = (workspace, type, fields) => {
-  workspace.blocks.blocks.push({
-    type,
-    fields,
-    id: Blockly.utils.idGenerator.genUid(),
-    x: 0,
-    y: 0,
-  });
-  return workspace
-};
 
-
-const block = (type, fields, next) => ({
+export const block = (type, fields, next) => ({
     type,
     fields,
     next,
     id: Blockly.utils.idGenerator.genUid(),
     x: 0,
     y: 0
-})
+});
+
+export const addBlock = (ws, block) => {
+  return workspace([...ws.blocks.blocks, block]);
+}
