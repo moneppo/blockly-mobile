@@ -23,6 +23,14 @@ const addBlock = (workspace, type) => {
 export default ({ blocks, save }) => {
   const blocklyDiv = createRef();
   const workspace = createRef();
+  
+  useEffect(() => {
+    CustomRenderer.setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", () => {
+      console.log(window.innerWidth);
+      CustomRenderer.setScreenWidth(window.innerWidth);
+    })
+  })
 
   useEffect(() => {
     workspace.current = Blockly.inject(blocklyDiv.current, {
