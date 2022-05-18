@@ -5,7 +5,7 @@ import {
   useState,
   useEffect,
   useCallback,
-  useRef
+  useRef,
 } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
 import htm from "https://unpkg.com/htm?module";
@@ -26,7 +26,7 @@ const addBlock = (workspace, type) => {
 const resize = () => CustomRenderer.setScreenWidth(window.innerWidth);
 
 export default ({ blocks, save }) => {
-/*  const [workspace, setWorkspace] = useState(null);
+  /*  const [workspace, setWorkspace] = useState(null);
 
   useEffect(() => {
     CustomRenderer.setScreenWidth(window.innerWidth);
@@ -78,8 +78,19 @@ export default ({ blocks, save }) => {
   const { workspace, xml } = useBlocklyWorkspace({
     ref: blocklyRef,
     toolboxConfiguration: toolbox, // this must be a JSON toolbox definition
+    workspaceConfiguration: {
+      renderer: "custom_renderer", // CustomRenderer.js
+      move: {
+        scrollbars: {
+          vertical: true,
+        },
+      },
+      plugins: {
+        metricsManager: VerticalMetrics,
+      },
+    },
     initialBlocks: blocks,
-    onWorkspaceChange: save
+    onBlocksChanged: save,
   });
 
   return html`<div ref=${blocklyRef} id="workspace" />`;
