@@ -4,7 +4,7 @@ import { h, createRef } from "https://unpkg.com/preact@latest?module";
 import {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
 import htm from "https://unpkg.com/htm?module";
@@ -21,28 +21,31 @@ const addBlock = (workspace, type) => {
   return block;
 };
 
+const resize = () => CustomRenderer.setScreenWidth(window.innerWidth);
 
 export default ({ blocks, save }) => {
-  const blocklyDiv = createRef();
-  const workspace = createRef();
-  
+  const [workspace, setWorkspace] = useState(null);
+
   useEffect(() => {
     CustomRenderer.setScreenWidth(window.innerWidth);
-    window.addEventListener("resize", () => {
-      console.log(window.innerWidth);
-      CustomRenderer.setScreenWidth(window.innerWidth);
-    })
-  })
+    window.addEventListener("resize", resize);
 
-  useCallback((node) => {
+    return () => window.removeEventListener("resize", resize);
+  });
+
+  const blocklyRef = useCallback((node) => {
+    console.log("Callback", node);
     // This is means the div was unmounted; tear down the Blockly instance
     if (node === null) {
-      console.log(Blockly.serialization.workspaces.save(workspace.current));
-      workspace.current && save && save(Blockly.serialization.workspaces.save(workspace.current));
+      console.log(Blockly.serialization.workspaces.save(workspace));
+      workspace &&
+        save &&
+        save(Blockly.serialization.workspaces.save(workspace));
       console.log("teardown");
+      return;
     }
-    
-    workspace.current = Blockly.inject(node, {
+
+    const ws = Blockly.inject(node, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
       move: {
@@ -55,21 +58,18 @@ export default ({ blocks, save }) => {
       },
       // grid: { spacing: 20, length: 3, colour: "#eee", snap: true },
     });
+    ws.getFlyout().hide();
 
-    workspace.current.getFlyout().hide();
-
-    return () => {
-    
-    };
+    setWorkspace(ws);
   }, []);
 
   useEffect(() => {
-    console.log("update", blocks, workspace)
-    if (blocks && workspace.current) {
+    console.log("update", blocks, workspace);
+    if (blocks && workspace) {
       console.log(blocks);
-      Blockly.serialization.workspaces.load(blocks, workspace.current);
+      Blockly.serialization.workspaces.load(blocks, workspace);
     }
-  }, [blocks, workspace]);
+  }, [blocks]);
 
-  return html`<div ref=${blocklyDiv} id="workspace" />`;
+  return html`<div ref=${blocklyRef} id="workspace" />`;
 };
