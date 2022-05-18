@@ -4,6 +4,7 @@ import { h, createRef } from "https://unpkg.com/preact@latest?module";
 import {
   useState,
   useEffect,
+  useCallback
 } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 
 import htm from "https://unpkg.com/htm?module";
@@ -20,6 +21,7 @@ const addBlock = (workspace, type) => {
   return block;
 };
 
+
 export default ({ blocks, save }) => {
   const blocklyDiv = createRef();
   const workspace = createRef();
@@ -32,8 +34,15 @@ export default ({ blocks, save }) => {
     })
   })
 
-  useEffect(() => {
-    workspace.current = Blockly.inject(blocklyDiv.current, {
+  useCallback((node) => {
+    // This is means the div was unmounted; tear down the Blockly instance
+    if (node === null) {
+      console.log(Blockly.serialization.workspaces.save(workspace.current));
+      workspace.current && save && save(Blockly.serialization.workspaces.save(workspace.current));
+      console.log("teardown");
+    }
+    
+    workspace.current = Blockly.inject(node, {
       toolbox,
       renderer: "custom_renderer", // CustomRenderer.js
       move: {
@@ -50,14 +59,13 @@ export default ({ blocks, save }) => {
     workspace.current.getFlyout().hide();
 
     return () => {
-      console.log(Blockly.serialization.workspaces.save(workspace.current));
-      save && save(Blockly.serialization.workspaces.save(workspace.current));
-      console.log("teardown");
+    
     };
   }, []);
 
   useEffect(() => {
-    if (blocks) {
+    console.log("update", blocks, workspace)
+    if (blocks && workspace.current) {
       console.log(blocks);
       Blockly.serialization.workspaces.load(blocks, workspace.current);
     }
