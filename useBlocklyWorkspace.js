@@ -40,13 +40,12 @@ function importFromObject(blocks, workspace) {
 
 const useBlocklyWorkspace = ({
   ref,
-  initialBlocks,
+  blocks,
   toolboxConfiguration,
   workspaceConfiguration,
-  onWorkspaceChange,
+  onBlocksChanged,
 }) => {
   const [workspace, setWorkspace] = useState(null);
-  const [blocks, setBlocks] = useState(initialBlocks);
   const [didInitialImport, setDidInitialImport] = useState(false);
   const [didHandleNewWorkspace, setDidHandleNewWorkspace] =
     useState(false);
@@ -69,6 +68,7 @@ const useBlocklyWorkspace = ({
   const handleWorkspaceChanged = useCallback(
     (newWorkspace) => {
       if (onWorkspaceChange) {
+
         onWorkspaceChange(newWorkspace);
       }
     },
