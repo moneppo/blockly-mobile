@@ -79,10 +79,8 @@ export default ({ blocks, save }) => {
     ref: blocklyRef,
     toolboxConfiguration: toolbox, // this must be a JSON toolbox definition
     initialBlocks: blocks,
-    onWorkspaceChange
+    onWorkspaceChange: save
   });
 
-  return (
-    <div ref={blocklyRef} /> // Blockly will be injected here
-  )
+  return html`<div ref=${blocklyRef} id="workspace" />`;
 };
