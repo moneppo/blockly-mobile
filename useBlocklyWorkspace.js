@@ -50,8 +50,7 @@ const useBlocklyWorkspace = ({
   onBlocksChanged,
 }) => {
   const [workspace, setWorkspace] = useState(null);
-  const [didHandleNewWorkspace, setDidHandleNewWorkspace] = useState(false);
-
+ 
   // we explicitly don't want to recreate the workspace when the configuration changes
   // so, we'll keep it in a ref and update as necessary in an effect hook
   const workspaceConfigurationRef = useRef(workspaceConfiguration);
@@ -77,18 +76,17 @@ const useBlocklyWorkspace = ({
       toolbox: toolboxConfigurationRef.current,
     });
     setWorkspace(newWorkspace);
-    setDidHandleNewWorkspace(false); // Signal that a workspace change event needs to be sent.
-
+   
     // Dispose of the workspace when our div ref goes away (Equivalent to didComponentUnmount)
-    return () => newWorkspace.dispose();
+    return () => {console.log("teardown"); newWorkspace.dispose();}
   }, [ref]);
 
   // Send a workspace change event when the workspace is created
   useEffect(() => {
-    if (workspace && !didHandleNewWorkspace) {
+    if (workspace) {
       onBlocksChanged(Blockly.serialization.workspaces.save(workspace));
     }
-  }, [onBlocksChanged, didHandleNewWorkspace, workspace]);
+  }, [onBlocksChanged, workspace]);
 
   useEffect(() => {
     if (workspace == null) {
@@ -101,6 +99,7 @@ const useBlocklyWorkspace = ({
         return;
       }
 
+      console.log("blocks", newBlocks);
       onBlocksChanged(newBlocks);
     }, 200);
 
@@ -113,8 +112,10 @@ const useBlocklyWorkspace = ({
   }, [workspace, blocks]);
 
   useEffect(() => {
+    console.log("onchange effect")
     if (blocks && workspace) {
       const success = importFromObject(blocks, workspace);
+      console.log("it worked", success)
     }
   }, [blocks, workspace]);
 
