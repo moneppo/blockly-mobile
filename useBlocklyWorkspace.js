@@ -95,6 +95,7 @@ const useBlocklyWorkspace = ({
 
     const [callback, cancel] = debounce(() => {
       const newBlocks = Blockly.serialization.workspaces.save(workspace);
+      console.log(newBlocks, blocks);
       if (newBlocks === blocks) {
         return;
       }
