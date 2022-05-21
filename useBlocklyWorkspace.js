@@ -15,33 +15,6 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-const debounce = (func, wait) => {
-  let timeout = null;
-  let later = null;
-
-  const debouncedFunction = (...args) => {
-    later = () => {
-      timeout = null;
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-
-  const cancel = () => {
-    if (timeout !== null) {
-      clearTimeout(timeout);
-      later();
-    }
-  };
-
-  return [debouncedFunction, cancel];
-};
-
-function importFromObject(blocks, workspace) {
-  Blockly.serialization.workspaces.load(blocks, workspace);
-}
-
 const useBlocklyWorkspace = ({
   ref,
   blocks,
@@ -50,7 +23,6 @@ const useBlocklyWorkspace = ({
   onBlocksChanged,
 }) => {
   const [workspace, setWorkspace] = useState(null);
-  const [notifiedUpdate, setNotifiedUpdate] = useState(false);
 
   const workspaceConfigurationRef = useRef(workspaceConfiguration);
   useEffect(() => {
@@ -75,34 +47,22 @@ const useBlocklyWorkspace = ({
     });
     setWorkspace(newWorkspace);
     
-     const [callback, cancel] = debounce((stuff) => {
-       console.log(stuff) 
-     }, 200);
+    const handler = (event) => {
+      console.log(event)
+      if (event.isUiEvent && onBlocksChanged && workspace && blocks ) {
+        onBlocksChanged(Blockly.serialization.workspaces.save(workspace))
+      }
+    }
     
-     newWorkspace.addChangeListener(callback);
+     newWorkspace.addChangeListener(handler);
 
     return () => newWorkspace.dispose();
   }, [ref]);
 
-  // useEffect(() => {
-  //   if (workspace == null) return undefined;
-  //   const [callback, cancel] = debounce(() => {
-  //     const newBlocks = Blockly.serialization.workspaces.save(workspace);
-  //     if (newBlocks === blocks) return;   
-  //     onBlocksChanged(newBlocks);
-  //   }, 2000);
-  //   workspace.addChangeListener(callback);
-  //   return () => {
-  //     workspace.removeChangeListener(callback);
-  //     cancel();
-  //   }
-  // }, [workspace, blocks]);
-
   useEffect(() => {
     console.log("load1", blocks, workspace)
     if (blocks && workspace) {
-      console.log("load")
-      const success = importFromObject(blocks, workspace);
+      Blockly.serialization.workspaces.load(blocks, workspace);
     }
   }, [blocks, workspace]);
 
