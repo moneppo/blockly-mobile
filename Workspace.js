@@ -89,7 +89,7 @@ export default ({ blocks, save }) => {
         metricsManager: VerticalMetrics,
       },
     },
-    initialBlocks: blocks,
+    blocks,
     onBlocksChanged: save,
   });
 

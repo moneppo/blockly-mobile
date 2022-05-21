@@ -51,9 +51,7 @@ const useBlocklyWorkspace = ({
 }) => {
   const [workspace, setWorkspace] = useState(null);
   const [notifiedUpdate, setNotifiedUpdate] = useState(false);
- 
-  // we explicitly don't want to recreate the workspace when the configuration changes
-  // so, we'll keep it in a ref and update as necessary in an effect hook
+
   const workspaceConfigurationRef = useRef(workspaceConfiguration);
   useEffect(() => {
     workspaceConfigurationRef.current = workspaceConfiguration;
@@ -70,48 +68,40 @@ const useBlocklyWorkspace = ({
   // Workspace creation
   useEffect(() => {
     if (!ref.current) return;
-    
+
     const newWorkspace = Blockly.inject(ref.current, {
       ...workspaceConfigurationRef.current,
       toolbox: toolboxConfigurationRef.current,
     });
     setWorkspace(newWorkspace);
-   
-    // Dispose of the workspace when our div ref goes away (Equivalent to didComponentUnmount)
+    
+     const [callback, cancel] = debounce((stuff) => {
+       console.log(stuff) 
+     }, 200);
+    
+     newWorkspace.addChangeListener(callback);
+
     return () => newWorkspace.dispose();
   }, [ref]);
 
-  useEffect(() => {
-    if (workspace == null) {
-      return undefined;
-    }
-    
-//         const [callback, cancel] = debounce(() => {
-//       if (notifiedUpdate) {
-//         setNotifiedUpdate(false);
-//       }
-      
-//       const newBlocks = Blockly.serialization.workspaces.save(workspace);
-  
-//       if (newBlocks === blocks) {
-//         return;
-//       }
-
-//       console.log("blocks", newBlocks);
-//       setNotifiedUpdate(true);
-//       onBlocksChanged(newBlocks);
-//     }, 2000);
-
-//     workspace.addChangeListener(callback);
-
-    return () => {
-    //  workspace.removeChangeListener(callback);
-     // cancel();
-    };
-  }, [workspace, blocks]);
+  // useEffect(() => {
+  //   if (workspace == null) return undefined;
+  //   const [callback, cancel] = debounce(() => {
+  //     const newBlocks = Blockly.serialization.workspaces.save(workspace);
+  //     if (newBlocks === blocks) return;   
+  //     onBlocksChanged(newBlocks);
+  //   }, 2000);
+  //   workspace.addChangeListener(callback);
+  //   return () => {
+  //     workspace.removeChangeListener(callback);
+  //     cancel();
+  //   }
+  // }, [workspace, blocks]);
 
   useEffect(() => {
+    console.log("load1", blocks, workspace)
     if (blocks && workspace) {
+      console.log("load")
       const success = importFromObject(blocks, workspace);
     }
   }, [blocks, workspace]);

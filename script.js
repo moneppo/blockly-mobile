@@ -187,7 +187,7 @@ easier porting to a redux store.
        mode.type === "started" &&
        html` <${Workspace}
          blocks=${startingBlocks}
-         save=${(b) => setStartingBlocks(b)}
+         save=${setStartingBlocks}
        />`
      }
     ${
