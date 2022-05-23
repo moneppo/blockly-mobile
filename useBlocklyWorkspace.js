@@ -29,24 +29,22 @@ const useBlocklyWorkspace = ({
     workspaceConfigurationRef.current = workspaceConfiguration;
   }, [workspaceConfiguration]);
 
-  const toolboxConfigurationRef = useRef(toolboxConfiguration);
-  useEffect(() => {
-    toolboxConfigurationRef.current = toolboxConfiguration;
-    if (toolboxConfiguration && workspace) {
-      workspace.updateToolbox(toolboxConfiguration);
-    }
-  }, [toolboxConfiguration, workspace]);
-
   // Workspace creation
   useEffect(() => {
     if (!ref.current) return;
+    
+    console.log("workspace creation")
 
     const newWorkspace = Blockly.inject(ref.current, {
       ...workspaceConfigurationRef.current,
-      toolbox: toolboxConfigurationRef.current,
+      toolbox: toolboxConfiguration,
     });
-    setWorkspace(newWorkspace);
     
+   
+    newWorkspace.getFlyout().hide();
+    
+    setWorkspace(newWorkspace);
+      
     const handler = (event) => {
       console.log(event)
       if (event.isUiEvent && onBlocksChanged && workspace && blocks ) {
@@ -54,13 +52,12 @@ const useBlocklyWorkspace = ({
       }
     }
     
-     newWorkspace.addChangeListener(handler);
+    newWorkspace.addChangeListener(handler);
 
     return () => newWorkspace.dispose();
   }, [ref]);
 
   useEffect(() => {
-    console.log("load1", blocks, workspace)
     if (blocks && workspace) {
       Blockly.serialization.workspaces.load(blocks, workspace);
     }
