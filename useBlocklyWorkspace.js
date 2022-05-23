@@ -54,11 +54,15 @@ const useBlocklyWorkspace = ({
     
     newWorkspace.addChangeListener(handler);
 
-    return () => newWorkspace.dispose();
+    return () => {
+      console.log("teardown");
+      newWorkspace.dispose();
+    }
   }, [ref]);
 
   useEffect(() => {
     if (blocks && workspace) {
+      console.log("updated blocks", blocks)
       Blockly.serialization.workspaces.load(blocks, workspace);
     }
   }, [blocks, workspace]);
