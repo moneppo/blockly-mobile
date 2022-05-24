@@ -32,38 +32,38 @@ const useBlocklyWorkspace = ({
   // Workspace creation
   useEffect(() => {
     if (!ref.current) return;
-    
-    console.log("workspace creation")
+
+    console.log("workspace creation");
 
     const newWorkspace = Blockly.inject(ref.current, {
       ...workspaceConfigurationRef.current,
       toolbox: toolboxConfiguration,
     });
-    
-   
+
     newWorkspace.getFlyout().hide();
-    
+
     setWorkspace(newWorkspace);
-      
+
     const handler = (event) => {
       console.log(event)
-      if (event.isUiEvent && onBlocksChanged && workspace && blocks ) {
-        onBlocksChanged(Blockly.serialization.workspaces.save(workspace))
+      if (event.isUiEvent && onBlocksChanged && blocks) {
+        onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
       }
-    }
-    
+    };
+
     newWorkspace.addChangeListener(handler);
 
     return () => {
       console.log("teardown");
       newWorkspace.dispose();
-    }
+    };
   }, [ref]);
 
   useEffect(() => {
     if (blocks && workspace) {
-      console.log("updated blocks", blocks)
+      console.log("updated blocks", blocks);
       Blockly.serialization.workspaces.load(blocks, workspace);
+      console.log(Blockly.serialization.workspaces.save(workspace))
     }
   }, [blocks, workspace]);
 

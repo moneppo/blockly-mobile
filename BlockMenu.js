@@ -8,24 +8,6 @@ import toolbox from "./toolbox.js";
 
 const html = htm.bind(h);
 
-/**
-
-The BlockMenu component is essentially a mobile-friendly re-implementation
-of the toolbox. It's debatable where this is a good solution. In theory,
-one can specify where the toolbox gets rendered, so it could be reutilitized
-in a menu component. However, there is a ton of complexity to the toolbox that
-doesn't seem mobile-friendly from a screen-space usage perspective: e.g. the way 
-categories are laid out, full preview of blocks, etc.
-
-Due to Blockly having its own state outside of Preact, for this prototype, 
-I've decided that the menu component adds blocks to the workspace and the delete
-button deletes the selected blocks. This is not how I would implement this in a
-production application. Instead, I would make blocks additions & deletions
-dispatched actions, even if the end result was the same calls into the Blockly
-workspace.
-
-*/
-
 export default ({ addBlock }) => {
   return html`<div id="blockmenu">
     ${toolbox.contents.map(
