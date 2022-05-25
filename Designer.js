@@ -130,9 +130,10 @@ const Button = ({ select, selected, update, button, onEdit }) => {
     <rect
       width=${w}
       height=${h}
-      fill="teal"
+      fill=${button.color || "teal"}
       onMouseDown=${selected ? startDrag : select}
     />
+    <text class=${button.icon}>content</text>
     ${selected &&
     html` <${Rotator} button=${button} update=${update} />
       <${Resizer} button=${button} update=${update} />
