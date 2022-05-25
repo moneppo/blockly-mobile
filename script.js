@@ -39,9 +39,14 @@ import IconMenu from "./IconMenu.js";
 import Workspace from "./Workspace.js";
 
 // TODO:
-//  - child blocks render smaller than parent
-//  - designer mode
-//  - image background
+//  - Icon in top block
+//  - Run view
+//  - Run triggers starter code
+//  - down/over triggers code
+//  - Audio engine
+//  - Block definitions
+//  - Child blocks render smaller than parent
+//  - Image background
 
 const App = () => {
   /** 

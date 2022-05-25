@@ -25,7 +25,9 @@ const icons = [
   "record-circle-fill",
   "radioactive",
   "megaphone",
-  "lightning-fill"
+  "lightning-fill",
+  "flower1",
+  "fingerprint"
 ];
 
 const colors = ["teal", "purple"];

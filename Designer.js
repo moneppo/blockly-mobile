@@ -142,6 +142,7 @@ const Button = ({ select, selected, update, button, onEdit }) => {
       fill="white"
       width=${w * 0.8}
       height=${h * 0.8}
+      onMouseDown=${selected ? startDrag : select}
     />
     ${selected &&
     html` <${Rotator} button=${button} update=${update} />
