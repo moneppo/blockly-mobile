@@ -5,10 +5,28 @@ import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.modul
 import htm from "https://unpkg.com/htm?module";
 
 const icons = [
-  "bi bi-balloon-fill", 
-  "bi bi-balloon-heart",
-  "bi bi-bell",
-  "bi bi-bullseye"];
+  "balloon-fill", 
+  "balloon-heart",
+  "bell",
+  "bullseye",
+  "wind",
+  "volume-up",
+"vinyl",
+  "triangle-fill",
+  "suit-diamond",
+  "suit-heart",
+  "suit-spade",
+  "suit-club",
+  "star",
+  "star-fill",
+  "square-fill",
+  "soundwave",
+  "speaker-fill",
+  "record-circle-fill",
+  "radioactive",
+  "megaphone",
+  "lightning-fill"
+];
 
 const colors = ["teal", "purple"];
 
@@ -24,7 +42,7 @@ export default ({ addButton }) => {
           (i) =>
             html`<li class=${icon === i ? "selected" : ""}>
               <button onclick=${() => (i === icon ? setIcon() : setIcon(i))}>
-                <i class=${i} />
+                <i class="bi bi-${i}" />
               </button>
             </li>`
         )}
