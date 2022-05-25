@@ -101,6 +101,26 @@ svg {
   box-shadow: 0px 4px 15px 5px rgba(0, 0, 0, 0.2);
 }
 
-#iconmenu ul {
-  list-style-: none;
+#iconmenu_options {
+  display: flex;
+  flex-direction: row;
 }
+
+#iconmenu ul {
+  list-style-type: none;
+  height: 200px;
+  overflow: scroll;
+  margin: 0;
+  padding: 10px;
+}
+
+#iconmenu .selected {
+  background-color: #eeeeee;
+}
+
+#iconmenu .color_swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+
