@@ -45,7 +45,11 @@ const useBlocklyWorkspace = ({
     setWorkspace(newWorkspace);
 
     const handler = (event) => {
-      console.log(event)
+      console.log(event);
+      if (event.type=="move" && (event.newParentId || event.oldParentId)) {
+        onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
+        
+      }
    //   if (event.isUiEvent && event.type !== "selected" && onBlocksChanged && blocks) {
     //    onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
    //   }
