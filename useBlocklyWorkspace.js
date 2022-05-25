@@ -46,9 +46,9 @@ const useBlocklyWorkspace = ({
 
     const handler = (event) => {
       console.log(event)
-      if (event.isUiEvent && onBlocksChanged && blocks) {
-        onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
-      }
+   //   if (event.isUiEvent && event.type !== "selected" && onBlocksChanged && blocks) {
+    //    onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
+   //   }
     };
 
     newWorkspace.addChangeListener(handler);
@@ -61,9 +61,7 @@ const useBlocklyWorkspace = ({
 
   useEffect(() => {
     if (blocks && workspace) {
-      console.log("updated blocks", blocks);
       Blockly.serialization.workspaces.load(blocks, workspace);
-      console.log(Blockly.serialization.workspaces.save(workspace))
     }
   }, [blocks, workspace]);
 

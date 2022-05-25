@@ -20,8 +20,14 @@ export const addBlock = (ws, block) => {
   if (ws.blocks.blocks.length === 0) {
     return workspace([block]);
   } else {
-    const first = ws.blocks.blocks[0];
+    const result = workspace();
+    let 
+    let current = ws.blocks.blocks[0];
+    while (current) {
+      r
+      current = current.next?.block;
+    }
     const rest = ws.blocks.blocks.slice(1);
-    return workspace([{ ...first, next: block }, ...rest]);
+    return workspace([{ ...first, next: {block} }, ...rest]);
   }
 };
