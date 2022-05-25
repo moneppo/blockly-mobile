@@ -68,6 +68,7 @@ easier porting to a redux store.
   };
 
   const addButton = (icon, color) => {
+     setMenuOpen(false);
     setSelected(buttons.length);
     setButtons([
       ...buttons,
@@ -214,7 +215,7 @@ easier porting to a redux store.
   ${
     menuOpen &&
     (mode.type === "design"
-      ? html`<${IconMenu}  />`
+      ? html`<${IconMenu}  addButton=${addButton}/>`
       : html`<${BlockMenu} addBlock=${add} />`)
   }
   </${Footer}>`;

@@ -4,7 +4,11 @@ import { h } from "https://unpkg.com/preact@latest?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 
-const icons = ["bi bi-arrow-counterclockwise", "bi bi-arrow-counterclockwise"];
+const icons = [
+  "bi bi-balloon-fill", 
+  "bi bi-balloon-heart",
+  "bi bi-bell",
+  "bi bi-bullseye"];
 
 const colors = ["teal", "purple"];
 
@@ -38,6 +42,6 @@ export default ({ addButton }) => {
         )}
       </ul>
     </div>
-    <button onclick=${() => addButton(icon, color)}>Add</button>
+    <button onclick=${() => {if (icon && color) addButton(icon, color)}}>Add</button>
   </div>`;
 };
