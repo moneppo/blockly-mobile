@@ -44,15 +44,17 @@ const useBlocklyWorkspace = ({
 
     setWorkspace(newWorkspace);
 
+    // This is a poor way to manage state between Blockly and an FRP
+    // system like React or Preact, but it enables the direct recording
+    // of the blockly workspace as a JS object for storage in P/React state,
+    // while also enabling the modification of that JS object outside of 
+    // Blockly, e.g. through the footer menu.
     const handler = (event) => {
-      console.log(event);
-      if (event.type=="move" && (event.newParentId || event.oldParentId)) {
+      console.log(event)
+      if (event.type=="move" && (event.newParentId)) {
         onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
         
       }
-   //   if (event.isUiEvent && event.type !== "selected" && onBlocksChanged && blocks) {
-    //    onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
-   //   }
     };
 
     newWorkspace.addChangeListener(handler);

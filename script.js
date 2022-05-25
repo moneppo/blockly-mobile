@@ -88,14 +88,15 @@ easier porting to a redux store.
       setMenuOpen(!menuOpen);
     }
   };
+  
   const onTrashClick = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       Blockly.selected.checkAndDelete();
+     
     }
   };
 
   const add = (type, fields) => {
-    console.log("add", type);
     setMenuOpen(false);
 
     switch (mode.type) {
@@ -108,8 +109,7 @@ easier porting to a redux store.
           return [...buttons];
         });
         break;
-      default:
-        console.log("should never get here");
+
     }
   };
 
