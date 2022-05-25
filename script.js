@@ -88,11 +88,22 @@ easier porting to a redux store.
       setMenuOpen(!menuOpen);
     }
   };
-  
+
   const onTrashClick = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
+      const ws = Blockly.selected.workspace;
       Blockly.selected.checkAndDelete();
-     
+      switch (mode.type) {
+        case "started":
+          setStartingBlocks(Blockly.serialization.workspaces.save(ws));
+          break;
+        case "button":
+          setButtons((buttons) => {
+            buttons[mode.i].b = Blockly.serialization.workspaces.save(ws);
+            return [...buttons];
+          });
+          break;
+      }
     }
   };
 
@@ -105,11 +116,10 @@ easier porting to a redux store.
         break;
       case "button":
         setButtons((buttons) => {
-          buttons[mode.i].b = addBlock(buttons[mode.i].b, block( type, fields));
+          buttons[mode.i].b = addBlock(buttons[mode.i].b, block(type, fields));
           return [...buttons];
         });
         break;
-
     }
   };
 
