@@ -35,7 +35,7 @@ import Designer from "./Designer.js";
 import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
-import IconMenu from "./BlockMenu.js";
+import IconMenu from "./IconMenu.js";
 import Workspace from "./Workspace.js";
 
 // TODO:
@@ -177,11 +177,7 @@ easier porting to a redux store.
       return [...b];
     });
   };
-const menuToShow = mode.type === "design"
-      ? html`<${IconMenu}  />`
-      : html`<${BlockMenu} addBlock=${add} />`;
-  console.log(menuToShow, mode.type === "design")
-  
+
   return html`
   <header>
     <button onClick=${navLeft}>

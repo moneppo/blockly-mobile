@@ -13,7 +13,7 @@ const html = htm.bind(h);
 export default ({ addButton }) => {
   const [icon, setIcon] = useState();
   const [color, setColor] = useState();
-  return html`<div id="blockmenu">
+  return html`<div id="iconmenu">
     <ul>
       ${icons.map(
         (icon) =>
@@ -37,6 +37,6 @@ export default ({ addButton }) => {
       )}
     </ul>
 
-    <button onclick=${() => addButton(icon, color)}
+    <button onclick=${() => addButton(icon, color)}>Add</button>
   </div>`;
 };
