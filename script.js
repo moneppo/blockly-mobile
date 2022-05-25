@@ -35,6 +35,7 @@ import Designer from "./Designer.js";
 import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
+import IconMenu from "./BlockMenu.js";
 import Workspace from "./Workspace.js";
 
 // TODO:
@@ -88,11 +89,11 @@ easier porting to a redux store.
   };
 
   const onAddClick = (...args) => {
-    if (mode.type === "design") {
-      addButton(args[0], args[1]);
-    } else {
-      setMenuOpen(!menuOpen);
-    }
+    //   if (mode.type === "design") {
+    //     addButton(args[0], args[1]);
+    //   } else {
+    setMenuOpen(!menuOpen);
+    //   }
   };
 
   const onTrashClick = () => {
@@ -176,7 +177,11 @@ easier porting to a redux store.
       return [...b];
     });
   };
-
+const menuToShow = mode.type === "design"
+      ? html`<${IconMenu}  />`
+      : html`<${BlockMenu} addBlock=${add} />`;
+  console.log(menuToShow, mode.type === "design")
+  
   return html`
   <header>
     <button onClick=${navLeft}>
@@ -210,7 +215,12 @@ easier porting to a redux store.
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-  ${menuOpen && html`<${BlockMenu} addBlock=${add} />`}
+  ${
+    menuOpen &&
+    (mode.type === "design"
+      ? html`<${IconMenu}  />`
+      : html`<${BlockMenu} addBlock=${add} />`)
+  }
   </${Footer}>`;
 };
 
