@@ -66,24 +66,30 @@ easier porting to a redux store.
     setButtons([...buttons]);
   };
 
-  const onAddClick = () => {
+  const addButton = (icon, color) => {
+    setSelected(buttons.length);
+    setButtons([
+      ...buttons,
+      {
+        x: 35,
+        y: 35,
+        w: 100,
+        h: 100,
+        r: 0,
+        color,
+        icon,
+        b: workspace([
+          block("event", {
+            button_name: "WHEN BUTTON PRESSED",
+          }),
+        ]),
+      },
+    ]);
+  };
+
+  const onAddClick = (...args) => {
     if (mode.type === "design") {
-      setSelected(buttons.length);
-      setButtons([
-        ...buttons,
-        {
-          x: 35,
-          y: 35,
-          w: 100,
-          h: 100,
-          r: 0,
-          b: workspace([
-            block("event", {
-              button_name: "WHEN BUTTON PRESSED",
-            }),
-          ]),
-        },
-      ]);
+      addButton(args[0], args[1]);
     } else {
       setMenuOpen(!menuOpen);
     }
@@ -133,8 +139,6 @@ easier porting to a redux store.
           mode.i === 0 ? { type: "started" } : { type: "button", i: mode.i - 1 }
         );
         break;
-      default:
-        console.log("should never get here");
     }
   };
 
