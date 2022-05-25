@@ -4,6 +4,8 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
+const svgIcons = "https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/bootstrap-icons.svg?v=1653505431247";
+
 // TODO: Scale after rotation is wonky
 
 const Rotator = ({ button, update }) => {
@@ -133,7 +135,7 @@ const Button = ({ select, selected, update, button, onEdit }) => {
       fill=${button.color || "teal"}
       onMouseDown=${selected ? startDrag : select}
     />
-    <text class=${button.icon}>content</text>
+    <use xlink:href="${svgIcons}#toggles"/>
     ${selected &&
     html` <${Rotator} button=${button} update=${update} />
       <${Resizer} button=${button} update=${update} />
