@@ -11,7 +11,10 @@ export default class IconField extends Blockly.Field {
     {
       "href":`BootstrapIcons.svg#balloon`,
       width: "24px",
-      height: "24px"
+      height: "24px",
+      x: "-12px",
+      y: "-12px",
+      fill: "white"
     }, this.fieldGroup_);
   }
   
