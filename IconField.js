@@ -12,15 +12,14 @@ export default class IconField extends Blockly.Field {
       "href":`BootstrapIcons.svg#balloon`,
       width: "24px",
       height: "24px",
-      x: "-12px",
-      y: "-12px",
       fill: "white"
     }, this.fieldGroup_);
   }
   
   render_() {
-    console.log(this);
-    this.icon.setAttribute("href",`BootstrapIcons.svg#${this.value_}`)
+    this.icon.setAttribute("href",`BootstrapIcons.svg#${this.value_}`);
+    this.size_.width = 24;
+    this.size_.height = 24;
   }
   
   static fromJson(options) {
