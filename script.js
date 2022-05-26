@@ -48,13 +48,6 @@ import Workspace from "./Workspace.js";
 //  - Child blocks render smaller than parent
 //  - Image background
 
-const genSVGDataURL = (icon) => {
-  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-    <use xlink:href="BootstrapIcons.svg#${icon}" />
-  </svg>`;
-}
-
-
 const App = () => {
   /** 
 

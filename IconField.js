@@ -8,6 +8,13 @@ class IconField extends Blockly.Field {
     
     super(opt_value, opt_validator);
   }
+  
+  initView() {
+    this.movableGroup_ = Blockly.utils.dom.createSvgElement('use',
+    {
+      "xlink:href":`BootstrapIcons.svg#${}`   
+    }, this.fieldGroup_);
+  }
 }
 
 Blockly.fieldRegistry.register('field_icon', IconField);
