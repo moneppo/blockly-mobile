@@ -1,20 +1,30 @@
 /* global Blockly */
 
-class IconField extends Blockly.Field {
-  constructor(opt_value, opt_validator) {
-    if (opt_value === null) {
-      opt_value = "";
-    }
-    
-    super(opt_value, opt_validator);
+export default class IconField extends Blockly.Field {
+  constructor(name) {
+    if (name === null) name = "balloon";
+    super(name);
   }
   
   initView() {
-    this.movableGroup_ = Blockly.utils.dom.createSvgElement('use',
+    this.icon = Blockly.utils.dom.createSvgElement('use',
     {
-      "xlink:href":`BootstrapIcons.svg#${}`   
+      "xlink:href":`BootstrapIcons.svg#balloon`,
+      width: "24px",
+      height: "24px"
     }, this.fieldGroup_);
   }
+  
+  render_() {
+    const value = this.displayValue_;
+    this.icon.setAttribute("xlink:href",`BootstrapIcons.svg#${value}`)
+  }
+  
+  fromJson(options) {
+    return new IconField(options['name'])
+  }
 }
+
+IconField.prototype.SERIALIZABLE = true;
 
 Blockly.fieldRegistry.register('field_icon', IconField);

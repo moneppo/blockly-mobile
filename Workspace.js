@@ -12,6 +12,7 @@ import htm from "https://unpkg.com/htm?module";
 import VerticalMetrics from "./VerticalMetrics.js";
 import toolbox from "./toolbox.js";
 import { CustomRenderer } from "./CustomRenderer.js";
+import IconField from "./IconField.js";
 import useBlocklyWorkspace from "./useBlocklyWorkspace.js";
 
 const html = htm.bind(h);
