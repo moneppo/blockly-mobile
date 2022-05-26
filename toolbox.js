@@ -21,15 +21,17 @@ Blockly.Blocks["event"] = {
   init: function () {
     this.jsonInit({
       type: "example_serializable_label",
-      message0: "%1",
+      message0: "WHEN %1 PRESSED",
       nextStatement: null,
       colour: 180,
       args0: [
         {
-          type: "field_label_serializable",
-          name: "button_name",
-          text: "name goes here",
+          type: "field_image",
+          name: "image",
+          width: 20, height:20,
+          src: "https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/music-note.svg?v=1651768616125",
         },
+  
       ],
     });
     this.setEditable(false);

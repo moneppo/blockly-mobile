@@ -48,6 +48,13 @@ import Workspace from "./Workspace.js";
 //  - Child blocks render smaller than parent
 //  - Image background
 
+const genSVGDataURL = (icon) => {
+  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+    <use  xlink:href="BootstrapIcons.#${button.icon}" />
+  </svg>`;
+}
+
+
 const App = () => {
   /** 
 
@@ -87,7 +94,7 @@ easier porting to a redux store.
         icon,
         b: workspace([
           block("event", {
-            button_name: "WHEN BUTTON PRESSED",
+            src: "https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/music-note.svg?v=1651768616125",
           }),
         ]),
       },
