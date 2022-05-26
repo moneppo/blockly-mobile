@@ -85,11 +85,7 @@ easier porting to a redux store.
         r: 0,
         color,
         icon,
-        b: workspace([
-          block("event", {
-            src: "https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
-          }),
-        ]),
+        b: workspace([block("event", {icon})]),
       },
     ]);
   };

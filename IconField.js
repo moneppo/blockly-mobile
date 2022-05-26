@@ -9,18 +9,18 @@ export default class IconField extends Blockly.Field {
   initView() {
     this.icon = Blockly.utils.dom.createSvgElement('use',
     {
-      "xlink:href":`BootstrapIcons.svg#balloon`,
+      "href":`BootstrapIcons.svg#balloon`,
       width: "24px",
       height: "24px"
     }, this.fieldGroup_);
   }
   
   render_() {
-    const value = this.displayValue_;
-    this.icon.setAttribute("xlink:href",`BootstrapIcons.svg#${value}`)
+    console.log(this);
+    this.icon.setAttribute("href",`BootstrapIcons.svg#${this.value_}`)
   }
   
-  fromJson(options) {
+  static fromJson(options) {
     return new IconField(options['name'])
   }
 }

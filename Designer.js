@@ -136,7 +136,7 @@ const Button = ({ select, selected, update, button, onEdit }) => {
       onMouseDown=${selected ? startDrag : select}
     />
     <use
-      xlink:href="${svgIcons}#${button.icon}"
+      href="${svgIcons}#${button.icon}"
       x=${w * 0.1}
       y=${h * 0.1}
       fill="white"

@@ -26,10 +26,9 @@ Blockly.Blocks["event"] = {
       colour: 180,
       args0: [
         {
-          type: "field_image",
-          name: "image",
+          type: "field_icon",
+          name: "icon",
           width: 20, height:20,
-          src: "https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/music-note.svg?v=1651768616125",
         },
   
       ],
