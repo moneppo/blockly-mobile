@@ -22,6 +22,7 @@ Blockly.Blocks["event"] = {
     this.jsonInit({
       type: "example_serializable_label",
       message0: "WHEN %1 PRESSED",
+      lastDummyAlign0: "CENTRE",
       nextStatement: null,
       colour: 180,
       args0: [
