@@ -6,7 +6,10 @@ export default class IconField extends Blockly.Field {
     super(name);
   }
   
+  static SERIALIZABLE = true;
+  
   initView() {
+    console.log(this.prototype);
     this.icon = Blockly.utils.dom.createSvgElement('use',
     {
       "href":`BootstrapIcons.svg#balloon`,
@@ -26,7 +29,5 @@ export default class IconField extends Blockly.Field {
     return new IconField(options['name'])
   }
 }
-
-IconField.prototype.SERIALIZABLE = true;
 
 Blockly.fieldRegistry.register('field_icon', IconField);
