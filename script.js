@@ -73,7 +73,7 @@ easier porting to a redux store.
   };
 
   const addButton = (icon, color) => {
-     setMenuOpen(false);
+    setMenuOpen(false);
     setSelected(buttons.length);
     setButtons([
       ...buttons,
@@ -91,14 +91,16 @@ easier porting to a redux store.
   };
 
   const onAddClick = (...args) => {
-    //   if (mode.type === "design") {
-    //     addButton(args[0], args[1]);
-    //   } else {
     setMenuOpen(!menuOpen);
-    //   }
   };
 
   const onTrashClick = () => {
+    if (mode.type === "design" && selected) {
+      setButtons(b => {
+        return b.splice(0, selected, 1)
+      })
+      return;
+    }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       const ws = Blockly.selected.workspace;
       Blockly.selected.checkAndDelete();
@@ -216,7 +218,7 @@ easier porting to a redux store.
   ${
     menuOpen &&
     (mode.type === "design"
-      ? html`<${IconMenu}  addButton=${addButton}/>`
+      ? html`<${IconMenu}  addButton=${addButton} />`
       : html`<${BlockMenu} addBlock=${add} />`)
   }
   </${Footer}>`;
