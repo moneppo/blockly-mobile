@@ -85,7 +85,7 @@ easier porting to a redux store.
         r: 0,
         color,
         icon,
-        b: workspace([block("event", {icon})]),
+        b: workspace([block("event", { icon })]),
       },
     ]);
   };
@@ -95,10 +95,12 @@ easier porting to a redux store.
   };
 
   const onTrashClick = () => {
-    if (mode.type === "design" && selected) {
-      setButtons(b => {
-        return b.splice(0, selected, 1)
-      })
+    if (mode.type === "design" && selected !== null) {
+      setButtons((b) => {
+        b.splice(selected, 1);
+        return b;
+      });
+      setSelected(null);
       return;
     }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -158,8 +160,6 @@ easier porting to a redux store.
       case "button":
         setMode({ type: "button", i: mode.i + 1 });
         break;
-      default:
-        console.log("should never get here");
     }
   };
 
@@ -218,7 +218,7 @@ easier porting to a redux store.
   ${
     menuOpen &&
     (mode.type === "design"
-      ? html`<${IconMenu}  addButton=${addButton} />`
+      ? html`<${IconMenu} addButton=${addButton} />`
       : html`<${BlockMenu} addBlock=${add} />`)
   }
   </${Footer}>`;

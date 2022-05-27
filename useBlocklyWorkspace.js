@@ -33,8 +33,6 @@ const useBlocklyWorkspace = ({
   useEffect(() => {
     if (!ref.current) return;
 
-    console.log("workspace creation");
-
     const newWorkspace = Blockly.inject(ref.current, {
       ...workspaceConfigurationRef.current,
       toolbox: toolboxConfiguration,
@@ -50,7 +48,6 @@ const useBlocklyWorkspace = ({
     // while also enabling the modification of that JS object outside of 
     // Blockly, e.g. through the footer menu.
     const handler = (event) => {
-      console.log(event)
       if (event.type=="move" && (event.newParentId)) {
         onBlocksChanged(Blockly.serialization.workspaces.save(newWorkspace));
         
@@ -59,10 +56,7 @@ const useBlocklyWorkspace = ({
 
     newWorkspace.addChangeListener(handler);
 
-    return () => {
-      console.log("teardown");
-      newWorkspace.dispose();
-    };
+    return () => newWorkspace.dispose();
   }, [ref]);
 
   useEffect(() => {
