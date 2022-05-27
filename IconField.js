@@ -4,9 +4,9 @@ export default class IconField extends Blockly.Field {
   constructor(name) {
     if (name === null) name = "balloon";
     super(name);
+    this.SERIALIZABLE = true;
   }
   
-  static SERIALIZABLE = true;
   
   initView() {
     console.log(this.prototype);
