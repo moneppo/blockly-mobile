@@ -13,24 +13,6 @@ import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.modul
 
 const html = htm.bind(h);
 
-/**
-
-The app consists of three views: Designer, Workspace, and Run. These are 
-documented in more detail in their respective sources, but they provide
-the following: 
-
-**Designer**: A simple UX for adding and removing buttons that can trigger
-  events when tapped or a finger moves over them. The hope is that this will
-  allow for "beat surfing" style playing, but even just a button grid is a 
-  sufficient experience for the prototype.
-
-**Blockly**: Place blocks as actions in response to events. In this prototype,
-  there are only two types of events: "when started" and "when tapped".
-  
-**Run**: Actually run the app, allowing for playback of sounds and responding to 
-  touch events.
-
-*/
 import Designer from "./Designer.js";
 import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
@@ -39,7 +21,6 @@ import IconMenu from "./IconMenu.js";
 import Workspace from "./Workspace.js";
 
 // TODO:
-//  - Icon in top block
 //  - Run view
 //  - Run triggers starter code
 //  - down/over triggers code
@@ -49,13 +30,6 @@ import Workspace from "./Workspace.js";
 //  - Image background
 
 const App = () => {
-  /** 
-
-All state is stored at the top level component (`App`). This allows for
-easier porting to a redux store.
-
-*/
-
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
@@ -64,9 +38,12 @@ easier porting to a redux store.
       block("top", undefined, block("play_sample", { NAME: "OPTIONNAME" })),
     ])
   );
-
   const [mode, setMode] = useState({ type: "design" });
 
+  const play = () => {
+    setMode({type: "play"});
+  }
+  
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
@@ -181,6 +158,10 @@ easier porting to a redux store.
       return [...b];
     });
   };
+  
+  if (mode.type === "play") {
+    return html``;
+  }
 
   return html`
   <header>
