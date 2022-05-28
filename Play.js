@@ -10,9 +10,8 @@ const html = htm.bind(h);
 
 const svgIcons = "BootstrapIcons.svg";
 
-
-const Button = ({button, activate}) => {
-  const {w,h,r,x,y, icon} = button;
+const Button = ({ button, activate }) => {
+  const { w, h, r, x, y, icon } = button;
   return html` <g
     transform="translate(${x} ${y}) rotate(${r} ${w / 2} ${h / 2})"
   >
@@ -31,17 +30,20 @@ const Button = ({button, activate}) => {
       height=${h * 0.8}
       onMouseDown=${activate}
     />
-    </g>`;
-}
+  </g>`;
+};
 
-export default ({buttons, activateButton}) => {
- return html`<svg>
+export default ({ buttons, activateButton, onStop }) => {
+  return html`<svg>
     <rect
       width="100%"
       height="100%"
       fill="transparent"
       stroke="blue"
     >
-    ${buttons.map(b => html`<Button button=${b} activate)}
-    </svg>`
-}
+    ${buttons.map(
+      (b) =>
+        html`<button button=${b} activate="${(_) => activateButton(b)})}" />`
+    )}
+    </svg>`;
+};
