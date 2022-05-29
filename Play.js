@@ -41,6 +41,7 @@ export default ({ buttons, activateButton, onStop }) => {
       fill="transparent"
       stroke="blue"
     >
+    <
     ${buttons.map(
       (b) =>
         html`<button button=${b} activate="${(_) => activateButton(b)})}" />`

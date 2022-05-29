@@ -10,7 +10,7 @@ package, so this should be pretty fast to port to React.
 import { h, render, createRef } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
-
+import {Router, route} from "https://unpkg.com/preact-router@4.0.1/dist/preact-router.module.js?module";
 const html = htm.bind(h);
 
 import Designer from "./Designer.js";
@@ -173,26 +173,19 @@ const App = () => {
     </button>
   </header>
   <main>
-    ${
-      mode.type === "design" &&
-      html`<${Designer}
+  <Router>
+    <${Designer} default
         buttons=${buttons}
         updateButton=${updateButton}
         selected=${selected}
         setSelected=${setSelected}
         onEdit=${(i) => setMode({ type: "button", i })}
-      />`
-    }
-     ${
-       mode.type === "started" &&
-       html` <${Workspace}
+      />
+   <${Workspace} path="/when_started"
          blocks=${startingBlocks}
          save=${setStartingBlocks}
-       />`
-     }
-    ${
-      mode.type === "button" &&
-      html`<${Workspace} blocks=${buttons[mode.i].b} save=${saveBlocks} />`
+       />
+   <${Workspace} path="/button/:i" blocks=${buttons[mode.i].b} save=${saveBlocks} />`
     }
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
