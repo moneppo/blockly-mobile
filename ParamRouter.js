@@ -1,12 +1,12 @@
-import { h, cloneElement, createContext, useContext,useMemo } from "https://unpkg.com/preact@latest?module";
-import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
+import { h, cloneElement } from "https://unpkg.com/preact@latest?module";
+import { useState, useMemo } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
 let setUrl = () => {};
 
-const useUrl = () => {
+export const useUrl = () => {
   const [url, invalidate] = useState(new URL(location));
   
   setUrl = useMemo(() => (url, type = 'push') => {
@@ -14,7 +14,7 @@ const useUrl = () => {
       history[`${type}State`](null, null, url);
       invalidate(new URL(url));
     }
-  }, []);
+  }, [url]);
   
   return url;
 }
@@ -46,6 +46,8 @@ export const ParamRouter = ({ children }) => {
 
 export const routeParam = (key, value) => {
   if (key) {
-    
+    const url = new URL(window.location);
+    url.searchParams.set(key, value);
+    setUrl(url);
   }
 }

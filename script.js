@@ -13,7 +13,7 @@ import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.modul
 
 const html = htm.bind(h);
 
-import { ParamRouter } from "./ParamRouter.js";
+import { ParamRouter, useUrl, routeParam } from "./ParamRouter.js";
 import Designer from "./Designer.js";
 import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
@@ -31,6 +31,7 @@ import Workspace from "./Workspace.js";
 //  - Image background
 
 const App = () => {
+  const url = useUrl();
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
