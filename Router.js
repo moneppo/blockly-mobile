@@ -5,8 +5,12 @@ import htm from "https://unpkg.com/htm?module";
 const html = htm.bind(h);
 
 export const Router = ({children}) => children.find(c => {
-  if (c.props.)
-  if (c.props.default) {
+  
+  if (c.props.path) {
+    const 
+  } else if (c.props.default) {
     return true;
   }
+  
+  return false;
 })
