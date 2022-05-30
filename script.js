@@ -13,6 +13,7 @@ import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.modul
 
 const html = htm.bind(h);
 
+import { ParamRouter } from "./ParamRouter.js";
 import Designer from "./Designer.js";
 import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
@@ -169,7 +170,7 @@ const App = () => {
     </button>
   </header>
   <main>
-    <${Router}>
+    <${ParamRouter}>
       <${Designer} default
           buttons=${buttons}
           updateButton=${updateButton}
@@ -177,12 +178,14 @@ const App = () => {
           setSelected=${setSelected}
           onEdit=${(i) => setMode({ type: "button", i })}
         />
-     <${Workspace} path="/when_started"
-           blocks=${[startingBlocks]}
-           index=0
-           save=${(blocks, i) => setStartingBlocks(blocks)}
+     <${Workspace} param="started" blocks=${startingBlocks}
+           save=${setStartingBlocks}
          />
-     <${Workspace} path="/button/:index" blocks=${buttons} save=${saveBlocks} />
+     <${Workspace} 
+           param="button" 
+           getProps=${(i) => ({blocks: buttons[i]})} 
+           save=${saveBlocks} 
+         />
     </>
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>

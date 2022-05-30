@@ -1,4 +1,4 @@
-import { h } from "https://unpkg.com/preact@latest?module";
+import { h, cloneElement } from "https://unpkg.com/preact@latest?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 
@@ -13,8 +13,15 @@ export const ParamRouter = ({ children }) => {
     }
     
     const param = children[i].props?.param;
-    if (params.get(param)) {
-      
+    if (param) {
+      const value = params.get(param);
+      let props = {};
+      if (children[i].props?.getProps) {
+        props = children[i].props?.getProps(value);
+      } else {
+        props[param] = value;
+      }
+      return cloneElement(children[i], props);
     }
   }
 };
