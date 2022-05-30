@@ -10,13 +10,8 @@ function setUrl(url, type = 'push') {
 	}
 }
 
-const context = createContext({
-  url: new URL(location),
-  setParams: (params) => {
-});
-
 export const ParamRouter = ({ children }) => {
-  const params = 
+  const params = (new URL(location)).searchParams;
 
   for (let i in children) {
     if ( children[i].props?.default) {
