@@ -9,7 +9,7 @@ export const ParamRouter = ({ children }) => {
 
   for (let i in children) {
     if ( children[i].props?.default) {
-      return html`<>${children[i]}</>`;
+       return cloneElement(children[i]);
     }
     
     const param = children[i].props?.param;
@@ -24,4 +24,12 @@ export const ParamRouter = ({ children }) => {
       return cloneElement(children[i], props);
     }
   }
+  
+  return null;
 };
+
+export const routeParam = (key, value) => {
+  if (key) {
+    
+  }
+}

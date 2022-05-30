@@ -160,42 +160,42 @@ const App = () => {
     });
   };
 
-  return html`
-  <header>
-    <button onClick=${navLeft}>
-      ${mode.type !== "design" && html`<i class="bi bi-chevron-left" />`}
-    </button>
-    <button onClick=${navRight}>
-     ${showRight && html`<i class="bi bi-chevron-right" />`}
-    </button>
-  </header>
-  <main>
-    <${ParamRouter}>
-      <${Designer} default
+  return html` <header>
+      <button onClick=${navLeft}>
+        ${mode.type !== "design" && html`<i class="bi bi-chevron-left" />`}
+      </button>
+      <button onClick=${navRight}>
+        ${showRight && html`<i class="bi bi-chevron-right" />`}
+      </button>
+    </header>
+    <main>
+      <${ParamRouter}>
+        <${Designer}
+          default
           buttons=${buttons}
           updateButton=${updateButton}
           selected=${selected}
           setSelected=${setSelected}
           onEdit=${(i) => setMode({ type: "button", i })}
         />
-     <${Workspace} param="started" blocks=${startingBlocks}
-           save=${setStartingBlocks}
-         />
-     <${Workspace} 
-           param="button" 
-           getProps=${(i) => ({blocks: buttons[i]})} 
-           save=${saveBlocks} 
-         />
-    </>
-  </main>
-  <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-  ${
-    menuOpen &&
-    (mode.type === "design"
-      ? html`<${IconMenu} addButton=${addButton} />`
-      : html`<${BlockMenu} addBlock=${add} />`)
-  }
-  </${Footer}>`;
+        <${Workspace}
+          param="started"
+          blocks=${startingBlocks}
+          save=${setStartingBlocks}
+        />
+        <${Workspace}
+          param="button"
+          getProps=${(i) => ({ blocks: buttons[i] })}
+          save=${saveBlocks}
+        />
+      </${ParamRouter}>
+    </main>
+    <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
+      ${menuOpen &&
+      (mode.type === "design"
+        ? html`<${IconMenu} addButton=${addButton} />`
+        : html`<${BlockMenu} addBlock=${add} />`)}
+    </${Footer}>`;
 };
 
 render(html`<${App} />`, document.body);
