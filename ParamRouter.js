@@ -4,19 +4,21 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-let setUrl = () => {};
+let setParams = () => {};
 
 export const useParams = () => {
-  const [url, invalidate] = useState(
+  const [params, invalidate] = useState(
     Object.fromEntries((new URL(location)).searchParams.entries())
   );
   
-  setUrl = useMemo(() => (url, type = 'push') => {
+  setParams = useMemo(() => (p, type = 'push') => {
     if (typeof history !== 'undefined' && history[`${type}State`]) {
       history[`${type}State`](null, null, url);
-      invalidate((new URL(url)).searchParams);
+      invalidate((new URL(url)).searchParams = );
     }
   }, [url]);
+  
+  console.log(url)
   
   return Object.fromEntries(url.searchParams.entries())
 

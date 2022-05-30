@@ -111,8 +111,7 @@ const App = () => {
   const navLeft = () => {
     if (params.started) {
       routeParam({});
-    }
-    if (params.button) {
+    } else if (params.button) {
       if (params.button === 0) {
         routeParam({ started: "" });
       } else {
@@ -122,29 +121,16 @@ const App = () => {
   };
 
   const navRight = () => {
-      if (params.)
-        setMode({ type: "started" });
-        break;
-      case "started":
-        setMode({ type: "button", i: 0 });
-        break;
-      case "button":
-        setMode({ type: "button", i: mode.i + 1 });
-        break;
+    if (isDesign) {
+      routeParam({ started: "" });
+    } else if (params.started) {
+      routeParam({ button: 0 });
+    } else if (params.button) {
+      routeParam({ type: "button", i: params.button + 1 });
     }
   };
 
-  let showRight = false;
-  switch (mode.type) {
-    case "design":
-      showRight = true;
-      break;
-    case "started":
-      if (buttons.length > 0) showRight = true;
-      break;
-    case "button":
-      if (mode.i < buttons.length - 1) showRight = true;
-  }
+  let showRight = params.button === buttons.length - 1;
 
   const saveBlocks = (blocks, index) => {
     setButtons((b) => {
@@ -155,7 +141,7 @@ const App = () => {
 
   return html` <header>
       <button onClick=${navLeft}>
-        ${mode.type !== "design" && html`<i class="bi bi-chevron-left" />`}
+        ${!isDesign && html`<i class="bi bi-chevron-left" />`}
       </button>
       <button onClick=${navRight}>
         ${showRight && html`<i class="bi bi-chevron-right" />`}
@@ -169,7 +155,7 @@ const App = () => {
           updateButton=${updateButton}
           selected=${selected}
           setSelected=${setSelected}
-          onEdit=${(i) => setMode({ type: "button", i })}
+          onEdit=${(i) => routeParam({button: i})}
         />
         <${Workspace}
           param="started"
@@ -186,11 +172,11 @@ const App = () => {
     <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
       ${
         menuOpen &&
-        (mode.type === "design"
+        (isDesign
           ? html`<${IconMenu} addButton=${addButton} />`
           : html`<${BlockMenu} addBlock=${add} />`)
       }
-    </${Footer}>`;
+    </>`;
 };
 
 render(html`<${App} />`, document.body);
