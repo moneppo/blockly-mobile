@@ -7,7 +7,9 @@ const html = htm.bind(h);
 let setUrl = () => {};
 
 export const useParams = () => {
-  const [url, invalidate] = useState((new URL(location)).searchParams);
+  const [url, invalidate] = useState(
+    Object.fromEntries((new URL(location)).searchParams.entries())
+  );
   
   setUrl = useMemo(() => (url, type = 'push') => {
     if (typeof history !== 'undefined' && history[`${type}State`]) {
@@ -16,7 +18,8 @@ export const useParams = () => {
     }
   }, [url]);
   
-  return url;
+  return Object.fromEntries(url.searchParams.entries())
+
 }
 
 export const ParamRouter = ({ children }) => {
@@ -29,7 +32,7 @@ export const ParamRouter = ({ children }) => {
     
     const param = children[i].props?.param;
     if (param) {
-      const value = params.get(param);
+      const value = params[param];
       let props = {};
       if (children[i].props?.getProps) {
         props = children[i].props?.getProps(value);

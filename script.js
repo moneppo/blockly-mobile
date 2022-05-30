@@ -32,7 +32,7 @@ import Workspace from "./Workspace.js";
 
 const App = () => {
   const params = useParams();
-  
+  const isDesign = Object.entries(params).length === 0;
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
@@ -70,7 +70,7 @@ const App = () => {
   };
 
   const onTrashClick = () => {
-    if (params.entries().length === 0 && selected !== null) {
+    if (isDesign && selected !== null) {
       setButtons((b) => {
         b.splice(selected, 1);
         return b;
@@ -81,16 +81,13 @@ const App = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       const ws = Blockly.selected.workspace;
       Blockly.selected.checkAndDelete();
-      switch (mode.type) {
-        case "started":
-          setStartingBlocks(Blockly.serialization.workspaces.save(ws));
-          break;
-        case "button":
-          setButtons((buttons) => {
-            buttons[mode.i].b = Blockly.serialization.workspaces.save(ws);
-            return [...buttons];
-          });
-          break;
+      if (params.started) {
+        setStartingBlocks(Blockly.serialization.workspaces.save(ws));
+      } else if (params.button) {
+        setButtons((buttons) => {
+          buttons[params.button].b = Blockly.serialization.workspaces.save(ws);
+          return [...buttons];
+        });
       }
     }
   };
@@ -98,35 +95,34 @@ const App = () => {
   const add = (type, fields) => {
     setMenuOpen(false);
 
-    switch (mode.type) {
-      case "started":
-        setStartingBlocks(addBlock(startingBlocks, block(type, fields)));
-        break;
-      case "button":
-        setButtons((buttons) => {
-          buttons[mode.i].b = addBlock(buttons[mode.i].b, block(type, fields));
-          return [...buttons];
-        });
-        break;
+    if (params.started) {
+      setStartingBlocks(addBlock(startingBlocks, block(type, fields)));
+    } else if (params.button) {
+      setButtons((buttons) => {
+        buttons[params.button].b = addBlock(
+          buttons[params.button].b,
+          block(type, fields)
+        );
+        return [...buttons];
+      });
     }
   };
 
   const navLeft = () => {
-    switch (mode.type) {
-      case "started":
-        setMode({ type: "design" });
-        break;
-      case "button":
-        setMode(
-          mode.i === 0 ? { type: "started" } : { type: "button", i: mode.i - 1 }
-        );
-        break;
+    if (params.started) {
+      routeParam({});
+    }
+    if (params.button) {
+      if (params.button === 0) {
+        routeParam({ started: "" });
+      } else {
+        routeParam({ button: params.button - 1 });
+      }
     }
   };
 
   const navRight = () => {
-    switch (mode.type) {
-      case "design":
+      if (params.)
         setMode({ type: "started" });
         break;
       case "started":
@@ -188,10 +184,12 @@ const App = () => {
       </${ParamRouter}>
     </main>
     <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-      ${menuOpen &&
-      (mode.type === "design"
-        ? html`<${IconMenu} addButton=${addButton} />`
-        : html`<${BlockMenu} addBlock=${add} />`)}
+      ${
+        menuOpen &&
+        (mode.type === "design"
+          ? html`<${IconMenu} addButton=${addButton} />`
+          : html`<${BlockMenu} addBlock=${add} />`)
+      }
     </${Footer}>`;
 };
 
