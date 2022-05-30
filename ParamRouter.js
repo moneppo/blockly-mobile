@@ -1,17 +1,27 @@
-import { h, cloneElement, createContext, useContext } from "https://unpkg.com/preact@latest?module";
+import { h, cloneElement, createContext, useContext,useMemo } from "https://unpkg.com/preact@latest?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
 import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-function setUrl(url, type = 'push') {
-  if (typeof history !== 'undefined' && history[`${type}State`]) {
-		history[`${type}State`](null, null, url);
-	}
+let setUrl = () => {};
+
+const useUrl = () => {
+  const [url, invalidate] = useState(new URL(location));
+  
+  setUrl = useMemo(() => (url, type = 'push') => {
+    if (typeof history !== 'undefined' && history[`${type}State`]) {
+      history[`${type}State`](null, null, url);
+      invalidate(new URL(url));
+    }
+  }, []);
+  
+  return url;
 }
 
 export const ParamRouter = ({ children }) => {
-  const params = (new URL(location)).searchParams;
+  const url = useUrl();
+  const params = url.searchParams;
 
   for (let i in children) {
     if ( children[i].props?.default) {
