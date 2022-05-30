@@ -4,15 +4,17 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
+export const ParamRouter = ({ children }) => {
+  const params = new URLSearchParams(location.search);
 
-const ids_regex = /:([^\/]+)/gm;
-
-export const Router = ({ children }) => {
   for (let i in children) {
-    if (children[i].props?.path) {
-      return;
-    } else if (children[i].props?.default) {
+    if ( children[i].props?.default) {
       return html`<>${children[i]}</>`;
+    }
+    
+    const param = children[i].props?.param;
+    if (params.get(param)) {
+      
     }
   }
 };
