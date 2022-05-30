@@ -6,13 +6,13 @@ const html = htm.bind(h);
 
 let setUrl = () => {};
 
-export const useUrl = () => {
-  const [url, invalidate] = useState(new URL(location));
+export const useParams = () => {
+  const [url, invalidate] = useState((new URL(location)).searchParams);
   
   setUrl = useMemo(() => (url, type = 'push') => {
     if (typeof history !== 'undefined' && history[`${type}State`]) {
       history[`${type}State`](null, null, url);
-      invalidate(new URL(url));
+      invalidate((new URL(url)).searchParams);
     }
   }, [url]);
   
@@ -20,8 +20,7 @@ export const useUrl = () => {
 }
 
 export const ParamRouter = ({ children }) => {
-  const url = useUrl();
-  const params = url.searchParams;
+  const params = useParams();
 
   for (let i in children) {
     if ( children[i].props?.default) {
