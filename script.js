@@ -40,11 +40,6 @@ const App = () => {
       block("top", undefined, block("play_sample", { NAME: "OPTIONNAME" })),
     ])
   );
-  const [mode, setMode] = useState({ type: "design" });
-
-  const play = () => {
-    setMode({ type: "play" });
-  };
 
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
@@ -74,7 +69,7 @@ const App = () => {
   };
 
   const onTrashClick = () => {
-    if (mode.type === "design" && selected !== null) {
+    if (params.entries().length === 0 && selected !== null) {
       setButtons((b) => {
         b.splice(selected, 1);
         return b;
