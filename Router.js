@@ -4,13 +4,15 @@ import htm from "https://unpkg.com/htm?module";
 
 const html = htm.bind(h);
 
-export const Router = ({children}) => children.find(c => {
-  
-  if (c.props.path) {
-    const 
-  } else if (c.props.default) {
-    return true;
+
+const ids_regex = /:([^\/]+)/gm;
+
+export const Router = ({ children }) => {
+  for (let i in children) {
+    if (children[i].props?.path) {
+      return;
+    } else if (children[i].props?.default) {
+      return html`<>${children[i]}</>`;
+    }
   }
-  
-  return false;
-})
+};
