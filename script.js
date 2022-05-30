@@ -10,7 +10,7 @@ package, so this should be pretty fast to port to React.
 import { h, render, createRef } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
-import {Router, route} from "https://unpkg.com/preact-router@4.0.1/dist/preact-router.module.js?module";
+
 const html = htm.bind(h);
 
 import Designer from "./Designer.js";
@@ -41,9 +41,9 @@ const App = () => {
   const [mode, setMode] = useState({ type: "design" });
 
   const play = () => {
-    setMode({type: "play"});
-  }
-  
+    setMode({ type: "play" });
+  };
+
   const updateButton = (i, b) => {
     buttons[i] = { ...buttons[i], ...b };
     setButtons([...buttons]);
@@ -152,16 +152,12 @@ const App = () => {
       if (mode.i < buttons.length - 1) showRight = true;
   }
 
-  const saveBlocks = (blocks) => {
+  const saveBlocks = (blocks, index) => {
     setButtons((b) => {
-      b[mode.i].b = blocks;
+      b[index].b = blocks;
       return [...b];
     });
   };
-  
-  if (mode.type === "play") {
-    return html``;
-  }
 
   return html`
   <header>
@@ -173,20 +169,21 @@ const App = () => {
     </button>
   </header>
   <main>
-  <Router>
-    <${Designer} default
-        buttons=${buttons}
-        updateButton=${updateButton}
-        selected=${selected}
-        setSelected=${setSelected}
-        onEdit=${(i) => setMode({ type: "button", i })}
-      />
-   <${Workspace} path="/when_started"
-         blocks=${startingBlocks}
-         save=${setStartingBlocks}
-       />
-   <${Workspace} path="/button/:i" blocks=${buttons[mode.i].b} save=${saveBlocks} />`
-    }
+    <${Router}>
+      <${Designer} default
+          buttons=${buttons}
+          updateButton=${updateButton}
+          selected=${selected}
+          setSelected=${setSelected}
+          onEdit=${(i) => setMode({ type: "button", i })}
+        />
+     <${Workspace} path="/when_started"
+           blocks=${[startingBlocks]}
+           index=0
+           save=${(blocks, i) => setStartingBlocks(blocks)}
+         />
+     <${Workspace} path="/button/:index" blocks=${buttons} save=${saveBlocks} />
+    </>
   </main>
   <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
   ${
