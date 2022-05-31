@@ -23,6 +23,10 @@ const Button = ({ button, activate }) => {
       height=${h}
       fill=${button.color || "teal"}
       onMouseDown=${activate}
+      onMouseUp=${deselect}
+      onMouseLeave=${deselect}
+      onMouseOut=${deselect}
+      onMouseUp=${deselect}
     />
     <use
       href="${svgIcons}#${icon}"
@@ -33,15 +37,16 @@ const Button = ({ button, activate }) => {
       height=${h * 0.8}
       onMouseDown=${() => {setSelected(true); activate(button)}}
       onMouseUp=${deselect}
-      onMouseLeave
-      onMouseMove onMouseOut onMouseOver onMouseUp
+      onMouseLeave=${deselect}
+      onMouseOut=${deselect}
+      onMouseUp=${deselect}
     />
   </g>`;
 };
 
 export default ({ buttons,onExit }) => {
   const activate = (button) => {
-    
+    console.log("boom", button)
   }
   
   return html`
@@ -57,7 +62,7 @@ export default ({ buttons,onExit }) => {
     />
     ${buttons.map(
       (b) =>
-        html`<${Button} button=${b} activate="${() => activate(b)})}" />`
+        html`<${Button} button=${b} activate="${activate}" />`
     )}
     </svg>`;
 };

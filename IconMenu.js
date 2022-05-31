@@ -5,32 +5,40 @@ import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.modul
 import htm from "https://unpkg.com/htm?module";
 
 const icons = [
-  "balloon-fill", 
+  "star",
+  "lightning-fill",
+  "balloon-fill",
+  "speaker-fill",
+  "vinyl",
   "balloon-heart",
   "bell",
   "bullseye",
   "wind",
   "volume-up",
-"vinyl",
   "triangle-fill",
   "suit-diamond",
   "suit-heart",
   "suit-spade",
   "suit-club",
-  "star",
   "star-fill",
   "square-fill",
   "soundwave",
-  "speaker-fill",
   "record-circle-fill",
   "radioactive",
   "megaphone",
-  "lightning-fill",
   "flower1",
-  "fingerprint"
+  "fingerprint",
 ];
 
-const colors = ["teal", "purple"];
+const colors = [
+  "tomato",
+  "orange",
+  "khaki",
+  "mediumseagreen",
+  "cornflowerblue",
+  "mediumorchid",
+  "black",
+];
 
 const html = htm.bind(h);
 
@@ -62,6 +70,12 @@ export default ({ addButton }) => {
         )}
       </ul>
     </div>
-    <button onclick=${() => {if (icon && color) addButton(icon, color)}}>Add</button>
+    <button
+      onclick=${() => {
+        if (icon && color) addButton(icon, color);
+      }}
+    >
+      Add
+    </button>
   </div>`;
 };
