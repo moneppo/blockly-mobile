@@ -20,6 +20,7 @@ import Footer from "./Footer.js";
 import BlockMenu from "./BlockMenu.js";
 import IconMenu from "./IconMenu.js";
 import Workspace from "./Workspace.js";
+import Play from "./Play.js";
 
 // TODO:
 //  - Run view
@@ -117,12 +118,16 @@ const App = () => {
   };
 
   const navRight = () => {
-    if (mode.name === "design") {
-      setMode({ name: "started" });
-    } else if (mode.name === "started") {
-      setMode({ name: "button", id: 0 });
-    } else if (mode.name === "button") {
-      setMode({ name: "button", id: mode.id + 1 });
+    switch (mode.name) {
+      case "design":
+        setMode({ name: "started" });
+        break;
+      case "started":
+        setMode({ name: "button", id: 0 });
+        break;
+      case "button":
+        setMode({ name: "button", id: mode.id + 1 });
+        break;
     }
   };
 
@@ -137,10 +142,19 @@ const App = () => {
       return [...b];
     });
   };
-  
-  console.log(mode)
 
-  return html`<header>
+  console.log(mode);
+
+  if (mode.name === "play") {
+    return html`<${Play}
+      when=${(s) => s.name === "play"}
+      buttons=${buttons}
+      onExit=${() => setMode({ name: "design" })}
+    />`;
+  }
+
+  return html`
+    <header>
       <button onClick=${navLeft}>
         ${mode.name !== "design" && html`<i class="bi bi-chevron-left" />`}
       </button>
@@ -171,15 +185,19 @@ const App = () => {
           })}
         />
       </${StateRouter}>
-    </main>
-    <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
+    </>
+    <${Footer} 
+      onAddClick=${onAddClick}
+      onTrashClick=${onTrashClick}
+      onRunClick=${(_) => setMode({ name: "play" })}
+    
       ${
         menuOpen &&
-        (mode.name = "design"
+        (mode.name === "design"
           ? html`<${IconMenu} addButton=${addButton} />`
           : html`<${BlockMenu} addBlock=${add} />`)
       }
-    </${Footer}>`;
+    </>`;
 };
 
 render(html`<${App} />`, document.body);

@@ -40,8 +40,7 @@ export default ({ buttons, activateButton, onStop }) => {
       height="100%"
       fill="transparent"
       stroke="blue"
-    >
-    <
+    />
     ${buttons.map(
       (b) =>
         html`<button button=${b} activate="${(_) => activateButton(b)})}" />`

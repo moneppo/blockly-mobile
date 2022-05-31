@@ -172,5 +172,5 @@ export default ({ buttons, updateButton, selected, setSelected, onEdit }) => {
         onEdit=${() => onEdit(i)}
       />`;
     })}
-  </svg> `;
+  </svg>`;
 };
