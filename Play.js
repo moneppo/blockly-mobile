@@ -44,9 +44,12 @@ const Button = ({ button, activate }) => {
   </g>`;
 };
 
+const audio = new Audio("https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/samples_snare.wav?v=1654023316973");
+
 export default ({ buttons,onExit }) => {
   const activate = (button) => {
-    console.log("boom", button)
+
+    audio.play();
   }
   
   return html`
