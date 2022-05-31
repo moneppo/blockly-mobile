@@ -13,7 +13,7 @@ import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.modul
 
 const html = htm.bind(h);
 
-import { ParamRouter, useParams, routeParam } from "./ParamRouter.js";
+import { StateRouter } from "./StateRouter.js";
 import Designer from "./Designer.js";
 import { workspace, block, addBlock } from "./blockHelpers.js";
 import Footer from "./Footer.js";
@@ -31,11 +31,10 @@ import Workspace from "./Workspace.js";
 //  - Image background
 
 const App = () => {
-  const params = useParams();
-  const isDesign = Object.entries(params).length === 0;
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
+  const [mode, setMode] = useState({name: "design", id: 0})
   const [startingBlocks, setStartingBlocks] = useState(
     workspace([
       block("top", undefined, block("play_sample", { NAME: "OPTIONNAME" })),
@@ -70,7 +69,7 @@ const App = () => {
   };
 
   const onTrashClick = () => {
-    if (isDesign && selected !== null) {
+    if (mode.name === "design" && selected !== null) {
       setButtons((b) => {
         b.splice(selected, 1);
         return b;
@@ -81,11 +80,11 @@ const App = () => {
     if (Blockly.selected && Blockly.selected.isDeletable()) {
       const ws = Blockly.selected.workspace;
       Blockly.selected.checkAndDelete();
-      if (params.started) {
+      if (mode.name === "started") {
         setStartingBlocks(Blockly.serialization.workspaces.save(ws));
-      } else if (params.button) {
+      } else if (mode.name === "button") {
         setButtons((buttons) => {
-          buttons[params.button].b = Blockly.serialization.workspaces.save(ws);
+          buttons[mode.id].b = Blockly.serialization.workspaces.save(ws);
           return [...buttons];
         });
       }
@@ -95,12 +94,12 @@ const App = () => {
   const add = (type, fields) => {
     setMenuOpen(false);
 
-    if (params.started) {
+    if (mode.name === "started") {
       setStartingBlocks(addBlock(startingBlocks, block(type, fields)));
-    } else if (params.button) {
+    } else if (mode.name === "button") {
       setButtons((buttons) => {
-        buttons[params.button].b = addBlock(
-          buttons[params.button].b,
+        buttons[mode.id].b = addBlock(
+          buttons[mode.id].b,
           block(type, fields)
         );
         return [...buttons];
@@ -109,28 +108,28 @@ const App = () => {
   };
 
   const navLeft = () => {
-    if (params.started) {
-      routeParam({});
-    } else if (params.button) {
-      if (params.button === 0) {
-        routeParam({ started: "" });
+    if (mode.name === "started") {
+      setMode({name: "design"});
+    } else if (mode.name === "button") {
+      if (mode.id === 0) {
+        setMode({name: "started"});
       } else {
-        routeParam({ button: params.button - 1 });
+        setMode({name: "button", id: mode.id - 1});
       }
     }
   };
 
   const navRight = () => {
-    if (isDesign) {
-      routeParam({ started: "" });
-    } else if (params.started) {
-      routeParam({ button: 0 });
-    } else if (params.button) {
-      routeParam({ type: "button", i: params.button + 1 });
+    if (mode.name === "design") {
+      setMode({name:"started"});
+    } else if (mode.name === "started") {
+      setMode({ name:"button", id: 0 });
+    } else if (mode.name === "button") {
+      setMode({ name:"button", id: mode.id + 1 });
     }
   };
 
-  let showRight = params.button === buttons.length - 1;
+  let showRight = mode.name !== "button" || mode.i < buttons.length - 1;
 
   const saveBlocks = (blocks, index) => {
     setButtons((b) => {
@@ -141,31 +140,31 @@ const App = () => {
 
   return html` <header>
       <button onClick=${navLeft}>
-        ${!isDesign && html`<i class="bi bi-chevron-left" />`}
+        ${mode.name === "design" && html`<i class="bi bi-chevron-left" />`}
       </button>
       <button onClick=${navRight}>
         ${showRight && html`<i class="bi bi-chevron-right" />`}
       </button>
     </header>
     <main>
-      <${ParamRouter}>
+      <${StateRouter} state=${mode}>
         <${Designer}
           default
           buttons=${buttons}
           updateButton=${updateButton}
           selected=${selected}
           setSelected=${setSelected}
-          onEdit=${(i) => routeParam({button: i})}
+          onEdit=${(id) => setMode({name: "button", id})}
         />
         <${Workspace}
-          param="started"
+          when=${s => s.name === "started"}
           blocks=${startingBlocks}
           save=${setStartingBlocks}
         />
         <${Workspace}
-          param="button"
-          getProps=${(i) => ({ blocks: buttons[i] })}
-          save=${saveBlocks}
+          when=${s => s.name === "button"}
+          toProps=${(s) => ({ blocks: buttons[s.id] })}
+          save=${(b) => saveBlocks(mode.id)}
         />
       </${ParamRouter}>
     </main>
