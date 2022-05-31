@@ -65,10 +65,6 @@ const App = () => {
     ]);
   };
 
-  const onAddClick = (...args) => {
-    setMenuOpen(!menuOpen);
-  };
-
   const onTrashClick = () => {
     if (mode.name === "design" && selected !== null) {
       setButtons((b) => {
@@ -143,11 +139,8 @@ const App = () => {
     });
   };
 
-  console.log(mode);
-
   if (mode.name === "play") {
     return html`<${Play}
-      when=${(s) => s.name === "play"}
       buttons=${buttons}
       onExit=${() => setMode({ name: "design" })}
     />`;
@@ -187,9 +180,9 @@ const App = () => {
       </${StateRouter}>
     </>
     <${Footer} 
-      onAddClick=${onAddClick}
+      onAddClick=${(onAddClick) => setMenuOpen(!menuOpen)}
       onTrashClick=${onTrashClick}
-      onRunClick=${(_) => setMode({ name: "play" })}
+      onRunClick=${() => setMode({ name: "play" })}>
     
       ${
         menuOpen &&

@@ -12,6 +12,9 @@ const svgIcons = "BootstrapIcons.svg";
 
 const Button = ({ button, activate }) => {
   const { w, h, r, x, y, icon } = button;
+  const [selected, setSelected] = useState(false);
+
+  const deselect = () => setSelected(false);
   return html` <g
     transform="translate(${x} ${y}) rotate(${r} ${w / 2} ${h / 2})"
   >
@@ -28,13 +31,24 @@ const Button = ({ button, activate }) => {
       fill="white"
       width=${w * 0.8}
       height=${h * 0.8}
-      onMouseDown=${activate}
+      onMouseDown=${() => {setSelected(true); activate(button)}}
+      onMouseUp=${deselect}
+      onMouseLeave
+      onMouseMove onMouseOut onMouseOver onMouseUp
     />
   </g>`;
 };
 
-export default ({ buttons, activateButton, onStop }) => {
-  return html`<svg>
+export default ({ buttons,onExit }) => {
+  const activate = (button) => {
+    
+  }
+  
+  return html`
+    <header>
+     <button onClick=${onExit}><i class="bi bi-chevron-left" /></button>
+    </header>
+    <svg>
     <rect
       width="100%"
       height="100%"
@@ -43,7 +57,7 @@ export default ({ buttons, activateButton, onStop }) => {
     />
     ${buttons.map(
       (b) =>
-        html`<button button=${b} activate="${(_) => activateButton(b)})}" />`
+        html`<${Button} button=${b} activate="${() => activate(b)})}" />`
     )}
     </svg>`;
 };
