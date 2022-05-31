@@ -34,7 +34,7 @@ const App = () => {
   const [selected, setSelected] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [buttons, setButtons] = useState([]);
-  const [mode, setMode] = useState({name: "design", id: 0})
+  const [mode, setMode] = useState({ name: "design", id: 0 });
   const [startingBlocks, setStartingBlocks] = useState(
     workspace([
       block("top", undefined, block("play_sample", { NAME: "OPTIONNAME" })),
@@ -98,10 +98,7 @@ const App = () => {
       setStartingBlocks(addBlock(startingBlocks, block(type, fields)));
     } else if (mode.name === "button") {
       setButtons((buttons) => {
-        buttons[mode.id].b = addBlock(
-          buttons[mode.id].b,
-          block(type, fields)
-        );
+        buttons[mode.id].b = addBlock(buttons[mode.id].b, block(type, fields));
         return [...buttons];
       });
     }
@@ -109,23 +106,23 @@ const App = () => {
 
   const navLeft = () => {
     if (mode.name === "started") {
-      setMode({name: "design"});
+      setMode({ name: "design" });
     } else if (mode.name === "button") {
       if (mode.id === 0) {
-        setMode({name: "started"});
+        setMode({ name: "started" });
       } else {
-        setMode({name: "button", id: mode.id - 1});
+        setMode({ name: "button", id: mode.id - 1 });
       }
     }
   };
 
   const navRight = () => {
     if (mode.name === "design") {
-      setMode({name:"started"});
+      setMode({ name: "started" });
     } else if (mode.name === "started") {
-      setMode({ name:"button", id: 0 });
+      setMode({ name: "button", id: 0 });
     } else if (mode.name === "button") {
-      setMode({ name:"button", id: mode.id + 1 });
+      setMode({ name: "button", id: mode.id + 1 });
     }
   };
 
@@ -138,9 +135,9 @@ const App = () => {
     });
   };
 
-  return html` <header>
+  return html`<header>
       <button onClick=${navLeft}>
-        ${mode.name === "design" && html`<i class="bi bi-chevron-left" />`}
+        ${mode.name !== "design" && html`<i class="bi bi-chevron-left" />`}
       </button>
       <button onClick=${navRight}>
         ${showRight && html`<i class="bi bi-chevron-right" />`}
@@ -154,28 +151,28 @@ const App = () => {
           updateButton=${updateButton}
           selected=${selected}
           setSelected=${setSelected}
-          onEdit=${(id) => setMode({name: "button", id})}
+          onEdit=${(id) => setMode({ name: "button", id })}
         />
         <${Workspace}
-          when=${s => s.name === "started"}
+          when=${(s) => s.name === "started"}
           blocks=${startingBlocks}
           save=${setStartingBlocks}
         />
         <${Workspace}
-          when=${s => s.name === "button"}
-          toProps=${(s) => ({ blocks: buttons[s.id] })}
-          save=${(b) => saveBlocks(mode.id)}
+          when=${(s) => s.name === "button"}
+          toProps=${(s) => ({
+            blocks: buttons[s.id],
+            save: (b) => saveBlocks(b, s.id),
+          })}
         />
-      </${ParamRouter}>
+      </${StateRouter}>
     </main>
     <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-      ${
-        menuOpen &&
-        (isDesign
-          ? html`<${IconMenu} addButton=${addButton} />`
-          : html`<${BlockMenu} addBlock=${add} />`)
-      }
-    </>`;
+      ${menuOpen &&
+      (mode.name = "design"
+        ? html`<${IconMenu} addButton=${addButton} />`
+        : html`<${BlockMenu} addBlock=${add} />`)}
+    </${Footer}>`;
 };
 
 render(html`<${App} />`, document.body);
