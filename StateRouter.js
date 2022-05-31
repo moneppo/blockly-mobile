@@ -10,7 +10,6 @@ export const StateRouter = ({ state, children }) => {
     }
 
     if (children[c].props?.when && children[c].props?.when(state)) {
-      console.log(children[c]);
       if (children[c].props?.toProps) {
         const props = children[c].props?.toProps(state);
         return cloneElement(children[c], props);

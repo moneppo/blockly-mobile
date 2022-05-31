@@ -27,7 +27,7 @@ const addBlock = (workspace, type) => {
 const resize = () => CustomRenderer.setScreenWidth(window.innerWidth);
 
 export default ({ blocks, save }) => {
- 
+  console.log()
   useEffect(() => {
     CustomRenderer.setScreenWidth(window.innerWidth);
     window.addEventListener("resize", resize);

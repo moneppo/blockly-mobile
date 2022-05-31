@@ -126,9 +126,10 @@ const App = () => {
     }
   };
 
-  let showRight = mode.name !== "button" || 
-                  (mode.name === "started"  && buttons.length > 0) ||
-                  mode.i < buttons.length - 1;
+  let showRight =
+    mode.name === "design" ||
+    (mode.name === "started" && buttons.length > 0) ||
+    (mode.name !== "button" && mode.i < buttons.length - 1);
 
   const saveBlocks = (blocks, index) => {
     setButtons((b) => {
@@ -136,6 +137,8 @@ const App = () => {
       return [...b];
     });
   };
+  
+  console.log(mode)
 
   return html`<header>
       <button onClick=${navLeft}>
@@ -163,17 +166,19 @@ const App = () => {
         <${Workspace}
           when=${(s) => s.name === "button"}
           toProps=${(s) => ({
-            blocks: buttons[s.id],
+            blocks: buttons[s.id].b,
             save: (b) => saveBlocks(b, s.id),
           })}
         />
       </${StateRouter}>
     </main>
     <${Footer} onAddClick=${onAddClick} onTrashClick=${onTrashClick}>
-      ${menuOpen &&
-      (mode.name = "design"
-        ? html`<${IconMenu} addButton=${addButton} />`
-        : html`<${BlockMenu} addBlock=${add} />`)}
+      ${
+        menuOpen &&
+        (mode.name = "design"
+          ? html`<${IconMenu} addButton=${addButton} />`
+          : html`<${BlockMenu} addBlock=${add} />`)
+      }
     </${Footer}>`;
 };
 
