@@ -147,7 +147,7 @@ const App = () => {
   }
 
   return html`
-    <header>
+    <header style="user-select: none;">
       <button onClick=${navLeft}>
         ${mode.name !== "design" && html`<i class="bi bi-chevron-left" />`}
       </button>
@@ -155,7 +155,7 @@ const App = () => {
         ${showRight && html`<i class="bi bi-chevron-right" />`}
       </button>
     </header>
-    <main>
+    <main style="user-select: none;">
       <${StateRouter} state=${mode}>
         <${Designer}
           default
@@ -179,7 +179,7 @@ const App = () => {
         />
       </${StateRouter}>
     </>
-    <${Footer} 
+    <${Footer} style="user-select: none;"
       onAddClick=${(onAddClick) => setMenuOpen(!menuOpen)}
       onTrashClick=${onTrashClick}
       onRunClick=${() => setMode({ name: "play" })}>
