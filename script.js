@@ -126,7 +126,9 @@ const App = () => {
     }
   };
 
-  let showRight = mode.name !== "button" || mode.i < buttons.length - 1;
+  let showRight = mode.name !== "button" || 
+                  (mode.name === "started"  && buttons.length > 0) ||
+                  mode.i < buttons.length - 1;
 
   const saveBlocks = (blocks, index) => {
     setButtons((b) => {
