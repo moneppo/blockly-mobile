@@ -12,7 +12,7 @@ export default class IconField extends Blockly.Field {
     console.log(this.prototype);
     this.icon = Blockly.utils.dom.createSvgElement('use',
     {
-      "href":`BootstrapIcons.svg#balloon`,
+      "href":`assets/BootstrapIcons.svg#balloon`,
       width: "24px",
       height: "24px",
       fill: "white"
@@ -20,7 +20,7 @@ export default class IconField extends Blockly.Field {
   }
   
   render_() {
-    this.icon.setAttribute("href",`BootstrapIcons.svg#${this.value_}`);
+    this.icon.setAttribute("href",`assets/BootstrapIcons.svg#${this.value_}`);
     this.size_.width = 24;
     this.size_.height = 24;
   }

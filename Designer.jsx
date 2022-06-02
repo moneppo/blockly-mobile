@@ -1,16 +1,11 @@
-import { h, createRef } from "https://unpkg.com/preact@latest?module";
-import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
-import htm from "https://unpkg.com/htm?module";
-
-const html = htm.bind(h);
-
-const svgIcons = "BootstrapIcons.svg";
+import { createRef } from "https://unpkg.com/preact@latest?module";
+const svgIcons = "assets/BootstrapIcons.svg";
 
 // TODO: Scale after rotation is wonky
 
 const Rotator = ({ button, update }) => {
   const ref = createRef();
-  const { w, h, r } = button;
+  const { width, height, rotation } = button;
 
   const startRotate = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -22,7 +17,7 @@ const Rotator = ({ button, update }) => {
       event.preventDefault();
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
-      update({ r: r + point.y - offset.y });
+      update({ rotation: rotation + point.y - offset.y });
     };
 
     const mouseup = () => {
@@ -34,20 +29,20 @@ const Rotator = ({ button, update }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  return html` <image
-    href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/rotate.svg?v=1651769853843"
-    ref=${ref}
-    x=${w}
-    y=${h / 2 - 16}
+  return <image
+    href="assets/rotate.svg"
+    ref={ref}
+    x={width}
+    y={height / 2 - 16}
     height="32"
     width="32"
-    onMouseDown=${startRotate}
-  />`;
+    onMouseDown={startRotate}
+  />
 };
 
 const Resizer = ({ button, update }) => {
   const ref = createRef();
-  const { x, y, w, h } = button;
+  const { width, height } = button;
 
   const startResize = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -60,8 +55,8 @@ const Resizer = ({ button, update }) => {
       let point = new DOMPoint(event.clientX, event.clientY);
       point = point.matrixTransform(svg.getScreenCTM().inverse());
       update({
-        w: Math.max(w + point.x - offset.x, 75),
-        h: Math.max(h + point.y - offset.y, 75),
+        width: Math.max(width + point.x - offset.x, 75),
+        height: Math.max(height + point.y - offset.y, 75),
       });
     };
 
@@ -74,32 +69,32 @@ const Resizer = ({ button, update }) => {
     document.addEventListener("mouseup", mouseup);
   };
 
-  return html`<polyline
-    points="${w + 8},${h - 12} ${w + 8},${h + 8} ${w - 12},${h + 8}"
+  return <polyline
+    points={`${width + 8},${height - 12} ${width + 8},${height + 8} ${width - 12},${height + 8}`}
     fill="transparent"
     stroke="black"
     pointer-events="all"
-    ref=${ref}
+    ref={ref}
     stroke-width="2.3px"
     stroke-linecap="round"
-    onMouseDown=${startResize}
-  />`;
+    onMouseDown={startResize}
+  />
 };
 
 const Edit = ({ onEdit, button }) => {
-  return html` <image
-    href="https://cdn.glitch.global/42a61bc0-fedb-4e83-8c59-7a23c15be838/code-slash.svg?v=1652059910958"
+  return <image
+    href="assets//code-slash.svg"
     height="32"
     width="32"
-    x="${button.w + 8}"
+    x={button.width + 8}
     y="-16"
-    onClick=${onEdit}
-  />`;
+    onClick={onEdit}
+  />
 };
 
 const Button = ({ select, selected, update, button, onEdit }) => {
   const ref = createRef();
-  let { x, y, w, h, r } = button;
+  let { x, y, width, height, rotation } = button;
 
   const startDrag = (event) => {
     const svg = ref.current.ownerSVGElement;
@@ -125,52 +120,54 @@ const Button = ({ select, selected, update, button, onEdit }) => {
     event.stopPropagation();
   };
 
-  return html` <g
-    ref=${ref}
-    transform="translate(${x} ${y}) rotate(${r} ${w / 2} ${h / 2})"
+  return <g
+    ref={ref}
+    transform={`translate(${x} ${y}) rotate(${rotation} ${width / 2} ${height / 2})`}
   >
     <rect
-      width=${w}
-      height=${h}
-      fill=${button.color || "teal"}
-      onMouseDown=${selected ? startDrag : select}
+      width={width}
+      height={height}
+      fill={button.color || "teal"}
+      onMouseDown={selected ? startDrag : select}
     />
     <use
-      href="${svgIcons}#${button.icon}"
-      x=${w * 0.1}
-      y=${h * 0.1}
+      href={`${svgIcons}#${button.icon}`}
+      x={width * 0.1}
+      y={height * 0.1}
       fill="white"
-      width=${w * 0.8}
-      height=${h * 0.8}
-      onMouseDown=${selected ? startDrag : select}
+      width={width * 0.8}
+      height={height * 0.8}
+      onMouseDown={selected ? startDrag : select}
     />
-    ${selected &&
-    html` <${Rotator} button=${button} update=${update} />
-      <${Resizer} button=${button} update=${update} />
-      <${Edit} onEdit=${onEdit} button=${button} />`}
-  </g>`;
+    {selected &&
+      <>
+        <Rotator button={button} update={update} />
+        <Resizer button={button} update={update} />
+        <Edit onEdit={onEdit} button={button} />
+      </>}
+  </g>;
 };
 
 export default ({ buttons, updateButton, selected, setSelected, onEdit }) => {
-  return html`<svg>
+  return <svg>
     <rect
       width="100%"
       height="100%"
       fill="transparent"
       stroke="green"
-      onClick=${() => setSelected(-1)}
+      onClick={() => setSelected(-1)}
     />
-    ${buttons.map((b, i) => {
+    {buttons.map((b, i) => {
       const select = () => setSelected(i);
 
-      return html`<${Button}
-        button=${b}
-        key=${i}
-        selected=${i === selected}
-        update=${(b) => updateButton(i, b)}
-        select=${select}
-        onEdit=${() => onEdit(i)}
-      />`;
+      return <Button
+        button={b}
+        key={i}
+        selected={i === selected}
+        update={(b) => updateButton(i, b)}
+        select={select}
+        onEdit={() => onEdit(i)}
+      />;
     })}
-  </svg>`;
+  </svg>;
 };

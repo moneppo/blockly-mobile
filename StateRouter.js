@@ -1,7 +1,4 @@
-import { h, cloneElement } from "https://unpkg.com/preact@latest?module";
-import htm from "https://unpkg.com/htm?module";
-
-const html = htm.bind(h);
+import { cloneElement } from "https://unpkg.com/preact@latest?module";
 
 export const StateRouter = ({ state, children }) => {
   for (let c in children) {

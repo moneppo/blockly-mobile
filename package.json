@@ -1,0 +1,15 @@
+{
+  "name": "blockly-mobile",
+  "version": "0.1.0",
+  "description": "prototype for using Blockly on mobile phones",
+  "main": "index.html",
+  "repository": "git@github.com:moneppo/blockly-mobile.git",
+  "author": "Michael Oneppo <moneppo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "esbuild *.jsx --format=esm --serve=8000 --servedir=. --inject:./preact-shim.js --jsx-factory=h --resolve-extensions=.js --jsx-fragment=Fragment"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.42"
+  }
+}

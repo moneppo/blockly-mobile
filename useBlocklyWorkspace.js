@@ -7,13 +7,7 @@ import {
   useState,
   useEffect,
   useRef,
-  useCallback,
 } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
-import htm from "https://unpkg.com/htm?module";
-
-import toolbox from "./toolbox.js";
-
-const html = htm.bind(h);
 
 const useBlocklyWorkspace = ({
   ref,

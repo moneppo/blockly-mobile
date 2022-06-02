@@ -1,17 +1,7 @@
 /* global Blockly */
 
-/** 
-
-I've selected Preact as it is significantly lighter weight than React and has good 
-support for direct-to-browser usage. I can even keep JSX format by using the `htm`
-package, so this should be pretty fast to port to React.
-
-*/
-import { h, render, createRef } from "https://unpkg.com/preact@latest?module";
-import htm from "https://unpkg.com/htm?module";
+import { h, render } from "https://unpkg.com/preact@latest?module";
 import { useState } from "https://unpkg.com/preact@latest/hooks/dist/hooks.module.js?module";
-
-const html = htm.bind(h);
 
 import { StateRouter } from "./StateRouter.js";
 import Designer from "./Designer.js";
@@ -55,9 +45,9 @@ const App = () => {
       {
         x: 35,
         y: 35,
-        w: 100,
-        h: 100,
-        r: 0,
+        width: 100,
+        height: 100,
+        rotation: 0,
         color,
         icon,
         b: workspace([block("event", { icon })]),
@@ -140,57 +130,57 @@ const App = () => {
   };
 
   if (mode.name === "play") {
-    return html`<${Play}
-      buttons=${buttons}
-      onExit=${() => setMode({ name: "design" })}
-    />`;
+    return <Play
+      buttons={buttons}
+      onExit={() => setMode({ name: "design" })}
+    />
   }
 
-  return html`
+  return <>
     <header style="user-select: none;">
-      <button onClick=${navLeft}>
-        ${mode.name !== "design" && html`<i class="bi bi-chevron-left" />`}
+      <button onClick={navLeft}>
+        {mode.name !== "design" && <i class="bi bi-chevron-left" />}
       </button>
-      <button onClick=${navRight}>
-        ${showRight && html`<i class="bi bi-chevron-right" />`}
+      <button onClick={navRight}>
+        {showRight && <i class="bi bi-chevron-right" />}
       </button>
     </header>
     <main style="user-select: none;">
-      <${StateRouter} state=${mode}>
-        <${Designer}
+      <StateRouter state={mode}>
+        <Designer
           default
-          buttons=${buttons}
-          updateButton=${updateButton}
-          selected=${selected}
-          setSelected=${setSelected}
-          onEdit=${(id) => setMode({ name: "button", id })}
+          buttons={buttons}
+          updateButton={updateButton}
+          selected={selected}
+          setSelected={setSelected}
+          onEdit={(id) => setMode({ name: "button", id })}
         />
-        <${Workspace}
-          when=${(s) => s.name === "started"}
-          blocks=${startingBlocks}
-          save=${setStartingBlocks}
+        <Workspace
+          when={(s) => s.name === "started"}
+          blocks={startingBlocks}
+          save={setStartingBlocks}
         />
-        <${Workspace}
-          when=${(s) => s.name === "button"}
-          toProps=${(s) => ({
+        <Workspace
+          when={(s) => s.name === "button"}
+          toProps={(s) => ({
             blocks: buttons[s.id].b,
             save: (b) => saveBlocks(b, s.id),
           })}
         />
-      </${StateRouter}>
-    </>
-    <${Footer} style="user-select: none;"
-      onAddClick=${(onAddClick) => setMenuOpen(!menuOpen)}
-      onTrashClick=${onTrashClick}
-      onRunClick=${() => setMode({ name: "play" })}>
-    
-      ${
+      </StateRouter>
+    </main>
+    <Footer style="user-select: none;"
+      onAddClick={(onAddClick) => setMenuOpen(!menuOpen)}
+      onTrashClick={onTrashClick}
+      onRunClick={() => setMode({ name: "play" })}>
+      {
         menuOpen &&
         (mode.name === "design"
-          ? html`<${IconMenu} addButton=${addButton} />`
-          : html`<${BlockMenu} addBlock=${add} />`)
+          ? <IconMenu addButton={addButton} />
+          : <BlockMenu addBlock={add} />)
       }
-    </>`;
+    </Footer>
+  </>;
 };
 
-render(html`<${App} />`, document.body);
+render(<App />, document.body);
