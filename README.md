@@ -1,5 +1,3 @@
-<!--
-
 # Blockly Mobile  Prototype
 
 This project is an experiment in making a mobile-first lab using Blockly.
